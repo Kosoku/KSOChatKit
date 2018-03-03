@@ -21,4 +21,4 @@ FOUNDATION_EXPORT double KSOChatKitVersionNumber;
 //! Project version string for KSOChatKit.
 FOUNDATION_EXPORT const unsigned char KSOChatKitVersionString[];
 
-#import <KSOChatKit/KSOChatInputAccessoryView.h>
+#import <KSOChatKit/KSOChatInputView.h>

@@ -18,7 +18,7 @@
 #import <KSOChatKit/KSOChatKit.h>
 
 @interface ViewController ()
-@property (strong,nonatomic) KSOChatInputAccessoryView *chatInputAccessoryView;
+@property (strong,nonatomic) KSOChatInputView *chatInputAccessoryView;
 @end
 
 @implementation ViewController
@@ -26,7 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.chatInputAccessoryView = [[KSOChatInputAccessoryView alloc] initWithFrame:CGRectZero];
+    self.chatInputAccessoryView = [[KSOChatInputView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.chatInputAccessoryView];
     
     

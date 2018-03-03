@@ -15,7 +15,7 @@
 
 #import <Ditko/KDIView.h>
 
-@interface KSOChatInputAccessoryView : KDIView
+@interface KSOChatInputView : KDIView
 
 @property (assign,nonatomic) CGFloat subviewPadding;
 
