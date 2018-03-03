@@ -21,6 +21,4 @@ FOUNDATION_EXPORT double KSOChatKitVersionNumber;
 //! Project version string for KSOChatKit.
 FOUNDATION_EXPORT const unsigned char KSOChatKitVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <KSOChatKit/PublicHeader.h>
-
-
+#import <KSOChatKit/KSOChatInputAccessoryView.h>
