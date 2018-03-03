@@ -14,6 +14,7 @@
 		07461666204B4A4600F2192A /* KSOChatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KSOChatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		07461669204B4A4600F2192A /* KSOChatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatKit.h; sourceTree = "<group>"; };
 		0746166A204B4A4600F2192A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07461671204B4BEC00F2192A /* KSOChatKit-Info.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KSOChatKit-Info.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,9 +48,26 @@
 			isa = PBXGroup;
 			children = (
 				07461669204B4A4600F2192A /* KSOChatKit.h */,
-				0746166A204B4A4600F2192A /* Info.plist */,
+				0746166F204B4B7E00F2192A /* Source */,
+				07461670204B4B8D00F2192A /* Supporting Files */,
 			);
 			path = KSOChatKit;
+			sourceTree = "<group>";
+		};
+		0746166F204B4B7E00F2192A /* Source */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		07461670204B4B8D00F2192A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				0746166A204B4A4600F2192A /* Info.plist */,
+				07461671204B4BEC00F2192A /* KSOChatKit-Info.h */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,7 +203,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 74KPPW2K35;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -206,13 +224,15 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = KSOChatKit/Info.plist;
+				INFOPLIST_PREFIX_HEADER = "$(SRCROOT)/KSOChatKit/KSOChatKit-Info.h";
+				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kosoku.KSOChatKit;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.kosoku.ksochatkit;
+				PRODUCT_NAME = KSOChatKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -256,7 +276,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 74KPPW2K35;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -271,12 +291,14 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = KSOChatKit/Info.plist;
+				INFOPLIST_PREFIX_HEADER = "$(SRCROOT)/KSOChatKit/KSOChatKit-Info.h";
+				INFOPLIST_PREPROCESS = YES;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kosoku.KSOChatKit;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.kosoku.ksochatkit;
+				PRODUCT_NAME = KSOChatKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
