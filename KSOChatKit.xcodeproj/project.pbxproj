@@ -19,7 +19,9 @@
 		0746165B204B495600F2192A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = KSO;
 				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = "Kosoku Interactive, LLC.";
 			};
 			buildConfigurationList = 0746165E204B495600F2192A /* Build configuration list for PBXProject "KSOChatKit" */;
 			compatibilityVersion = "Xcode 8.0";
