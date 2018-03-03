@@ -22,3 +22,4 @@ FOUNDATION_EXPORT double KSOChatKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char KSOChatKitVersionString[];
 
 #import <KSOChatKit/KSOChatInputView.h>
+#import <KSOChatKit/KSOChatViewController.h>

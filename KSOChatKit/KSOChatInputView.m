@@ -67,8 +67,10 @@
 
 - (void)_KSOChatInputAccessoryViewInit; {
     self.translatesAutoresizingMaskIntoConstraints = NO;
+    self.backgroundColor = UIColor.clearColor;
     
     _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular]];
+    _visualEffectView.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview:_visualEffectView];
     
     _textField = [[UITextField alloc] initWithFrame:CGRectZero];
