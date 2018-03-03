@@ -15,22 +15,21 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+#import <KSOChatKit/KSOChatKit.h>
 
+@interface ViewController ()
+@property (strong,nonatomic) KSOChatInputAccessoryView *chatInputAccessoryView;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    self.chatInputAccessoryView = [[KSOChatInputAccessoryView alloc] initWithFrame:CGRectZero];
+    [self.view addSubview:self.chatInputAccessoryView];
+    
+    
 }
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 @end

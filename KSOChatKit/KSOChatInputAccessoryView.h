@@ -17,6 +17,8 @@
 
 @interface KSOChatInputAccessoryView : KDIView
 
+@property (assign,nonatomic) CGFloat subviewPadding;
+
 @property (readonly,nonatomic) UIView *contentView;
 
 @end
