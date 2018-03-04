@@ -78,6 +78,7 @@
     _textView.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
     _textView.placeholder = @"Message";
     _textView.KDI_dynamicTypeTextStyle = UIFontTextStyleBody;
+    _textView.KDI_cornerRadius = 5.0;
     [_visualEffectView.contentView addSubview:_textView];
 }
 
