@@ -15,10 +15,12 @@
 
 #import <Ditko/KDIView.h>
 
-@interface KSOChatInputView : KDIView
+NS_ASSUME_NONNULL_BEGIN
 
-@property (assign,nonatomic) CGFloat subviewPadding;
+@interface KSOChatInputView : KDIView
 
 @property (readonly,nonatomic) UIView *contentView;
 
 @end
+
+NS_ASSUME_NONNULL_END
