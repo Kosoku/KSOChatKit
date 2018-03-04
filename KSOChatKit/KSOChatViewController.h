@@ -15,6 +15,12 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface KSOChatViewController : UIViewController
 
+@property (strong,nonatomic,nullable) __kindof UIViewController *contentViewController;
+
 @end
+
+NS_ASSUME_NONNULL_END

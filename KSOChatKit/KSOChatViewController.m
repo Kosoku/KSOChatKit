@@ -24,6 +24,7 @@
 @interface KSOChatViewController ()
 @property (strong,nonatomic) KSOChatInputView *chatInputView;
 
+- (void)_addContentViewControllerIfNecessary;
 - (NSArray<NSLayoutConstraint *> *)_chatInputViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame;
 @end
 
@@ -37,6 +38,8 @@
     [self.view addSubview:self.chatInputView];
     
     self.KDI_customConstraints = [self _chatInputViewLayoutConstraintsForKeyboardFrame:CGRectZero];
+    
+    [self _addContentViewControllerIfNecessary];
     
     kstWeakify(self);
     [self KAG_addObserverForNotificationNames:@[UIKeyboardWillShowNotification,UIKeyboardWillHideNotification] object:nil block:^(NSNotification * _Nonnull notification) {
@@ -61,6 +64,33 @@
     }];
 }
 
+- (void)setContentViewController:(__kindof UIViewController *)contentViewController {
+    UIViewController *oldViewController = _contentViewController;
+    
+    _contentViewController = contentViewController;
+    
+    if (self.isViewLoaded) {
+        [oldViewController willMoveToParentViewController:nil];
+        [self _addContentViewControllerIfNecessary];
+        [oldViewController.view removeFromSuperview];
+        [oldViewController removeFromParentViewController];
+    }
+}
+
+- (void)_addContentViewControllerIfNecessary; {
+    if (self.contentViewController == nil) {
+        return;
+    }
+    
+    [self addChildViewController:self.contentViewController];
+    self.contentViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view insertSubview:self.contentViewController.view belowSubview:self.chatInputView];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
+    
+    [self.contentViewController didMoveToParentViewController:self];
+}
 - (NSArray<NSLayoutConstraint *> *)_chatInputViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame {
     return [@[[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatInputView}],CGRectIsEmpty(keyboardFrame) ? [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatInputView, @"bottom": self.bottomLayoutGuide}] : [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view]-bottom-|" options:0 metrics:@{@"bottom": @(CGRectGetHeight(CGRectIntersection(self.view.bounds, keyboardFrame)))} views:@{@"view": self.chatInputView}]] KQS_flatten];
 }
