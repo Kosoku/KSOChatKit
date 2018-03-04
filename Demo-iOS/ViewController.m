@@ -62,7 +62,7 @@
 }
 @end
 
-@interface ViewController ()
+@interface ViewController () <KSOChatViewControllerDelegate>
 @property (strong,nonatomic) KSOChatViewController *chatViewController;
 @property (strong,nonatomic) UINavigationController *contentViewController;
 @end
@@ -74,6 +74,7 @@
     
     self.chatViewController = [[KSOChatViewController alloc] initWithNibName:nil bundle:nil];
     self.chatViewController.title = @"Chats";
+    self.chatViewController.delegate = self;
     self.chatViewController.contentViewController = [[ContentViewController alloc] initWithNibName:nil bundle:nil];
     
     self.contentViewController = [[UINavigationController alloc] initWithRootViewController:self.chatViewController];
@@ -84,6 +85,12 @@
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
+}
+
+- (void)chatViewControllerDidTapDoneButton:(KSOChatViewController *)chatViewController completion:(KSOChatViewControllerCompletionBlock)completion {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        completion(YES);
+    });
 }
 
 @end

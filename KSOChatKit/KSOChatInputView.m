@@ -27,11 +27,10 @@
 @property (strong,nonatomic) KDITextView *textView;
 @property (strong,nonatomic) KDIButton *doneButton;
 
-@property (readwrite,strong,nonatomic) KAGAction *doneAction;
+@property (strong,nonatomic) KAGAction *doneAction;
 
 @property (weak,nonatomic) KSOChatViewController *chatViewController;
 
-- (void)_KSOChatInputAccessoryViewInit;
 @end
 
 @implementation KSOChatInputView
@@ -40,46 +39,9 @@
     if (!(self = [super initWithFrame:CGRectZero]))
         return nil;
     
-    [self _KSOChatInputAccessoryViewInit];
-    
-    return self;
-}
-
-+ (BOOL)requiresConstraintBasedLayout {
-    return YES;
-}
-- (void)updateConstraints {
-    NSMutableArray *temp = [[NSMutableArray alloc] init];
-    
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
-    
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
-    
-    self.KDI_customConstraints = temp;
-    
-    [super updateConstraints];
-}
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    return YES;
-}
-- (void)textViewDidChange:(UITextView *)textView {
-    [self willChangeValueForKey:@kstKeypath(self,text)];
-    [self didChangeValueForKey:@kstKeypath(self,text)];
-}
-
-@dynamic text;
-- (NSString *)text {
-    return self.textView.text;
-}
-- (void)setText:(NSString *)text {
-    self.textView.text = text;
-}
-
-- (void)_KSOChatInputAccessoryViewInit; {
     kstWeakify(self);
+    
+    _chatViewController = chatViewController;
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.backgroundColor = UIColor.clearColor;
@@ -121,6 +83,7 @@
     
     _doneButton = [KDIButton buttonWithType:UIButtonTypeSystem];
     _doneButton.translatesAutoresizingMaskIntoConstraints = NO;
+    _doneButton.titleLabel.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
     _doneButton.KAG_action = _doneAction;
     [_doneButton setTitle:@"Send" forState:UIControlStateNormal];
     [_stackView addArrangedSubview:_doneButton];
@@ -129,6 +92,41 @@
         kstStrongify(self);
         self.doneAction.enabled = self.text.length > 0;
     }];
+    
+    return self;
+}
+
++ (BOOL)requiresConstraintBasedLayout {
+    return YES;
+}
+- (void)updateConstraints {
+    NSMutableArray *temp = [[NSMutableArray alloc] init];
+    
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
+    
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
+    
+    self.KDI_customConstraints = temp;
+    
+    [super updateConstraints];
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    return YES;
+}
+- (void)textViewDidChange:(UITextView *)textView {
+    [self willChangeValueForKey:@kstKeypath(self,text)];
+    [self didChangeValueForKey:@kstKeypath(self,text)];
+}
+
+@dynamic text;
+- (NSString *)text {
+    return self.textView.text;
+}
+- (void)setText:(NSString *)text {
+    self.textView.text = text;
 }
 
 @end

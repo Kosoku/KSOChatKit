@@ -22,9 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface KSOChatInputView : UIView
 
-@property (copy,nonatomic) NSString *text;
-
-@property (readonly,strong,nonatomic) KAGAction *doneAction;
+@property (copy,nonatomic,nullable) NSString *text;
 
 - (instancetype)initWithChatViewController:(KSOChatViewController *)chatViewController;
 
