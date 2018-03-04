@@ -34,7 +34,41 @@
 @end
 
 @implementation KSOChatInputView
+#pragma mark *** Subclass Overrides ***
++ (BOOL)requiresConstraintBasedLayout {
+    return YES;
+}
+- (void)updateConstraints {
+    NSMutableArray *temp = [[NSMutableArray alloc] init];
+    
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
+    
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
+    
+    self.KDI_customConstraints = temp;
+    
+    [super updateConstraints];
+}
+#pragma mark UITextViewDelegate
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if ([text rangeOfCharacterFromSet:NSCharacterSet.newlineCharacterSet].length > 0 &&
+        [self.chatViewController.delegate respondsToSelector:@selector(chatViewControllerReturnShouldTapDoneButton:)]) {
+        
+        if ([self.chatViewController.delegate chatViewControllerReturnShouldTapDoneButton:self.chatViewController]) {
+            [self.doneAction execute:self.doneButton];
+            return NO;
+        }
+    }
+    return YES;
+}
+- (void)textViewDidChange:(UITextView *)textView {
+    [self willChangeValueForKey:@kstKeypath(self,text)];
+    [self didChangeValueForKey:@kstKeypath(self,text)];
+}
 
+#pragma mark *** Public Methods ***
 - (instancetype)initWithChatViewController:(KSOChatViewController *)chatViewController {
     if (!(self = [super initWithFrame:CGRectZero]))
         return nil;
@@ -48,8 +82,8 @@
     
     _doneAction = [[KAGAction alloc] initWithAsynchronousSenderValueErrorBlock:^(id  _Nullable sender, KAGValueErrorBlock  _Nonnull completion) {
         kstStrongify(self);
-        if ([self.chatViewController.delegate respondsToSelector:@selector(chatViewControllerDidTapDoneButton:completion:)]) {
-            [self.chatViewController.delegate chatViewControllerDidTapDoneButton:self.chatViewController completion:^(BOOL success) {
+        if ([self.chatViewController.delegate respondsToSelector:@selector(chatViewControllerDidTapDoneButton:view:completion:)]) {
+            [self.chatViewController.delegate chatViewControllerDidTapDoneButton:self.chatViewController view:sender completion:^(BOOL success) {
                 if (success) {
                     self.text = nil;
                 }
@@ -95,32 +129,7 @@
     
     return self;
 }
-
-+ (BOOL)requiresConstraintBasedLayout {
-    return YES;
-}
-- (void)updateConstraints {
-    NSMutableArray *temp = [[NSMutableArray alloc] init];
-    
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
-    
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
-    
-    self.KDI_customConstraints = temp;
-    
-    [super updateConstraints];
-}
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    return YES;
-}
-- (void)textViewDidChange:(UITextView *)textView {
-    [self willChangeValueForKey:@kstKeypath(self,text)];
-    [self didChangeValueForKey:@kstKeypath(self,text)];
-}
-
+#pragma mark Properties
 @dynamic text;
 - (NSString *)text {
     return self.textView.text;

@@ -87,7 +87,10 @@
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
 }
 
-- (void)chatViewControllerDidTapDoneButton:(KSOChatViewController *)chatViewController completion:(KSOChatViewControllerCompletionBlock)completion {
+- (BOOL)chatViewControllerReturnShouldTapDoneButton:(KSOChatViewController *)chatViewController {
+    return YES;
+}
+- (void)chatViewControllerDidTapDoneButton:(KSOChatViewController *)chatViewController view:(UIView *)view completion:(KSOChatViewControllerCompletionBlock)completion {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         completion(YES);
     });
