@@ -34,7 +34,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.chatInputView = [[KSOChatInputView alloc] initWithFrame:CGRectZero];
+    self.chatInputView = [[KSOChatInputView alloc] initWithChatViewController:self];
     self.chatInputView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.chatInputView];
     
@@ -82,6 +82,13 @@
         [oldViewController removeFromParentViewController];
     }
 }
+@dynamic text;
+- (NSString *)text {
+    return self.chatInputView.text;
+}
+- (void)setText:(NSString *)text {
+    self.chatInputView.text = text;
+}
 
 - (void)_addContentViewControllerIfNecessary; {
     if (self.contentViewController == nil) {
@@ -112,6 +119,24 @@
 }
 - (NSArray<NSLayoutConstraint *> *)_chatInputViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame {
     return [@[[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatInputView}],CGRectIsEmpty(keyboardFrame) ? [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatInputView, @"bottom": self.bottomLayoutGuide}] : [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view]-bottom-|" options:0 metrics:@{@"bottom": @(CGRectGetHeight(CGRectIntersection(self.view.bounds, keyboardFrame)))} views:@{@"view": self.chatInputView}]] KQS_flatten];
+}
+
+@end
+
+@implementation UIViewController (KSOChatViewControllerExtensions)
+
+- (KSOChatViewController *)KSO_chatViewController {
+    UIViewController *viewController = self;
+    
+    while (viewController != nil) {
+        if ([viewController isKindOfClass:KSOChatViewController.class]) {
+            return (KSOChatViewController *)viewController;
+        }
+        
+        viewController = viewController.parentViewController;
+    }
+    
+    return nil;
 }
 
 @end

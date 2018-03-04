@@ -31,6 +31,7 @@
 		070F990D204B7628001CFEFE /* Quicksilver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 070F990C204B7628001CFEFE /* Quicksilver.framework */; };
 		070F990E204B7628001CFEFE /* Quicksilver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 070F990C204B7628001CFEFE /* Quicksilver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		070F990F204B762F001CFEFE /* Quicksilver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 070F9910204B762F001CFEFE /* Quicksilver.framework */; };
+		070F9916204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 070F9915204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0746166B204B4A4600F2192A /* KSOChatKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 07461669204B4A4600F2192A /* KSOChatKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0746167A204B4EB900F2192A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07461679204B4EB900F2192A /* AppDelegate.m */; };
 		0746167D204B4EB900F2192A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746167C204B4EB900F2192A /* ViewController.m */; };
@@ -87,6 +88,7 @@
 		070F9907204B667A001CFEFE /* Agamotto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Agamotto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		070F990C204B7628001CFEFE /* Quicksilver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Quicksilver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		070F9910204B762F001CFEFE /* Quicksilver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Quicksilver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		070F9915204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatViewControllerDelegate.h; sourceTree = "<group>"; };
 		07461666204B4A4600F2192A /* KSOChatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KSOChatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		07461669204B4A4600F2192A /* KSOChatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatKit.h; sourceTree = "<group>"; };
 		0746166A204B4A4600F2192A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -185,10 +187,11 @@
 		0746166F204B4B7E00F2192A /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				070F98FB204B50CF001CFEFE /* KSOChatInputView.h */,
-				070F98FC204B50CF001CFEFE /* KSOChatInputView.m */,
+				070F9915204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h */,
 				070F98FF204B6230001CFEFE /* KSOChatViewController.h */,
 				070F9900204B6230001CFEFE /* KSOChatViewController.m */,
+				070F98FB204B50CF001CFEFE /* KSOChatInputView.h */,
+				070F98FC204B50CF001CFEFE /* KSOChatInputView.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				070F9916204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h in Headers */,
 				0746166B204B4A4600F2192A /* KSOChatKit.h in Headers */,
 				070F9901204B6230001CFEFE /* KSOChatViewController.h in Headers */,
 				070F98FD204B50CF001CFEFE /* KSOChatInputView.h in Headers */,
