@@ -19,9 +19,12 @@
 #import <Agamotto/Agamotto.h>
 #import <Stanley/Stanley.h>
 #import <Ditko/Ditko.h>
+#import <Quicksilver/Quicksilver.h>
 
 @interface KSOChatViewController ()
 @property (strong,nonatomic) KSOChatInputView *chatInputView;
+
+- (NSArray<NSLayoutConstraint *> *)_chatInputViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame;
 @end
 
 @implementation KSOChatViewController
@@ -33,19 +36,33 @@
     self.chatInputView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.chatInputView];
     
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatInputView}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatInputView, @"bottom": self.bottomLayoutGuide}]];
+    self.KDI_customConstraints = [self _chatInputViewLayoutConstraintsForKeyboardFrame:CGRectZero];
     
     kstWeakify(self);
     [self KAG_addObserverForNotificationNames:@[UIKeyboardWillShowNotification,UIKeyboardWillHideNotification] object:nil block:^(NSNotification * _Nonnull notification) {
         kstStrongify(self);
         if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+            CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
             
+            keyboardFrame = [self.view convertRect:[self.view.window convertRect:keyboardFrame fromWindow:nil] fromView:nil];
+            
+            self.KDI_customConstraints = [self _chatInputViewLayoutConstraintsForKeyboardFrame:keyboardFrame];
         }
         else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-            
+            self.KDI_customConstraints = [self _chatInputViewLayoutConstraintsForKeyboardFrame:CGRectZero];
         }
+        
+        [self.view setNeedsLayout];
+        [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+            [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+            
+            [self.view layoutIfNeeded];
+        }];
     }];
+}
+
+- (NSArray<NSLayoutConstraint *> *)_chatInputViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame {
+    return [@[[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatInputView}],CGRectIsEmpty(keyboardFrame) ? [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatInputView, @"bottom": self.bottomLayoutGuide}] : [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view]-bottom-|" options:0 metrics:@{@"bottom": @(CGRectGetHeight(CGRectIntersection(self.view.bounds, keyboardFrame)))} views:@{@"view": self.chatInputView}]] KQS_flatten];
 }
 
 @end
