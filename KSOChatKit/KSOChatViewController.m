@@ -15,6 +15,7 @@
 
 #import "KSOChatViewController.h"
 #import "KSOChatInputView.h"
+#import "KSOChatViewModel.h"
 
 #import <Agamotto/Agamotto.h>
 #import <Stanley/Stanley.h>
@@ -24,6 +25,8 @@
 @interface KSOChatViewController ()
 @property (strong,nonatomic) KSOChatInputView *chatInputView;
 
+@property (strong,nonatomic) KSOChatViewModel *viewModel;
+
 - (void)_addContentViewControllerIfNecessary;
 - (void)_adjustContentInsetsIfNecessary;
 - (NSArray<NSLayoutConstraint *> *)_chatInputViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame;
@@ -31,11 +34,19 @@
 
 @implementation KSOChatViewController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (!(self = [super initWithNibName:nil bundle:nil]))
+        return nil;
+    
+    _viewModel = [[KSOChatViewModel alloc] initWithChatViewController:self];
+    
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.chatInputView = [[KSOChatInputView alloc] initWithChatViewController:self];
-    self.chatInputView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.chatInputView = [[KSOChatInputView alloc] initWithViewModel:self.viewModel];
     [self.view addSubview:self.chatInputView];
     
     self.KDI_customConstraints = [self _chatInputViewLayoutConstraintsForKeyboardFrame:CGRectZero];
@@ -70,6 +81,20 @@
     [self _adjustContentInsetsIfNecessary];
 }
 
+@dynamic delegate;
+- (id<KSOChatViewControllerDelegate>)delegate {
+    return self.viewModel.delegate;
+}
+- (void)setDelegate:(id<KSOChatViewControllerDelegate>)delegate {
+    self.viewModel.delegate = delegate;
+}
+@dynamic options;
+- (KSOChatViewControllerOptions)options {
+    return self.viewModel.options;
+}
+- (void)setOptions:(KSOChatViewControllerOptions)options {
+    self.viewModel.options = options;
+}
 - (void)setContentViewController:(__kindof UIViewController *)contentViewController {
     UIViewController *oldViewController = _contentViewController;
     
@@ -84,10 +109,10 @@
 }
 @dynamic text;
 - (NSString *)text {
-    return self.chatInputView.text;
+    return self.viewModel.text;
 }
 - (void)setText:(NSString *)text {
-    self.chatInputView.text = text;
+    self.viewModel.text = text;
 }
 
 - (void)_addContentViewControllerIfNecessary; {

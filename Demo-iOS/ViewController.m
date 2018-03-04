@@ -115,7 +115,7 @@
 - (BOOL)chatViewControllerReturnShouldTapDoneButton:(KSOChatViewController *)chatViewController {
     return YES;
 }
-- (void)chatViewControllerDidTapDoneButton:(KSOChatViewController *)chatViewController view:(UIView *)view completion:(KSOChatViewControllerCompletionBlock)completion {
+- (void)chatViewControllerDidTapDoneButton:(KSOChatViewController *)chatViewController completion:(KSOChatViewControllerCompletionBlock)completion {
     ContentViewController *viewController = chatViewController.contentViewController;
     
     [viewController addMessageWithText:chatViewController.text];

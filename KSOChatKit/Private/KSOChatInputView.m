@@ -14,7 +14,7 @@
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "KSOChatInputView.h"
-#import "KSOChatViewController.h"
+#import "KSOChatViewModel.h"
 
 #import <Ditko/Ditko.h>
 #import <Stanley/Stanley.h>
@@ -27,9 +27,7 @@
 @property (strong,nonatomic) KDITextView *textView;
 @property (strong,nonatomic) KDIButton *doneButton;
 
-@property (strong,nonatomic) KAGAction *doneAction;
-
-@property (weak,nonatomic) KSOChatViewController *chatViewController;
+@property (strong,nonatomic) KSOChatViewModel *viewModel;
 
 @end
 
@@ -53,49 +51,23 @@
 }
 #pragma mark UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    if ([text rangeOfCharacterFromSet:NSCharacterSet.newlineCharacterSet].length > 0 &&
-        text.length == 1 &&
-        [self.chatViewController.delegate respondsToSelector:@selector(chatViewControllerReturnShouldTapDoneButton:)]) {
-        
-        if ([self.chatViewController.delegate chatViewControllerReturnShouldTapDoneButton:self.chatViewController]) {
-            [self.doneAction execute:self.doneButton];
-            return NO;
-        }
-    }
-    return YES;
+    return [self.viewModel shouldChangeTextInRange:range text:text];
 }
 - (void)textViewDidChange:(UITextView *)textView {
-    [self willChangeValueForKey:@kstKeypath(self,text)];
-    [self didChangeValueForKey:@kstKeypath(self,text)];
+    self.viewModel.text = self.textView.text;
 }
 
 #pragma mark *** Public Methods ***
-- (instancetype)initWithChatViewController:(KSOChatViewController *)chatViewController {
+- (instancetype)initWithViewModel:(KSOChatViewModel *)viewModel; {
     if (!(self = [super initWithFrame:CGRectZero]))
         return nil;
     
     kstWeakify(self);
     
-    _chatViewController = chatViewController;
+    _viewModel = viewModel;
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.backgroundColor = UIColor.clearColor;
-    
-    _doneAction = [[KAGAction alloc] initWithAsynchronousSenderValueErrorBlock:^(id  _Nullable sender, KAGValueErrorBlock  _Nonnull completion) {
-        kstStrongify(self);
-        if ([self.chatViewController.delegate respondsToSelector:@selector(chatViewControllerDidTapDoneButton:view:completion:)]) {
-            [self.chatViewController.delegate chatViewControllerDidTapDoneButton:self.chatViewController view:sender completion:^(BOOL success) {
-                completion(@(success),nil);
-                
-                if (success) {
-                    self.text = nil;
-                }
-            }];
-        }
-        else {
-            completion(@NO,nil);
-        }
-    }];
     
     _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent]];
     _visualEffectView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -120,24 +92,21 @@
     _doneButton = [KDIButton buttonWithType:UIButtonTypeSystem];
     _doneButton.translatesAutoresizingMaskIntoConstraints = NO;
     _doneButton.titleLabel.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
-    _doneButton.KAG_action = _doneAction;
+    _doneButton.KAG_action = _viewModel.doneAction;
     [_doneButton setTitle:@"Send" forState:UIControlStateNormal];
     [_stackView addArrangedSubview:_doneButton];
     
-    [self KAG_addObserverForKeyPaths:@[@kstKeypath(self,text)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,options)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
-        self.doneAction.enabled = self.text.length > 0;
+        if ([keyPath isEqualToString:@kstKeypath(self.viewModel,text)]) {
+            self.textView.text = self.viewModel.text;
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,options)]) {
+            self.doneButton.hidden = (!(self.viewModel.options & KSOChatViewControllerOptionsShowDoneButton));
+        }
     }];
     
     return self;
-}
-#pragma mark Properties
-@dynamic text;
-- (NSString *)text {
-    return self.textView.text;
-}
-- (void)setText:(NSString *)text {
-    self.textView.text = text;
 }
 
 @end
