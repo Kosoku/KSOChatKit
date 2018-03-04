@@ -25,6 +25,9 @@
 		070F98FE204B50CF001CFEFE /* KSOChatInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070F98FC204B50CF001CFEFE /* KSOChatInputView.m */; };
 		070F9901204B6230001CFEFE /* KSOChatViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 070F98FF204B6230001CFEFE /* KSOChatViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		070F9902204B6230001CFEFE /* KSOChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070F9900204B6230001CFEFE /* KSOChatViewController.m */; };
+		070F9904204B6673001CFEFE /* Agamotto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 070F9903204B6673001CFEFE /* Agamotto.framework */; };
+		070F9905204B6673001CFEFE /* Agamotto.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 070F9903204B6673001CFEFE /* Agamotto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		070F9906204B667A001CFEFE /* Agamotto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 070F9907204B667A001CFEFE /* Agamotto.framework */; };
 		0746166B204B4A4600F2192A /* KSOChatKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 07461669204B4A4600F2192A /* KSOChatKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0746167A204B4EB900F2192A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07461679204B4EB900F2192A /* AppDelegate.m */; };
 		0746167D204B4EB900F2192A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746167C204B4EB900F2192A /* ViewController.m */; };
@@ -55,6 +58,7 @@
 				070F98E2204B4FC7001CFEFE /* KSOChatKit.framework in Embed Frameworks */,
 				070F98E8204B4FD5001CFEFE /* Stanley.framework in Embed Frameworks */,
 				070F98F4204B5026001CFEFE /* Ditko.framework in Embed Frameworks */,
+				070F9905204B6673001CFEFE /* Agamotto.framework in Embed Frameworks */,
 				070F98F1204B501D001CFEFE /* KSOFontAwesomeExtensions.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -75,6 +79,8 @@
 		070F98FC204B50CF001CFEFE /* KSOChatInputView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatInputView.m; sourceTree = "<group>"; };
 		070F98FF204B6230001CFEFE /* KSOChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatViewController.h; sourceTree = "<group>"; };
 		070F9900204B6230001CFEFE /* KSOChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatViewController.m; sourceTree = "<group>"; };
+		070F9903204B6673001CFEFE /* Agamotto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Agamotto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		070F9907204B667A001CFEFE /* Agamotto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Agamotto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		07461666204B4A4600F2192A /* KSOChatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KSOChatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		07461669204B4A4600F2192A /* KSOChatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatKit.h; sourceTree = "<group>"; };
 		0746166A204B4A4600F2192A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -96,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				070F9906204B667A001CFEFE /* Agamotto.framework in Frameworks */,
 				070F98F9204B5041001CFEFE /* Loki.framework in Frameworks */,
 				070F98F7204B503C001CFEFE /* KSOFontAwesomeExtensions.framework in Frameworks */,
 				070F98F5204B5032001CFEFE /* Ditko.framework in Frameworks */,
@@ -111,6 +118,7 @@
 				070F98E1204B4FC7001CFEFE /* KSOChatKit.framework in Frameworks */,
 				070F98E7204B4FD5001CFEFE /* Stanley.framework in Frameworks */,
 				070F98F3204B5026001CFEFE /* Ditko.framework in Frameworks */,
+				070F9904204B6673001CFEFE /* Agamotto.framework in Frameworks */,
 				070F98F0204B501D001CFEFE /* KSOFontAwesomeExtensions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -121,6 +129,8 @@
 		070F98E9204B4FF2001CFEFE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				070F9903204B6673001CFEFE /* Agamotto.framework */,
+				070F9907204B667A001CFEFE /* Agamotto.framework */,
 				070F98F2204B5026001CFEFE /* Ditko.framework */,
 				070F98EF204B501D001CFEFE /* KSOFontAwesomeExtensions.framework */,
 				070F98EC204B5011001CFEFE /* Loki.framework */,

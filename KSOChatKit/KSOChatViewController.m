@@ -16,6 +16,10 @@
 #import "KSOChatViewController.h"
 #import "KSOChatInputView.h"
 
+#import <Agamotto/Agamotto.h>
+#import <Stanley/Stanley.h>
+#import <Ditko/Ditko.h>
+
 @interface KSOChatViewController ()
 @property (strong,nonatomic) KSOChatInputView *chatInputView;
 @end
@@ -31,6 +35,17 @@
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatInputView}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatInputView, @"bottom": self.bottomLayoutGuide}]];
+    
+    kstWeakify(self);
+    [self KAG_addObserverForNotificationNames:@[UIKeyboardWillShowNotification,UIKeyboardWillHideNotification] object:nil block:^(NSNotification * _Nonnull notification) {
+        kstStrongify(self);
+        if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+            
+        }
+        else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
+            
+        }
+    }];
 }
 
 @end
