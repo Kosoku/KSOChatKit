@@ -21,7 +21,7 @@
 		070F98F5204B5032001CFEFE /* Ditko.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 070F98F6204B5032001CFEFE /* Ditko.framework */; };
 		070F98F7204B503C001CFEFE /* KSOFontAwesomeExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 070F98F8204B503C001CFEFE /* KSOFontAwesomeExtensions.framework */; };
 		070F98F9204B5041001CFEFE /* Loki.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 070F98FA204B5041001CFEFE /* Loki.framework */; };
-		070F98FD204B50CF001CFEFE /* KSOChatInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 070F98FB204B50CF001CFEFE /* KSOChatInputView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		070F98FD204B50CF001CFEFE /* KSOChatInputView.h in Headers */ = {isa = PBXBuildFile; fileRef = 070F98FB204B50CF001CFEFE /* KSOChatInputView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		070F98FE204B50CF001CFEFE /* KSOChatInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 070F98FC204B50CF001CFEFE /* KSOChatInputView.m */; };
 		070F9901204B6230001CFEFE /* KSOChatViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 070F98FF204B6230001CFEFE /* KSOChatViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		070F9902204B6230001CFEFE /* KSOChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 070F9900204B6230001CFEFE /* KSOChatViewController.m */; };
@@ -155,6 +155,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		070F9917204BC3D2001CFEFE /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				070F98FB204B50CF001CFEFE /* KSOChatInputView.h */,
+				070F98FC204B50CF001CFEFE /* KSOChatInputView.m */,
+			);
+			path = Private;
+			sourceTree = "<group>";
+		};
 		0746165A204B495600F2192A = {
 			isa = PBXGroup;
 			children = (
@@ -190,8 +199,7 @@
 				070F9915204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h */,
 				070F98FF204B6230001CFEFE /* KSOChatViewController.h */,
 				070F9900204B6230001CFEFE /* KSOChatViewController.m */,
-				070F98FB204B50CF001CFEFE /* KSOChatInputView.h */,
-				070F98FC204B50CF001CFEFE /* KSOChatInputView.m */,
+				070F9917204BC3D2001CFEFE /* Private */,
 			);
 			name = Source;
 			sourceTree = "<group>";
