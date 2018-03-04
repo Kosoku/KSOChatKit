@@ -13,3 +13,6 @@
 [submodule "Vendor/Agamotto"]
 	path = Vendor/Agamotto
 	url = https://github.com/Kosoku/Agamotto.git
+[submodule "Vendor/Quicksilver"]
+	path = Vendor/Quicksilver
+	url = https://github.com/Kosoku/Quicksilver.git
