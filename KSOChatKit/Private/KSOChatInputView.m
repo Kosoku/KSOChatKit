@@ -54,6 +54,7 @@
 #pragma mark UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     if ([text rangeOfCharacterFromSet:NSCharacterSet.newlineCharacterSet].length > 0 &&
+        text.length == 1 &&
         [self.chatViewController.delegate respondsToSelector:@selector(chatViewControllerReturnShouldTapDoneButton:)]) {
         
         if ([self.chatViewController.delegate chatViewControllerReturnShouldTapDoneButton:self.chatViewController]) {
