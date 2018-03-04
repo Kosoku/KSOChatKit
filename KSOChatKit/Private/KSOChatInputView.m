@@ -85,10 +85,11 @@
         kstStrongify(self);
         if ([self.chatViewController.delegate respondsToSelector:@selector(chatViewControllerDidTapDoneButton:view:completion:)]) {
             [self.chatViewController.delegate chatViewControllerDidTapDoneButton:self.chatViewController view:sender completion:^(BOOL success) {
+                completion(@(success),nil);
+                
                 if (success) {
                     self.text = nil;
                 }
-                completion(@(success),nil);
             }];
         }
         else {

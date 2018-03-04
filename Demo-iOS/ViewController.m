@@ -17,48 +17,73 @@
 
 #import <KSOChatKit/KSOChatKit.h>
 #import <Ditko/Ditko.h>
+#import <KSOFontAwesomeExtensions/KSOFontAwesomeExtensions.h>
 
 @interface ContentViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
-@property (readonly,nonatomic) UITableView *tableView;
-@property (readonly,nonatomic) NSInteger numberOfRows;
+@property (strong,nonatomic) UITableView *tableView;
+
+@property (copy,nonatomic) NSArray<NSString *> *messages;
+
+- (void)addMessageWithText:(NSString *)text;
 @end
 
 @implementation ContentViewController
 - (BOOL)automaticallyAdjustsScrollViewInsets {
     return NO;
 }
-- (void)loadView {
-    self.view = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tableView.rowHeight = 44.0;
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tableView.backgroundView = ({
+        KDIEmptyView *retval = [[KDIEmptyView alloc] initWithFrame:CGRectZero];
+       
+        retval.alignmentVertical = KDIEmptyViewAlignmentVerticalCustomSpacing;
+        retval.alignmentVerticalCustomSpacing = 75.0;
+        retval.image = [UIImage KSO_fontAwesomeImageWithString:@"\uf086" size:CGSizeMake(128, 128)];
+        retval.headline = @"No Messages";
+        retval.body = @"Add a message to see something!";
+        
+        retval;
+    });
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.estimatedRowHeight = 44.0;
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:NSStringFromClass(UITableViewCell.class)];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.view addSubview:self.tableView];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.tableView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.tableView}]];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.numberOfRows;
+    return self.messages.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *retval = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(UITableViewCell.class) forIndexPath:indexPath];
     
-    retval.textLabel.text = [NSNumberFormatter localizedStringFromNumber:@(indexPath.row) numberStyle:NSNumberFormatterSpellOutStyle];
+    retval.textLabel.numberOfLines = 0;
+    retval.textLabel.text = self.messages[indexPath.row];
     
     return retval;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = KDIColorRandomRGB();
+    cell.contentView.backgroundColor = indexPath.row % 2 == 0 ? UIColor.whiteColor : [KDIColorRandomRGB() colorWithAlphaComponent:0.5];
 }
 
-- (UITableView *)tableView {
-    return (UITableView *)self.view;
-}
-- (NSInteger)numberOfRows {
-    return 25;
+- (void)addMessageWithText:(NSString *)text {
+    NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
+    
+    [temp addObject:text];
+    
+    self.messages = temp;
+    
+    self.tableView.backgroundView.hidden = self.messages.count > 0;
+    
+    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 @end
 
@@ -91,9 +116,13 @@
     return YES;
 }
 - (void)chatViewControllerDidTapDoneButton:(KSOChatViewController *)chatViewController view:(UIView *)view completion:(KSOChatViewControllerCompletionBlock)completion {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        completion(YES);
-    });
+    ContentViewController *viewController = chatViewController.contentViewController;
+    
+    [viewController addMessageWithText:chatViewController.text];
+    
+    [viewController.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:viewController.messages.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    
+    completion(YES);
 }
 
 @end
