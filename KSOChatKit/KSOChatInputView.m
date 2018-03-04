@@ -20,7 +20,7 @@
 @interface KSOChatInputView ()
 @property (strong,nonatomic) UIVisualEffectView *visualEffectView;
 
-@property (strong,nonatomic) UITextField *textField;
+@property (strong,nonatomic) KDITextView *textView;
 
 - (void)_KSOChatInputAccessoryViewInit;
 @end
@@ -53,8 +53,8 @@
     [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
     [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
     
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": self.textField}]];
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": self.textField}]];
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": self.textView}]];
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": self.textView}]];
     
     self.KDI_customConstraints = temp;
     
@@ -69,16 +69,16 @@
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.backgroundColor = UIColor.clearColor;
     
-    _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular]];
+    _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent]];
     _visualEffectView.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview:_visualEffectView];
     
-    _textField = [[UITextField alloc] initWithFrame:CGRectZero];
-    _textField.translatesAutoresizingMaskIntoConstraints = NO;
-    _textField.borderStyle = UITextBorderStyleRoundedRect;
-    _textField.placeholder = @"Enter message…";
-    _textField.KDI_dynamicTypeTextStyle = UIFontTextStyleBody;
-    [_visualEffectView.contentView addSubview:_textField];
+    _textView = [[KDITextView alloc] initWithFrame:CGRectZero textContainer:nil];
+    _textView.translatesAutoresizingMaskIntoConstraints = NO;
+    _textView.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
+    _textView.placeholder = @"Message";
+    _textView.KDI_dynamicTypeTextStyle = UIFontTextStyleBody;
+    [_visualEffectView.contentView addSubview:_textView];
 }
 
 @end

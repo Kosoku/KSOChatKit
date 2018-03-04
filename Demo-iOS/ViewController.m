@@ -16,9 +16,55 @@
 #import "ViewController.h"
 
 #import <KSOChatKit/KSOChatKit.h>
+#import <Ditko/Ditko.h>
+
+@interface ContentViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
+@property (readonly,nonatomic) UITableView *tableView;
+@property (readonly,nonatomic) NSInteger numberOfRows;
+@end
+
+@implementation ContentViewController
+- (BOOL)automaticallyAdjustsScrollViewInsets {
+    return NO;
+}
+- (void)loadView {
+    self.view = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.tableView.rowHeight = 44.0;
+    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:NSStringFromClass(UITableViewCell.class)];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.numberOfRows;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *retval = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(UITableViewCell.class) forIndexPath:indexPath];
+    
+    retval.textLabel.text = [NSNumberFormatter localizedStringFromNumber:@(indexPath.row) numberStyle:NSNumberFormatterSpellOutStyle];
+    
+    return retval;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    cell.backgroundColor = KDIColorRandomRGB();
+}
+
+- (UITableView *)tableView {
+    return (UITableView *)self.view;
+}
+- (NSInteger)numberOfRows {
+    return 25;
+}
+@end
 
 @interface ViewController ()
 @property (strong,nonatomic) KSOChatViewController *chatViewController;
+@property (strong,nonatomic) UINavigationController *contentViewController;
 @end
 
 @implementation ViewController
@@ -27,13 +73,17 @@
     [super viewDidLoad];
     
     self.chatViewController = [[KSOChatViewController alloc] initWithNibName:nil bundle:nil];
-    [self addChildViewController:self.chatViewController];
-    self.chatViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:self.chatViewController.view];
-    [self.chatViewController didMoveToParentViewController:self];
+    self.chatViewController.title = @"Chats";
+    self.chatViewController.contentViewController = [[ContentViewController alloc] initWithNibName:nil bundle:nil];
     
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatViewController.view}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.chatViewController.view}]];
+    self.contentViewController = [[UINavigationController alloc] initWithRootViewController:self.chatViewController];
+    self.contentViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addChildViewController:self.contentViewController];
+    [self.view addSubview:self.contentViewController.view];
+    [self.contentViewController didMoveToParentViewController:self];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
 }
 
 @end

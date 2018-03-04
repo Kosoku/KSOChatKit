@@ -25,6 +25,7 @@
 @property (strong,nonatomic) KSOChatInputView *chatInputView;
 
 - (void)_addContentViewControllerIfNecessary;
+- (void)_adjustContentInsetsIfNecessary;
 - (NSArray<NSLayoutConstraint *> *)_chatInputViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame;
 @end
 
@@ -63,6 +64,11 @@
         }];
     }];
 }
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    [self _adjustContentInsetsIfNecessary];
+}
 
 - (void)setContentViewController:(__kindof UIViewController *)contentViewController {
     UIViewController *oldViewController = _contentViewController;
@@ -90,6 +96,19 @@
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
     
     [self.contentViewController didMoveToParentViewController:self];
+}
+- (void)_adjustContentInsetsIfNecessary; {
+    UIScrollView *scrollView = [[self.contentViewController.view KDI_recursiveSubviews] KQS_find:^BOOL(__kindof UIView * _Nonnull object, NSInteger index) {
+        return [object isKindOfClass:UIScrollView.class];
+    }];
+    
+    if (scrollView == nil) {
+        if ([self.contentViewController.view isKindOfClass:UIScrollView.class]) {
+            scrollView = (UIScrollView *)self.contentViewController.view;
+        }
+    }
+    
+    scrollView.contentInset = UIEdgeInsetsMake(0, 0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(self.chatInputView.frame), 0);
 }
 - (NSArray<NSLayoutConstraint *> *)_chatInputViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame {
     return [@[[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatInputView}],CGRectIsEmpty(keyboardFrame) ? [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatInputView, @"bottom": self.bottomLayoutGuide}] : [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view]-bottom-|" options:0 metrics:@{@"bottom": @(CGRectGetHeight(CGRectIntersection(self.view.bounds, keyboardFrame)))} views:@{@"view": self.chatInputView}]] KQS_flatten];
