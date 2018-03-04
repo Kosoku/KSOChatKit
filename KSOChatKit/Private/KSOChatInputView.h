@@ -16,16 +16,12 @@
 #import <UIKit/UIKit.h>
 #import <Agamotto/KAGAction.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @class KSOChatViewController;
 
 @interface KSOChatInputView : UIView
 
-@property (copy,nonatomic,nullable) NSString *text;
+@property (copy,nonatomic) NSString *text;
 
 - (instancetype)initWithChatViewController:(KSOChatViewController *)chatViewController;
 
 @end
-
-NS_ASSUME_NONNULL_END
