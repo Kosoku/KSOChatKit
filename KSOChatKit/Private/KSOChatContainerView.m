@@ -43,6 +43,7 @@
     [self addSubview:_stackView];
     
     _chatCompletionsView = [[KSOChatCompletionsView alloc] initWithViewModel:_viewModel];
+    _chatCompletionsView.hidden = YES;
     [_stackView addArrangedSubview:_chatCompletionsView];
     
     _chatInputView = [[KSOChatInputView alloc] initWithViewModel:_viewModel];

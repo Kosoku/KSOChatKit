@@ -59,7 +59,10 @@
     NSString *outPrefix;
     NSString *outText;
     if ([self.viewModel shouldShowCompletionsForRange:self.textView.selectedRange prefix:&outPrefix text:&outText]) {
-        KSTLog(@"%@ %@",outPrefix,outText);
+        [self.viewModel showCompletionsForPrefix:outPrefix text:outText];
+    }
+    else {
+        [self.viewModel hideCompletions];
     }
 }
 

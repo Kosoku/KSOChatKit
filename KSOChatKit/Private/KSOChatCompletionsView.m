@@ -16,8 +16,9 @@
 #import "KSOChatCompletionsView.h"
 #import "KSOChatViewModel.h"
 
-@interface KSOChatCompletionsView ()
+@interface KSOChatCompletionsView () <KSOChatViewModelViewDelegate>
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
+
 @end
 
 @implementation KSOChatCompletionsView
@@ -26,13 +27,23 @@
     return CGSizeMake(UIViewNoIntrinsicMetric, 44.0);
 }
 
+#pragma mark KSOChatViewModelViewDelegate
+- (void)chatViewModelShowCompletions:(KSOChatViewModel *)chatViewModel {
+    self.hidden = NO;
+}
+- (void)chatViewModelHideCompletions:(KSOChatViewModel *)chatViewModel {
+    self.hidden = YES;
+}
+
 - (instancetype)initWithViewModel:(KSOChatViewModel *)viewModel {
     if (!(self = [super initWithFrame:CGRectZero]))
         return nil;
     
     _viewModel = viewModel;
+    [_viewModel addViewDelegate:self];
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
+    self.hidden = YES;
     self.backgroundColor = UIColor.lightGrayColor;
     
     return self;

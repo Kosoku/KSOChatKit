@@ -126,4 +126,8 @@
     completion(YES);
 }
 
+- (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldShowCompletionsForPrefix:(NSString *)prefix text:(NSString *)text {
+    return YES;
+}
+
 @end

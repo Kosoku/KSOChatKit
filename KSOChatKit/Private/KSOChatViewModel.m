@@ -23,6 +23,7 @@
 @property (readwrite,strong,nonatomic) KAGAction *doneAction;
 
 @property (weak,nonatomic) KSOChatViewController *chatViewController;
+@property (strong,nonatomic) NSHashTable<id<KSOChatViewModelViewDelegate>> *viewDelegates;
 
 @end
 
@@ -35,6 +36,7 @@
     kstWeakify(self);
     
     _chatViewController = chatViewController;
+    _viewDelegates = [NSHashTable weakObjectsHashTable];
     
     _options = KSOChatViewControllerOptionsShowDoneButton;
     
@@ -60,6 +62,13 @@
     }];
     
     return self;
+}
+
+- (void)addViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate; {
+    [self.viewDelegates addObject:viewDelegate];
+}
+- (void)removeViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate; {
+    [self.viewDelegates removeObject:viewDelegate];
 }
 
 - (BOOL)shouldChangeTextInRange:(NSRange)range text:(NSString *)text; {
@@ -95,6 +104,24 @@
     }
     
     return NO;
+}
+- (void)showCompletionsForPrefix:(NSString *)prefix text:(NSString *)text; {
+    if (![self.delegate respondsToSelector:@selector(chatViewController:shouldShowCompletionsForPrefix:text:)] ||
+        ![self.delegate chatViewController:self.chatViewController shouldShowCompletionsForPrefix:prefix text:text]) {
+        
+        [self hideCompletions];
+        
+        return;
+    }
+    
+    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegates) {
+        [delegate chatViewModelShowCompletions:self];
+    }
+}
+- (void)hideCompletions; {
+    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegates) {
+        [delegate chatViewModelHideCompletions:self];
+    }
 }
 
 @end

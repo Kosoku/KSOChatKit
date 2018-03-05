@@ -18,6 +18,8 @@
 #import "KSOChatViewControllerDefines.h"
 #import "KSOChatViewControllerDelegate.h"
 
+@protocol KSOChatViewModelViewDelegate;
+
 @interface KSOChatViewModel : NSObject
 
 @property (weak,nonatomic) id<KSOChatViewControllerDelegate> delegate;
@@ -32,7 +34,18 @@
 
 - (instancetype)initWithChatViewController:(KSOChatViewController *)chatViewController;
 
+- (void)addViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate;
+- (void)removeViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate;
+
 - (BOOL)shouldChangeTextInRange:(NSRange)range text:(NSString *)text;
 - (BOOL)shouldShowCompletionsForRange:(NSRange)range prefix:(NSString **)outPrefix text:(NSString **)outText;
+- (void)showCompletionsForPrefix:(NSString *)prefix text:(NSString *)text;
+- (void)hideCompletions;
 
+@end
+
+@protocol KSOChatViewModelViewDelegate <NSObject>
+@required
+- (void)chatViewModelShowCompletions:(KSOChatViewModel *)chatViewModel;
+- (void)chatViewModelHideCompletions:(KSOChatViewModel *)chatViewModel;
 @end
