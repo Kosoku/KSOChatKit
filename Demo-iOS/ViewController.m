@@ -158,6 +158,8 @@
     self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
     self.chatViewController.delegate = self;
     self.chatViewController.contentViewController = [[ContentViewController alloc] initWithNibName:nil bundle:nil];
+    [self.chatViewController addSyntaxHighlightingRegularExpression:[NSRegularExpression regularExpressionWithPattern:@"#\\w+" options:0 error:NULL] textAttributes:@{NSForegroundColorAttributeName: UIColor.orangeColor}];
+    [self.chatViewController addSyntaxHighlightingRegularExpression:[NSRegularExpression regularExpressionWithPattern:@"@\\w+" options:0 error:NULL] textAttributes:@{NSForegroundColorAttributeName: UIColor.redColor}];
     
     self.contentViewController = [[UINavigationController alloc] initWithRootViewController:self.chatViewController];
     self.contentViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
