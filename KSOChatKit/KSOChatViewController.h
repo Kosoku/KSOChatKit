@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong,nonatomic,nullable) __kindof UIViewController *contentViewController;
 @property (copy,nonatomic,nullable) NSString *text;
 
+@property (copy,nonatomic,nullable) NSSet<NSString *> *prefixesForCompletion;
+
 @end
 
 @interface UIViewController (KSOChatViewControllerExtensions)

@@ -99,6 +99,7 @@
     
     self.chatViewController = [[KSOChatViewController alloc] initWithNibName:nil bundle:nil];
     self.chatViewController.title = @"Chats";
+    self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
     self.chatViewController.delegate = self;
     self.chatViewController.contentViewController = [[ContentViewController alloc] initWithNibName:nil bundle:nil];
     

@@ -55,6 +55,12 @@
 }
 - (void)textViewDidChange:(UITextView *)textView {
     self.viewModel.text = self.textView.text;
+    
+    NSString *outPrefix;
+    NSString *outText;
+    if ([self.viewModel shouldShowCompletionsForRange:self.textView.selectedRange prefix:&outPrefix text:&outText]) {
+        KSTLog(@"%@ %@",outPrefix,outText);
+    }
 }
 
 #pragma mark *** Public Methods ***

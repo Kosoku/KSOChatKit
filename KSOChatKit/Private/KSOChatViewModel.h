@@ -26,10 +26,13 @@
 
 @property (copy,nonatomic) NSString *text;
 
+@property (copy,nonatomic) NSSet<NSString *> *prefixesForCompletion;
+
 @property (readonly,strong,nonatomic) KAGAction *doneAction;
 
 - (instancetype)initWithChatViewController:(KSOChatViewController *)chatViewController;
 
 - (BOOL)shouldChangeTextInRange:(NSRange)range text:(NSString *)text;
+- (BOOL)shouldShowCompletionsForRange:(NSRange)range prefix:(NSString **)outPrefix text:(NSString **)outText;
 
 @end

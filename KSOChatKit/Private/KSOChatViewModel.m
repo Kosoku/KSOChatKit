@@ -23,6 +23,7 @@
 @property (readwrite,strong,nonatomic) KAGAction *doneAction;
 
 @property (weak,nonatomic) KSOChatViewController *chatViewController;
+
 @end
 
 @implementation KSOChatViewModel
@@ -72,6 +73,28 @@
         }
     }
     return YES;
+}
+- (BOOL)shouldShowCompletionsForRange:(NSRange)range prefix:(NSString **)outPrefix text:(NSString **)outText; {
+    NSString *text = [self.text KST_wordAtRange:range];
+    
+    if (text.length == 0) {
+        return NO;
+    }
+    
+    for (NSString *prefix in self.prefixesForCompletion) {
+        if ([text hasPrefix:prefix]) {
+            if (outPrefix != NULL) {
+                *outPrefix = prefix;
+            }
+            if (outText != nil) {
+                *outText = [text substringFromIndex:prefix.length];
+            }
+            
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 @end

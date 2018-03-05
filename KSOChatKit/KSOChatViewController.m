@@ -114,6 +114,13 @@
 - (void)setText:(NSString *)text {
     self.viewModel.text = text;
 }
+@dynamic prefixesForCompletion;
+- (NSSet<NSString *> *)prefixesForCompletion {
+    return self.viewModel.prefixesForCompletion;
+}
+- (void)setPrefixesForCompletion:(NSSet<NSString *> *)prefixesForCompletion {
+    self.viewModel.prefixesForCompletion = prefixesForCompletion;
+}
 
 - (void)_addContentViewControllerIfNecessary; {
     if (self.contentViewController == nil) {
