@@ -14,23 +14,44 @@
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "ViewController.h"
+#import "LoremIpsum.h"
 
 #import <KSOChatKit/KSOChatKit.h>
 #import <Ditko/Ditko.h>
 #import <KSOFontAwesomeExtensions/KSOFontAwesomeExtensions.h>
 
-@interface User : NSObject
-
+@interface User : NSObject <KSOChatCompletion>
 @end
 
 @implementation User
+- (NSString *)chatCompletionTitle {
+    return [LoremIpsum name];
+}
+@end
 
+@interface Message : NSObject
+@property (copy,nonatomic) NSString *text;
+- (instancetype)initWithText:(NSString *)text;
+@end
+
+@implementation Message
+- (instancetype)init {
+    return [self initWithText:nil];
+}
+- (instancetype)initWithText:(NSString *)text {
+    if (!(self = [super init]))
+        return nil;
+    
+    _text = text ?: [LoremIpsum sentence];
+    
+    return self;
+}
 @end
 
 @interface ContentViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (strong,nonatomic) UITableView *tableView;
 
-@property (copy,nonatomic) NSArray<NSString *> *messages;
+@property (copy,nonatomic) NSArray<Message *> *messages;
 
 - (void)addMessageWithText:(NSString *)text;
 @end
@@ -42,22 +63,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSMutableArray *temp = [[NSMutableArray alloc] init];
+    
+    for (NSUInteger i=0; i<25; i++) {
+        [temp addObject:[[Message alloc] init]];
+    }
+    
+    self.messages = temp;
+    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.tableView.backgroundView = ({
-        KDIEmptyView *retval = [[KDIEmptyView alloc] initWithFrame:CGRectZero];
-       
-        retval.alignmentVertical = KDIEmptyViewAlignmentVerticalCustomSpacing;
-        retval.alignmentVerticalCustomSpacing = 75.0;
-        retval.image = [UIImage KSO_fontAwesomeImageWithString:@"\uf086" size:CGSizeMake(128, 128)];
-        retval.headline = @"No Messages";
-        retval.body = @"Add a message to see something!";
-        
-        retval;
-    });
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.estimatedRowHeight = 44.0;
-    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:NSStringFromClass(UITableViewCell.class)];
+    [self.tableView registerClass:KDITableViewCell.class forCellReuseIdentifier:NSStringFromClass(KDITableViewCell.class)];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
@@ -70,26 +88,21 @@
     return self.messages.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *retval = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(UITableViewCell.class) forIndexPath:indexPath];
+    KDITableViewCell *retval = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(KDITableViewCell.class) forIndexPath:indexPath];
     
-    retval.textLabel.numberOfLines = 0;
-    retval.textLabel.text = self.messages[indexPath.row];
+    retval.contentView.backgroundColor = KDIColorRandomRGB();
+    retval.titleColor = [retval.contentView.backgroundColor KDI_contrastingColor];
+    retval.title = self.messages[indexPath.row].text;
     
     return retval;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.contentView.backgroundColor = indexPath.row % 2 == 0 ? UIColor.whiteColor : [KDIColorRandomRGB() colorWithAlphaComponent:0.5];
 }
 
 - (void)addMessageWithText:(NSString *)text {
     NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
     
-    [temp addObject:text];
+    [temp addObject:[[Message alloc] initWithText:text]];
     
     self.messages = temp;
-    
-    self.tableView.backgroundView.hidden = self.messages.count > 0;
     
     [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
@@ -138,7 +151,15 @@
     return YES;
 }
 - (NSArray<id<KSOChatCompletion>> *)chatViewController:(KSOChatViewController *)chatViewController completionsForPrefix:(NSString *)prefix text:(NSString *)text {
+    NSMutableArray *retval = [[NSMutableArray alloc] init];
     
+    if ([prefix isEqualToString:@"@"]) {
+        for (NSUInteger i=0; i<10; i++) {
+            [retval addObject:[[User alloc] init]];
+        }
+    }
+    
+    return retval;
 }
 
 @end

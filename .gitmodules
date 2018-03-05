@@ -16,3 +16,6 @@
 [submodule "Vendor/Quicksilver"]
 	path = Vendor/Quicksilver
 	url = https://github.com/Kosoku/Quicksilver.git
+[submodule "Vendor/LoremIpsum"]
+	path = Vendor/LoremIpsum
+	url = https://github.com/lukaskubanek/LoremIpsum.git

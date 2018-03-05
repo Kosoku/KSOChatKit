@@ -70,17 +70,18 @@
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.hidden = YES;
-    self.backgroundColor = UIColor.lightGrayColor;
+    self.backgroundColor = UIColor.clearColor;
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.translatesAutoresizingMaskIntoConstraints = NO;
     _tableView.estimatedRowHeight = 44.0;
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    [_tableView registerClass:KDITableViewCell.class forCellReuseIdentifier:NSStringFromClass(KDITableViewCell.class)];
     [self addSubview:_tableView];
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _tableView}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view(<=height)]|" options:0 metrics:@{@"height": @(_tableView.estimatedRowHeight * 3.0)} views:@{@"view": _tableView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view(==height@priority)]|" options:0 metrics:@{@"height": @(ceil(_tableView.estimatedRowHeight * 2.0)), @"priority": @(UILayoutPriorityRequired - 1.0)} views:@{@"view": _tableView}]];
     
     [self KAG_addObserverForKeyPaths:@[@kstKeypath(self,completions)] options:0 block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);

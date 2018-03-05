@@ -42,6 +42,7 @@
 		07490A64204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 07490A62204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		07490A65204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07490A63204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m */; };
 		07490A67204CFCFF004CB5C8 /* KSOChatCompletion.h in Headers */ = {isa = PBXBuildFile; fileRef = 07490A66204CFCFF004CB5C8 /* KSOChatCompletion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		07490A6A204D1D5E004CB5C8 /* LoremIpsum.m in Sources */ = {isa = PBXBuildFile; fileRef = 07490A69204D1D5E004CB5C8 /* LoremIpsum.m */; };
 		07CDA86A204CA2D300089406 /* KSOChatViewControllerDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 07CDA869204CA2D300089406 /* KSOChatViewControllerDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		07CDA86D204CA3E200089406 /* KSOChatViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 07CDA86B204CA3E200089406 /* KSOChatViewModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		07CDA86E204CA3E200089406 /* KSOChatViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CDA86C204CA3E200089406 /* KSOChatViewModel.m */; };
@@ -116,6 +117,8 @@
 		07490A62204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+KSOChatKitExtensions.h"; sourceTree = "<group>"; };
 		07490A63204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+KSOChatKitExtensions.m"; sourceTree = "<group>"; };
 		07490A66204CFCFF004CB5C8 /* KSOChatCompletion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatCompletion.h; sourceTree = "<group>"; };
+		07490A68204D1D5E004CB5C8 /* LoremIpsum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoremIpsum.h; path = Vendor/LoremIpsum/LoremIpsum/LoremIpsum.h; sourceTree = SOURCE_ROOT; };
+		07490A69204D1D5E004CB5C8 /* LoremIpsum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoremIpsum.m; path = Vendor/LoremIpsum/LoremIpsum/LoremIpsum.m; sourceTree = SOURCE_ROOT; };
 		07CDA869204CA2D300089406 /* KSOChatViewControllerDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatViewControllerDefines.h; sourceTree = "<group>"; };
 		07CDA86B204CA3E200089406 /* KSOChatViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatViewModel.h; sourceTree = "<group>"; };
 		07CDA86C204CA3E200089406 /* KSOChatViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatViewModel.m; sourceTree = "<group>"; };
@@ -250,6 +253,8 @@
 				07461679204B4EB900F2192A /* AppDelegate.m */,
 				0746167B204B4EB900F2192A /* ViewController.h */,
 				0746167C204B4EB900F2192A /* ViewController.m */,
+				07490A68204D1D5E004CB5C8 /* LoremIpsum.h */,
+				07490A69204D1D5E004CB5C8 /* LoremIpsum.m */,
 				0746167E204B4EB900F2192A /* Main.storyboard */,
 				07461681204B4EB900F2192A /* Assets.xcassets */,
 				07461683204B4EB900F2192A /* LaunchScreen.storyboard */,
@@ -396,6 +401,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07490A6A204D1D5E004CB5C8 /* LoremIpsum.m in Sources */,
 				0746167D204B4EB900F2192A /* ViewController.m in Sources */,
 				07461688204B4EB900F2192A /* main.m in Sources */,
 				0746167A204B4EB900F2192A /* AppDelegate.m in Sources */,
