@@ -18,10 +18,13 @@
 #import "KSOChatViewControllerDefines.h"
 #import "KSOChatViewControllerDelegate.h"
 
-@protocol KSOChatViewModelViewDelegate;
+typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatCompletion>> *completions);
+
+@protocol KSOChatViewModelDataSource,KSOChatViewModelViewDelegate;
 
 @interface KSOChatViewModel : NSObject
 
+@property (weak,nonatomic) id<KSOChatViewModelDataSource> dataSource;
 @property (weak,nonatomic) id<KSOChatViewControllerDelegate> delegate;
 
 @property (assign,nonatomic) KSOChatViewControllerOptions options;
@@ -42,6 +45,13 @@
 - (void)showCompletionsForPrefix:(NSString *)prefix text:(NSString *)text;
 - (void)hideCompletions;
 
+- (void)requestCompletionsWithCompletion:(KSOChatViewModelRequestCompletionsBlock)completion;
+
+@end
+
+@protocol KSOChatViewModelDataSource <NSObject>
+@required
+- (NSRange)selectedRangeForChatViewModel:(KSOChatViewModel *)chatViewModel;
 @end
 
 @protocol KSOChatViewModelViewDelegate <NSObject>

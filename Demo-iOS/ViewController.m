@@ -19,6 +19,14 @@
 #import <Ditko/Ditko.h>
 #import <KSOFontAwesomeExtensions/KSOFontAwesomeExtensions.h>
 
+@interface User : NSObject
+
+@end
+
+@implementation User
+
+@end
+
 @interface ContentViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (strong,nonatomic) UITableView *tableView;
 
@@ -128,6 +136,9 @@
 
 - (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldShowCompletionsForPrefix:(NSString *)prefix text:(NSString *)text {
     return YES;
+}
+- (NSArray<id<KSOChatCompletion>> *)chatViewController:(KSOChatViewController *)chatViewController completionsForPrefix:(NSString *)prefix text:(NSString *)text {
+    
 }
 
 @end

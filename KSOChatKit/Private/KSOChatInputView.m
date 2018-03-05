@@ -20,7 +20,7 @@
 #import <Stanley/Stanley.h>
 #import <Agamotto/Agamotto.h>
 
-@interface KSOChatInputView () <UITextViewDelegate>
+@interface KSOChatInputView () <KSOChatViewModelDataSource,UITextViewDelegate>
 @property (strong,nonatomic) UIVisualEffectView *visualEffectView;
 @property (strong,nonatomic) UIStackView *stackView;
 
@@ -58,12 +58,16 @@
     
     NSString *outPrefix;
     NSString *outText;
-    if ([self.viewModel shouldShowCompletionsForRange:self.textView.selectedRange prefix:&outPrefix text:&outText]) {
+    if ([self.viewModel shouldShowCompletionsForRange:KDISelectedRangeFromTextInput(self.textView) prefix:&outPrefix text:&outText]) {
         [self.viewModel showCompletionsForPrefix:outPrefix text:outText];
     }
     else {
         [self.viewModel hideCompletions];
     }
+}
+#pragma mark KSOChatViewModelDataSource
+- (NSRange)selectedRangeForChatViewModel:(KSOChatViewModel *)chatViewModel {
+    return KDISelectedRangeFromTextInput(self.textView);
 }
 
 #pragma mark *** Public Methods ***
@@ -74,6 +78,7 @@
     kstWeakify(self);
     
     _viewModel = viewModel;
+    _viewModel.dataSource = self;
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.backgroundColor = UIColor.clearColor;

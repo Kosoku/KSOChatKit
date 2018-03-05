@@ -124,4 +124,23 @@
     }
 }
 
+- (void)requestCompletionsWithCompletion:(KSOChatViewModelRequestCompletionsBlock)completion {
+    if (![self.delegate respondsToSelector:@selector(chatViewController:completionsForPrefix:text:)]) {
+        completion(nil);
+        return;
+    }
+    
+    NSString *outPrefix;
+    NSString *outText;
+    NSRange range = [self.dataSource selectedRangeForChatViewModel:self];
+    if ([self shouldShowCompletionsForRange:range prefix:&outPrefix text:&outText]) {
+        NSArray *completions = [self.delegate chatViewController:self.chatViewController completionsForPrefix:outPrefix text:outText];
+        
+        completion(completions);
+    }
+    else {
+        completion(nil);
+    }
+}
+
 @end

@@ -16,20 +16,44 @@
 #import "KSOChatCompletionsView.h"
 #import "KSOChatViewModel.h"
 
-@interface KSOChatCompletionsView () <KSOChatViewModelViewDelegate>
+#import <Ditko/Ditko.h>
+#import <Stanley/Stanley.h>
+#import <Agamotto/Agamotto.h>
+
+@interface KSOChatCompletionsView () <KSOChatViewModelViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@property (strong,nonatomic) UITableView *tableView;
+
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
+@property (copy,nonatomic) NSArray<id<KSOChatCompletion>> *completions;
 
 @end
 
 @implementation KSOChatCompletionsView
 
-- (CGSize)intrinsicContentSize {
-    return CGSizeMake(UIViewNoIntrinsicMetric, 44.0);
+#pragma mark UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.completions.count;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    KDITableViewCell *retval = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(KDITableViewCell.class) forIndexPath:indexPath];
+    id<KSOChatCompletion> completion = self.completions[indexPath.row];
+    
+    retval.title = completion.chatCompletionTitle;
+    
+    return retval;
+}
+#pragma mark UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
 }
 
 #pragma mark KSOChatViewModelViewDelegate
 - (void)chatViewModelShowCompletions:(KSOChatViewModel *)chatViewModel {
     self.hidden = NO;
+    
+    [self.viewModel requestCompletionsWithCompletion:^(NSArray<id<KSOChatCompletion>> *completions) {
+        self.completions = completions;
+    }];
 }
 - (void)chatViewModelHideCompletions:(KSOChatViewModel *)chatViewModel {
     self.hidden = YES;
@@ -39,12 +63,29 @@
     if (!(self = [super initWithFrame:CGRectZero]))
         return nil;
     
+    kstWeakify(self);
+    
     _viewModel = viewModel;
     [_viewModel addViewDelegate:self];
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.hidden = YES;
     self.backgroundColor = UIColor.lightGrayColor;
+    
+    _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    _tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    _tableView.estimatedRowHeight = 44.0;
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+    [self addSubview:_tableView];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _tableView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view(<=height)]|" options:0 metrics:@{@"height": @(_tableView.estimatedRowHeight * 3.0)} views:@{@"view": _tableView}]];
+    
+    [self KAG_addObserverForKeyPaths:@[@kstKeypath(self,completions)] options:0 block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+        kstStrongify(self);
+        [self.tableView reloadData];
+    }];
     
     return self;
 }
