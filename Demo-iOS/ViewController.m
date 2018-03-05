@@ -19,6 +19,7 @@
 #import <KSOChatKit/KSOChatKit.h>
 #import <Ditko/Ditko.h>
 #import <KSOFontAwesomeExtensions/KSOFontAwesomeExtensions.h>
+#import <Stanley/Stanley.h>
 
 @interface User : NSObject <KSOChatCompletion>
 @property (copy,nonatomic) NSString *name;
@@ -179,6 +180,10 @@
     [viewController.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:viewController.messages.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     
     completion(YES);
+}
+
+- (void)chatViewControllerDidChangeText:(KSOChatViewController *)chatViewController {
+    KSTLog(@"text=%@",chatViewController.text);
 }
 
 - (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldShowCompletionsForPrefix:(NSString *)prefix text:(NSString *)text {

@@ -55,6 +55,8 @@
         NSRange lineRange = [textStorage.string lineRangeForRange:editedRange];
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"#\\w+" options:0 error:NULL];
         
+        [textStorage addAttribute:NSForegroundColorAttributeName value:UIColor.blackColor range:lineRange];
+        
         [regex enumerateMatchesInString:textStorage.string options:0 range:lineRange usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
             [textStorage addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:result.range];
         }];
@@ -66,6 +68,10 @@
 }
 - (void)textViewDidChange:(UITextView *)textView {
     self.viewModel.text = self.textView.text;
+    
+    if ([self.viewModel.delegate respondsToSelector:@selector(chatViewControllerDidChangeText:)]) {
+        [self.viewModel.delegate chatViewControllerDidChangeText:self.viewModel.chatViewController];
+    }
     
     NSString *outPrefix;
     NSString *outText;
