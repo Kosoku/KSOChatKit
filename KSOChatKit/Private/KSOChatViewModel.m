@@ -20,9 +20,9 @@
 #import <Stanley/Stanley.h>
 
 @interface KSOChatViewModel ()
+@property (readwrite,weak,nonatomic) KSOChatViewController *chatViewController;
 @property (readwrite,strong,nonatomic) KAGAction *doneAction;
 
-@property (weak,nonatomic) KSOChatViewController *chatViewController;
 @property (strong,nonatomic) NSHashTable<id<KSOChatViewModelViewDelegate>> *viewDelegates;
 
 @end
@@ -83,8 +83,8 @@
     }
     return YES;
 }
-- (BOOL)shouldShowCompletionsForRange:(NSRange)range prefix:(NSString **)outPrefix text:(NSString **)outText; {
-    NSString *text = [self.text KST_wordAtRange:range];
+- (BOOL)shouldShowCompletionsForRange:(NSRange)range prefix:(NSString **)outPrefix text:(NSString **)outText range:(NSRangePointer)outRange; {
+    NSString *text = [self.text KST_wordAtRange:range outRange:outRange];
     
     if (text.length == 0) {
         return NO;
@@ -133,7 +133,8 @@
     NSString *outPrefix;
     NSString *outText;
     NSRange range = [self.dataSource selectedRangeForChatViewModel:self];
-    if ([self shouldShowCompletionsForRange:range prefix:&outPrefix text:&outText]) {
+    
+    if ([self shouldShowCompletionsForRange:range prefix:&outPrefix text:&outText range:NULL]) {
         NSArray *completions = [self.delegate chatViewController:self.chatViewController completionsForPrefix:outPrefix text:outText];
         
         completion(completions);
@@ -141,6 +142,20 @@
     else {
         completion(nil);
     }
+}
+- (void)selectCompletion:(id<KSOChatCompletion>)completion; {
+    NSRange outRange;
+    NSRange range = [self.dataSource selectedRangeForChatViewModel:self];
+    
+    if ([self shouldShowCompletionsForRange:range prefix:NULL text:NULL range:&outRange]) {
+        if ([self.delegate respondsToSelector:@selector(chatViewController:textForCompletion:)]) {
+            NSString *text = [self.delegate chatViewController:self.chatViewController textForCompletion:completion];
+            
+            self.text = [self.text stringByReplacingCharactersInRange:outRange withString:text];
+        }
+    }
+    
+    [self hideCompletions];
 }
 
 @end

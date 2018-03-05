@@ -39,12 +39,15 @@
     id<KSOChatCompletion> completion = self.completions[indexPath.row];
     
     retval.title = completion.chatCompletionTitle;
+    if ([completion respondsToSelector:@selector(chatCompletionSubtitle)]) {
+        retval.subtitle = completion.chatCompletionSubtitle;
+    }
     
     return retval;
 }
 #pragma mark UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    [self.viewModel selectCompletion:self.completions[indexPath.row]];
 }
 
 #pragma mark KSOChatViewModelViewDelegate
@@ -81,7 +84,7 @@
     [self addSubview:_tableView];
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _tableView}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view(==height@priority)]|" options:0 metrics:@{@"height": @(ceil(_tableView.estimatedRowHeight * 2.0)), @"priority": @(UILayoutPriorityRequired - 1.0)} views:@{@"view": _tableView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view(==height@priority)]|" options:0 metrics:@{@"height": @(ceil(_tableView.estimatedRowHeight * 2.5)), @"priority": @(UILayoutPriorityRequired - 1.0)} views:@{@"view": _tableView}]];
     
     [self KAG_addObserverForKeyPaths:@[@kstKeypath(self,completions)] options:0 block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);

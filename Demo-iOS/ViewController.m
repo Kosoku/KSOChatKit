@@ -21,11 +21,26 @@
 #import <KSOFontAwesomeExtensions/KSOFontAwesomeExtensions.h>
 
 @interface User : NSObject <KSOChatCompletion>
+@property (copy,nonatomic) NSString *name;
+@property (copy,nonatomic) NSString *screenName;
 @end
 
 @implementation User
+- (instancetype)init {
+    if (!(self = [super init]))
+        return nil;
+    
+    _name = [LoremIpsum name];
+    _screenName = [@"@" stringByAppendingString:[LoremIpsum firstName]];
+    
+    return self;
+}
+
 - (NSString *)chatCompletionTitle {
-    return [LoremIpsum name];
+    return self.name;
+}
+- (NSString *)chatCompletionSubtitle {
+    return self.screenName;
 }
 @end
 
@@ -160,6 +175,14 @@
     }
     
     return retval;
+}
+- (NSString *)chatViewController:(KSOChatViewController *)chatViewController textForCompletion:(id<KSOChatCompletion>)completion {
+    if ([completion isKindOfClass:User.class]) {
+        User *user = (User *)completion;
+        
+        return user.screenName;
+    }
+    return @"";
 }
 
 @end

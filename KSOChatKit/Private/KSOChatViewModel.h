@@ -24,6 +24,8 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 
 @interface KSOChatViewModel : NSObject
 
+@property (readonly,weak,nonatomic) KSOChatViewController *chatViewController;
+
 @property (weak,nonatomic) id<KSOChatViewModelDataSource> dataSource;
 @property (weak,nonatomic) id<KSOChatViewControllerDelegate> delegate;
 
@@ -41,11 +43,12 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 - (void)removeViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate;
 
 - (BOOL)shouldChangeTextInRange:(NSRange)range text:(NSString *)text;
-- (BOOL)shouldShowCompletionsForRange:(NSRange)range prefix:(NSString **)outPrefix text:(NSString **)outText;
+- (BOOL)shouldShowCompletionsForRange:(NSRange)range prefix:(NSString **)outPrefix text:(NSString **)outText range:(NSRangePointer)outRange;
 - (void)showCompletionsForPrefix:(NSString *)prefix text:(NSString *)text;
 - (void)hideCompletions;
 
 - (void)requestCompletionsWithCompletion:(KSOChatViewModelRequestCompletionsBlock)completion;
+- (void)selectCompletion:(id<KSOChatCompletion>)completion;
 
 @end
 

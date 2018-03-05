@@ -30,6 +30,7 @@ typedef void(^KSOChatViewControllerCompletionBlock)(BOOL success);
 - (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldShowCompletionsForPrefix:(NSString *)prefix text:(NSString *)text;
 
 - (nullable NSArray<id<KSOChatCompletion>> *)chatViewController:(KSOChatViewController *)chatViewController completionsForPrefix:(NSString *)prefix text:(NSString *)text;
+- (NSString *)chatViewController:(KSOChatViewController *)chatViewController textForCompletion:(id<KSOChatCompletion>)completion;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -58,7 +58,7 @@
     
     NSString *outPrefix;
     NSString *outText;
-    if ([self.viewModel shouldShowCompletionsForRange:KDISelectedRangeFromTextInput(self.textView) prefix:&outPrefix text:&outText]) {
+    if ([self.viewModel shouldShowCompletionsForRange:KDISelectedRangeFromTextInput(self.textView) prefix:&outPrefix text:&outText range:NULL]) {
         [self.viewModel showCompletionsForPrefix:outPrefix text:outText];
     }
     else {
