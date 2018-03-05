@@ -20,7 +20,7 @@
 #import <Stanley/Stanley.h>
 #import <Agamotto/Agamotto.h>
 
-@interface KSOChatInputView () <KSOChatViewModelDataSource,UITextViewDelegate>
+@interface KSOChatInputView () <KSOChatViewModelDataSource,UITextViewDelegate,NSTextStorageDelegate>
 @property (strong,nonatomic) UIVisualEffectView *visualEffectView;
 @property (strong,nonatomic) UIStackView *stackView;
 
@@ -48,6 +48,17 @@
     self.KDI_customConstraints = temp;
     
     [super updateConstraints];
+}
+#pragma mark NSTextStorageDelegate
+- (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta {
+    if (editedMask & NSTextStorageEditedCharacters) {
+        NSRange lineRange = [textStorage.string lineRangeForRange:editedRange];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"#\\w+" options:0 error:NULL];
+        
+        [regex enumerateMatchesInString:textStorage.string options:0 range:lineRange usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
+            [textStorage addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:result.range];
+        }];
+    }
 }
 #pragma mark UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
@@ -98,6 +109,7 @@
     _textView.translatesAutoresizingMaskIntoConstraints = NO;
     _textView.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
     _textView.delegate = self;
+    _textView.textStorage.delegate = self;
     _textView.placeholder = @"Message";
     _textView.KDI_dynamicTypeTextStyle = UIFontTextStyleBody;
     _textView.KDI_cornerRadius = 5.0;
