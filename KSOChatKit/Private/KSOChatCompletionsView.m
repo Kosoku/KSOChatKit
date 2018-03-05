@@ -42,6 +42,15 @@
     if ([completion respondsToSelector:@selector(chatCompletionSubtitle)]) {
         retval.subtitle = completion.chatCompletionSubtitle;
     }
+    else {
+        retval.subtitle = nil;
+    }
+    if ([completion respondsToSelector:@selector(chatCompletionImage)]) {
+        retval.icon = completion.chatCompletionImage;
+    }
+    else {
+        retval.icon = nil;
+    }
     
     return retval;
 }

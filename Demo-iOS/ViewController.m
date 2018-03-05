@@ -44,6 +44,25 @@
 }
 @end
 
+@interface HashTag : NSObject <KSOChatCompletion>
+@property (copy,nonatomic) NSString *name;
+@end
+
+@implementation HashTag
+- (instancetype)init {
+    if (!(self = [super init]))
+        return nil;
+    
+    _name = [@"#" stringByAppendingString:[LoremIpsum word]];
+    
+    return self;
+}
+
+- (NSString *)chatCompletionTitle {
+    return self.name;
+}
+@end
+
 @interface Message : NSObject
 @property (copy,nonatomic) NSString *text;
 - (instancetype)initWithText:(NSString *)text;
@@ -173,6 +192,11 @@
             [retval addObject:[[User alloc] init]];
         }
     }
+    else if ([prefix isEqualToString:@"#"]) {
+        for (NSUInteger i=0; i<10; i++) {
+            [retval addObject:[[HashTag alloc] init]];
+        }
+    }
     
     return retval;
 }
@@ -181,6 +205,11 @@
         User *user = (User *)completion;
         
         return user.screenName;
+    }
+    else if ([completion isKindOfClass:HashTag.class]) {
+        HashTag *hashtag = (HashTag *)completion;
+        
+        return hashtag.name;
     }
     return @"";
 }
