@@ -107,7 +107,7 @@
     _stackView = [[UIStackView alloc] initWithFrame:CGRectZero];
     _stackView.translatesAutoresizingMaskIntoConstraints = NO;
     _stackView.axis = UILayoutConstraintAxisHorizontal;
-    _stackView.alignment = UIStackViewAlignmentTop;
+    _stackView.alignment = UIStackViewAlignmentBottom;
     _stackView.spacing = 8.0;
     [_visualEffectView.contentView addSubview:_stackView];
     
