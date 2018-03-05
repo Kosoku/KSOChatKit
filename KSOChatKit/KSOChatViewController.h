@@ -32,10 +32,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface UIViewController (KSOChatViewControllerExtensions)
-
-@property (readonly,nonatomic,nullable) KSOChatViewController *KSO_chatViewController;
-
-@end
-
 NS_ASSUME_NONNULL_END

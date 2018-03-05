@@ -1,8 +1,8 @@
 //
-//  KSOChatKit.h
+//  UIViewController+KSOChatKitExtensions.m
 //  KSOChatKit
 //
-//  Created by William Towe on 3/3/18.
+//  Created by William Towe on 3/4/18.
 //  Copyright © 2018 Kosoku Interactive, LLC. All rights reserved.
 //
 //  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -13,15 +13,23 @@
 //
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <UIKit/UIKit.h>
+#import "UIViewController+KSOChatKitExtensions.h"
+#import "KSOChatViewController.h"
 
-//! Project version number for KSOChatKit.
-FOUNDATION_EXPORT double KSOChatKitVersionNumber;
+@implementation UIViewController (KSOChatKitExtensions)
 
-//! Project version string for KSOChatKit.
-FOUNDATION_EXPORT const unsigned char KSOChatKitVersionString[];
+- (KSOChatViewController *)KSO_chatViewController {
+    UIViewController *viewController = self;
+    
+    while (viewController != nil) {
+        if ([viewController isKindOfClass:KSOChatViewController.class]) {
+            return (KSOChatViewController *)viewController;
+        }
+        
+        viewController = viewController.parentViewController;
+    }
+    
+    return nil;
+}
 
-#import <KSOChatKit/KSOChatViewControllerDefines.h>
-#import <KSOChatKit/KSOChatViewControllerDelegate.h>
-#import <KSOChatKit/KSOChatViewController.h>
-#import <KSOChatKit/UIViewController+KSOChatKitExtensions.h>
+@end

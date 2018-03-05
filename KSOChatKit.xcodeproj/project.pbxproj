@@ -39,6 +39,8 @@
 		07461682204B4EB900F2192A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07461681204B4EB900F2192A /* Assets.xcassets */; };
 		07461685204B4EB900F2192A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07461683204B4EB900F2192A /* LaunchScreen.storyboard */; };
 		07461688204B4EB900F2192A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 07461687204B4EB900F2192A /* main.m */; };
+		07490A64204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 07490A62204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		07490A65204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 07490A63204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m */; };
 		07CDA86A204CA2D300089406 /* KSOChatViewControllerDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 07CDA869204CA2D300089406 /* KSOChatViewControllerDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		07CDA86D204CA3E200089406 /* KSOChatViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 07CDA86B204CA3E200089406 /* KSOChatViewModel.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		07CDA86E204CA3E200089406 /* KSOChatViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CDA86C204CA3E200089406 /* KSOChatViewModel.m */; };
@@ -110,6 +112,8 @@
 		07461684204B4EB900F2192A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		07461686204B4EB900F2192A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		07461687204B4EB900F2192A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		07490A62204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+KSOChatKitExtensions.h"; sourceTree = "<group>"; };
+		07490A63204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+KSOChatKitExtensions.m"; sourceTree = "<group>"; };
 		07CDA869204CA2D300089406 /* KSOChatViewControllerDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatViewControllerDefines.h; sourceTree = "<group>"; };
 		07CDA86B204CA3E200089406 /* KSOChatViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatViewModel.h; sourceTree = "<group>"; };
 		07CDA86C204CA3E200089406 /* KSOChatViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatViewModel.m; sourceTree = "<group>"; };
@@ -220,6 +224,8 @@
 				070F9915204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h */,
 				070F98FF204B6230001CFEFE /* KSOChatViewController.h */,
 				070F9900204B6230001CFEFE /* KSOChatViewController.m */,
+				07490A62204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h */,
+				07490A63204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m */,
 				070F9917204BC3D2001CFEFE /* Private */,
 			);
 			name = Source;
@@ -263,6 +269,7 @@
 				0746166B204B4A4600F2192A /* KSOChatKit.h in Headers */,
 				070F9901204B6230001CFEFE /* KSOChatViewController.h in Headers */,
 				070F98FD204B50CF001CFEFE /* KSOChatInputView.h in Headers */,
+				07490A64204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h in Headers */,
 				07CDA86D204CA3E200089406 /* KSOChatViewModel.h in Headers */,
 				07CDA879204CE74300089406 /* KSOChatContainerView.h in Headers */,
 			);
@@ -375,6 +382,7 @@
 				07CDA876204CE31700089406 /* KSOChatCompletionsView.m in Sources */,
 				07CDA86E204CA3E200089406 /* KSOChatViewModel.m in Sources */,
 				070F9902204B6230001CFEFE /* KSOChatViewController.m in Sources */,
+				07490A65204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m in Sources */,
 				07CDA87A204CE74300089406 /* KSOChatContainerView.m in Sources */,
 				070F98FE204B50CF001CFEFE /* KSOChatInputView.m in Sources */,
 			);

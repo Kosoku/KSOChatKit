@@ -154,21 +154,3 @@
 }
 
 @end
-
-@implementation UIViewController (KSOChatViewControllerExtensions)
-
-- (KSOChatViewController *)KSO_chatViewController {
-    UIViewController *viewController = self;
-    
-    while (viewController != nil) {
-        if ([viewController isKindOfClass:KSOChatViewController.class]) {
-            return (KSOChatViewController *)viewController;
-        }
-        
-        viewController = viewController.parentViewController;
-    }
-    
-    return nil;
-}
-
-@end
