@@ -13,13 +13,14 @@
 //
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <Agamotto/KAGAction.h>
 #import "KSOChatViewControllerDefines.h"
 #import "KSOChatViewControllerDelegate.h"
 
 typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatCompletion>> *completions);
 
+@class KSOChatTheme;
 @protocol KSOChatViewModelDataSource,KSOChatViewModelViewDelegate;
 
 @interface KSOChatViewModel : NSObject
@@ -28,11 +29,15 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 
 @property (weak,nonatomic) id<KSOChatViewModelDataSource> dataSource;
 @property (weak,nonatomic) id<KSOChatViewControllerDelegate> delegate;
+@property (readonly,nonatomic) NSSet<id<KSOChatViewModelViewDelegate>> *viewDelegates;
 
 @property (assign,nonatomic) KSOChatViewControllerOptions options;
 
+@property (strong,nonatomic) KSOChatTheme *theme;
+
 @property (copy,nonatomic) NSString *text;
 
+@property (readonly,copy,nonatomic) NSDictionary<NSRegularExpression *, NSDictionary<NSAttributedStringKey, id> *> *regularExpressionsToTextAttributes;
 @property (copy,nonatomic) NSSet<NSString *> *prefixesForCompletion;
 
 @property (readonly,strong,nonatomic) KAGAction *doneAction;
@@ -41,6 +46,9 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 
 - (void)addViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate;
 - (void)removeViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate;
+
+- (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes;
+- (void)removeSyntaxHighlightingRegularExpressions;
 
 - (BOOL)shouldChangeTextInRange:(NSRange)range text:(NSString *)text;
 - (BOOL)shouldShowCompletionsForRange:(NSRange)range prefix:(NSString **)outPrefix text:(NSString **)outText range:(NSRangePointer)outRange;

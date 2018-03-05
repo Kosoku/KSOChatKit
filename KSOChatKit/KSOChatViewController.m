@@ -33,7 +33,7 @@
 @end
 
 @implementation KSOChatViewController
-
+#pragma mark *** Subclass Overrides ***
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (!(self = [super initWithNibName:nil bundle:nil]))
         return nil;
@@ -42,7 +42,7 @@
     
     return self;
 }
-
+#pragma mark -
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -80,7 +80,14 @@
     
     [self _adjustContentInsetsIfNecessary];
 }
-
+#pragma mark *** Public Methods ***
+- (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes; {
+    [self.viewModel addSyntaxHighlightingRegularExpression:regularExpression textAttributes:textAttributes];
+}
+- (void)removeSyntaxHighlightingRegularExpressions; {
+    [self.viewModel removeSyntaxHighlightingRegularExpressions];
+}
+#pragma mark Properties
 @dynamic delegate;
 - (id<KSOChatViewControllerDelegate>)delegate {
     return self.viewModel.delegate;
@@ -94,6 +101,13 @@
 }
 - (void)setOptions:(KSOChatViewControllerOptions)options {
     self.viewModel.options = options;
+}
+@dynamic theme;
+- (KSOChatTheme *)theme {
+    return self.viewModel.theme;
+}
+- (void)setTheme:(KSOChatTheme *)theme {
+    self.viewModel.theme = theme;
 }
 - (void)setContentViewController:(__kindof UIViewController *)contentViewController {
     UIViewController *oldViewController = _contentViewController;
@@ -121,7 +135,7 @@
 - (void)setPrefixesForCompletion:(NSSet<NSString *> *)prefixesForCompletion {
     self.viewModel.prefixesForCompletion = prefixesForCompletion;
 }
-
+#pragma mark *** Private Methods ***
 - (void)_addContentViewControllerIfNecessary; {
     if (self.contentViewController == nil) {
         return;

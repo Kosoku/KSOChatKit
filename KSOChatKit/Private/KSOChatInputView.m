@@ -15,6 +15,7 @@
 
 #import "KSOChatInputView.h"
 #import "KSOChatViewModel.h"
+#import "KSOChatTheme.h"
 
 #import <Ditko/Ditko.h>
 #import <Stanley/Stanley.h>
@@ -53,12 +54,13 @@
 - (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta {
     if (editedMask & NSTextStorageEditedCharacters) {
         NSRange lineRange = [textStorage.string lineRangeForRange:editedRange];
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"#\\w+" options:0 error:NULL];
         
-        [textStorage addAttribute:NSForegroundColorAttributeName value:UIColor.blackColor range:lineRange];
+        [textStorage addAttribute:NSForegroundColorAttributeName value:self.viewModel.theme.textColor range:lineRange];
         
-        [regex enumerateMatchesInString:textStorage.string options:0 range:lineRange usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
-            [textStorage addAttribute:NSForegroundColorAttributeName value:UIColor.orangeColor range:result.range];
+        [self.viewModel.regularExpressionsToTextAttributes enumerateKeysAndObjectsUsingBlock:^(NSRegularExpression * _Nonnull key, NSDictionary<NSAttributedStringKey,id> * _Nonnull obj, BOOL * _Nonnull stop) {
+            [key enumerateMatchesInString:textStorage.string options:0 range:lineRange usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
+                [textStorage addAttributes:obj range:result.range];
+            }];
         }];
     }
 }

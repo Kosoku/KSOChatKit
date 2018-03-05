@@ -15,15 +15,17 @@
 
 #import "KSOChatViewModel.h"
 #import "KSOChatViewController.h"
+#import "KSOChatTheme.h"
 
 #import <Agamotto/Agamotto.h>
 #import <Stanley/Stanley.h>
 
 @interface KSOChatViewModel ()
 @property (readwrite,weak,nonatomic) KSOChatViewController *chatViewController;
+@property (readwrite,copy,nonatomic) NSDictionary<NSRegularExpression *, NSDictionary<NSAttributedStringKey, id> *> *regularExpressionsToTextAttributes;
 @property (readwrite,strong,nonatomic) KAGAction *doneAction;
 
-@property (strong,nonatomic) NSHashTable<id<KSOChatViewModelViewDelegate>> *viewDelegates;
+@property (strong,nonatomic) NSHashTable<id<KSOChatViewModelViewDelegate>> *viewDelegatesHashTable;
 
 @end
 
@@ -36,9 +38,11 @@
     kstWeakify(self);
     
     _chatViewController = chatViewController;
-    _viewDelegates = [NSHashTable weakObjectsHashTable];
+    _viewDelegatesHashTable = [NSHashTable weakObjectsHashTable];
     
     _options = KSOChatViewControllerOptionsShowDoneButton;
+    
+    _theme = KSOChatTheme.defaultTheme;
     
     _doneAction = [[KAGAction alloc] initWithAsynchronousValueErrorBlock:^(KAGValueErrorBlock  _Nonnull completion) {
         kstStrongify(self);
@@ -65,10 +69,21 @@
 }
 
 - (void)addViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate; {
-    [self.viewDelegates addObject:viewDelegate];
+    [self.viewDelegatesHashTable addObject:viewDelegate];
 }
 - (void)removeViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate; {
-    [self.viewDelegates removeObject:viewDelegate];
+    [self.viewDelegatesHashTable removeObject:viewDelegate];
+}
+
+- (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes; {
+    NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithDictionary:self.regularExpressionsToTextAttributes];
+    
+    temp[regularExpression] = textAttributes;
+    
+    self.regularExpressionsToTextAttributes = temp;
+}
+- (void)removeSyntaxHighlightingRegularExpressions; {
+    self.regularExpressionsToTextAttributes = nil;
 }
 
 - (BOOL)shouldChangeTextInRange:(NSRange)range text:(NSString *)text; {
@@ -114,12 +129,12 @@
         return;
     }
     
-    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegates) {
+    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegatesHashTable) {
         [delegate chatViewModelShowCompletions:self];
     }
 }
 - (void)hideCompletions; {
-    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegates) {
+    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegatesHashTable) {
         [delegate chatViewModelHideCompletions:self];
     }
 }
@@ -156,6 +171,13 @@
     }
     
     [self hideCompletions];
+}
+
+- (NSSet<id<KSOChatViewModelViewDelegate>> *)viewDelegates {
+    return self.viewDelegatesHashTable.setRepresentation;
+}
+- (void)setTheme:(KSOChatTheme *)theme {
+    _theme = theme ?: KSOChatTheme.defaultTheme;
 }
 
 @end
