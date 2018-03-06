@@ -60,6 +60,7 @@
     _label = [[UILabel alloc] initWithFrame:CGRectZero];
     _label.translatesAutoresizingMaskIntoConstraints = NO;
     _label.textAlignment = NSTextAlignmentCenter;
+    _label.textColor = _viewModel.theme.textColor;
     _label.font = _viewModel.theme.buttonFont;
     [_label setContentHuggingPriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
     [_stackView addArrangedSubview:_label];
