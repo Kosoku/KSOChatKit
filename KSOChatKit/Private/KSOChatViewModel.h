@@ -51,6 +51,7 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @property (readonly,copy,nonatomic) NSDictionary<NSRegularExpression *, NSDictionary<NSAttributedStringKey, id> *> *syntaxHighlightingRegularExpressionsToTextAttributes;
 @property (copy,nonatomic) NSSet<NSString *> *prefixesForCompletion;
 @property (readonly,copy,nonatomic) NSDictionary<NSString *, Class<KSOChatCompletionCell>> *prefixesToCompletionCellClasses;
+@property (copy,nonatomic) NSArray<NSDictionary<NSString *, NSString *> *> *markdownSymbolsToTitles;
 
 @property (readonly,strong,nonatomic) KAGAction *cancelAction;
 @property (readonly,strong,nonatomic) KAGAction *doneAction;
@@ -74,6 +75,11 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 - (void)requestCompletionsWithCompletion:(KSOChatViewModelRequestCompletionsBlock)completion;
 - (void)selectCompletion:(id<KSOChatCompletion>)completion;
 
+- (void)showMarkdownSymbols;
+- (void)hideMarkdownSymbols;
+
+- (void)applyMarkdownSymbolToSelectedRange:(NSString *)markdownSymbol;
+
 - (void)editText:(NSString *)text;
 - (void)cancelTextEditing;
 
@@ -86,7 +92,10 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @end
 
 @protocol KSOChatViewModelViewDelegate <NSObject>
-@required
+@optional
 - (void)chatViewModelShowCompletions:(KSOChatViewModel *)chatViewModel;
 - (void)chatViewModelHideCompletions:(KSOChatViewModel *)chatViewModel;
+
+- (void)chatViewModelShowMarkdownSymbols:(KSOChatViewModel *)chatViewModel;
+- (void)chatViewModelHideMarkdownSymbols:(KSOChatViewModel *)chatViewModel;
 @end

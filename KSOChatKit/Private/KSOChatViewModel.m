@@ -167,6 +167,10 @@
     return NO;
 }
 - (void)showCompletionsForPrefix:(NSString *)prefix text:(NSString *)text; {
+    if (self.prefixesForCompletion.count == 0) {
+        return;
+    }
+    
     if (![self.delegate respondsToSelector:@selector(chatViewController:shouldShowCompletionsForPrefix:text:)] ||
         ![self.delegate chatViewController:self.chatViewController shouldShowCompletionsForPrefix:prefix text:text]) {
         
@@ -175,13 +179,21 @@
         return;
     }
     
-    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegatesHashTable) {
-        [delegate chatViewModelShowCompletions:self];
+    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegates) {
+        if ([delegate respondsToSelector:@selector(chatViewModelShowCompletions:)]) {
+            [delegate chatViewModelShowCompletions:self];
+        }
     }
 }
 - (void)hideCompletions; {
-    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegatesHashTable) {
-        [delegate chatViewModelHideCompletions:self];
+    if (self.prefixesForCompletion.count == 0) {
+        return;
+    }
+    
+    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegates) {
+        if ([delegate respondsToSelector:@selector(chatViewModelHideCompletions:)]) {
+            [delegate chatViewModelHideCompletions:self];
+        }
     }
 }
 #pragma mark -
@@ -217,6 +229,46 @@
     }
     
     [self hideCompletions];
+}
+#pragma mark -
+- (void)showMarkdownSymbols; {
+    if (self.markdownSymbolsToTitles.count == 0) {
+        return;
+    }
+    
+    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegates) {
+        if ([delegate respondsToSelector:@selector(chatViewModelShowMarkdownSymbols:)]) {
+            [delegate chatViewModelShowMarkdownSymbols:self];
+        }
+    }
+}
+- (void)hideMarkdownSymbols; {
+    if (self.markdownSymbolsToTitles.count == 0) {
+        return;
+    }
+    
+    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegates) {
+        if ([delegate respondsToSelector:@selector(chatViewModelHideMarkdownSymbols:)]) {
+            [delegate chatViewModelHideMarkdownSymbols:self];
+        }
+    }
+}
+#pragma mark -
+- (void)applyMarkdownSymbolToSelectedRange:(NSString *)markdownSymbol; {
+    NSRange range = self.selectedRange;
+    
+    if (range.length == 0) {
+        return;
+    }
+    
+    NSString *substring = [self.text substringWithRange:range];
+    NSString *insertString = [NSString stringWithFormat:@"%@%@%@",markdownSymbol,substring,markdownSymbol];
+    
+    self.text = [self.text stringByReplacingCharactersInRange:range withString:insertString];
+    
+    self.selectedRange = NSMakeRange(range.location, insertString.length);
+    
+    [self hideMarkdownSymbols];
 }
 #pragma mark -
 - (void)editText:(NSString *)text; {

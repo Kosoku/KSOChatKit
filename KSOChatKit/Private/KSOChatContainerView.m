@@ -17,12 +17,14 @@
 #import "KSOChatViewModel.h"
 #import "KSOChatInputView.h"
 #import "KSOChatCompletionsView.h"
+#import "KSOChatMarkdownView.h"
 
-@interface KSOChatContainerView ()
+@interface KSOChatContainerView () <KSOChatViewModelViewDelegate>
 @property (strong,nonatomic) UIStackView *stackView;
 
 @property (strong,nonatomic) KSOChatInputView *chatInputView;
 @property (strong,nonatomic) KSOChatCompletionsView *chatCompletionsView;
+@property (strong,nonatomic) KSOChatMarkdownView *chatMarkdownView;
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
 @end
@@ -34,6 +36,7 @@
         return nil;
     
     _viewModel = viewModel;
+    [_viewModel addViewDelegate:self];
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
     
@@ -42,10 +45,6 @@
     _stackView.axis = UILayoutConstraintAxisVertical;
     [self addSubview:_stackView];
     
-    _chatCompletionsView = [[KSOChatCompletionsView alloc] initWithViewModel:_viewModel];
-    _chatCompletionsView.hidden = YES;
-    [_stackView addArrangedSubview:_chatCompletionsView];
-    
     _chatInputView = [[KSOChatInputView alloc] initWithViewModel:_viewModel];
     [_stackView addArrangedSubview:_chatInputView];
     
@@ -53,6 +52,33 @@
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": _stackView}]];
     
     return self;
+}
+
+- (void)chatViewModelShowCompletions:(KSOChatViewModel *)chatViewModel {
+    if (self.chatCompletionsView == nil) {
+        self.chatCompletionsView = [[KSOChatCompletionsView alloc] initWithViewModel:self.viewModel];
+        [self.stackView insertArrangedSubview:self.chatCompletionsView atIndex:0];
+    }
+    self.chatCompletionsView.hidden = NO;
+}
+- (void)chatViewModelHideCompletions:(KSOChatViewModel *)chatViewModel {
+    if (self.chatCompletionsView != nil) {
+        [self.chatCompletionsView removeFromSuperview];
+        self.chatCompletionsView = nil;
+    }
+}
+- (void)chatViewModelShowMarkdownSymbols:(KSOChatViewModel *)chatViewModel {
+    if (self.chatMarkdownView == nil) {
+        self.chatMarkdownView = [[KSOChatMarkdownView alloc] initWithViewModel:self.viewModel];
+        [self.stackView insertArrangedSubview:self.chatMarkdownView atIndex:0];
+    }
+    self.chatMarkdownView.hidden = NO;
+}
+- (void)chatViewModelHideMarkdownSymbols:(KSOChatViewModel *)chatViewModel {
+    if (self.chatMarkdownView != nil) {
+        [self.chatMarkdownView removeFromSuperview];
+        self.chatMarkdownView = nil;
+    }
 }
 
 @end

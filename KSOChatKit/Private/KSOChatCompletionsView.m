@@ -66,14 +66,9 @@
 
 #pragma mark KSOChatViewModelViewDelegate
 - (void)chatViewModelShowCompletions:(KSOChatViewModel *)chatViewModel {
-    self.hidden = NO;
-    
     [self.viewModel requestCompletionsWithCompletion:^(NSArray<id<KSOChatCompletion>> *completions) {
         self.completions = completions;
     }];
-}
-- (void)chatViewModelHideCompletions:(KSOChatViewModel *)chatViewModel {
-    self.hidden = YES;
 }
 
 - (instancetype)initWithViewModel:(KSOChatViewModel *)viewModel {
@@ -88,8 +83,7 @@
     _registeredCompletionCellClasses = [[NSMutableSet alloc] init];
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
-    self.hidden = YES;
-    self.backgroundColor = UIColor.clearColor;
+    self.backgroundColor = UIColor.whiteColor;
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -101,6 +95,11 @@
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _tableView}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view(==height@priority)]|" options:0 metrics:@{@"height": @(ceil(_tableView.estimatedRowHeight * 2.5)), @"priority": @(UILayoutPriorityRequired - 1.0)} views:@{@"view": _tableView}]];
+    
+    [_viewModel requestCompletionsWithCompletion:^(NSArray<id<KSOChatCompletion>> *completions) {
+        kstStrongify(self);
+        self.completions = completions;
+    }];
     
     [self KAG_addObserverForKeyPaths:@[@kstKeypath(self,completions)] options:0 block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);

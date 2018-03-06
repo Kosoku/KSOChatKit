@@ -42,6 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (copy,nonatomic,nullable) NSSet<NSString *> *prefixesForCompletion;
 
+@property (copy,nonatomic,nullable) NSArray<NSDictionary<NSString *, NSString *> *> *markdownSymbolsToTitles;
+
 - (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes;
 - (void)removeSyntaxHighlightingRegularExpressions;
 

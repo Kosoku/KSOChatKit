@@ -90,6 +90,10 @@
 - (void)textViewDidChangeSelection:(UITextView *)textView {
     if (self.viewModel.selectedRange.length > 0) {
         [self.viewModel hideCompletions];
+        [self.viewModel showMarkdownSymbols];
+    }
+    else {
+        [self.viewModel hideMarkdownSymbols];
     }
 }
 #pragma mark KSOChatViewModelDataSource

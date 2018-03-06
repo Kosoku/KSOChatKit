@@ -210,6 +210,12 @@
     self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
     self.chatViewController.delegate = self;
     self.chatViewController.contentViewController = [[ContentViewController alloc] initWithNibName:nil bundle:nil];
+    self.chatViewController.markdownSymbolsToTitles = @[@{@"**": @"Bold"},
+                                                        @{@"_": @"Italic"},
+                                                        @{@"~~": @"Strike"},
+                                                        @{@"`": @"Code"},
+                                                        @{@"```": @"Preformatted"},
+                                                        @{@"> ": @"Quote"}];
     [self.chatViewController addSyntaxHighlightingRegularExpression:[NSRegularExpression regularExpressionWithPattern:@"#\\w+" options:0 error:NULL] textAttributes:@{NSForegroundColorAttributeName: UIColor.orangeColor}];
     [self.chatViewController addSyntaxHighlightingRegularExpression:[NSRegularExpression regularExpressionWithPattern:@"@\\w+" options:0 error:NULL] textAttributes:@{NSForegroundColorAttributeName: UIColor.redColor}];
     [self.chatViewController setCompletionCellClass:UserTableViewCell.class forPrefix:@"@"];
@@ -243,7 +249,7 @@
 }
 
 - (void)chatViewControllerDidChangeText:(KSOChatViewController *)chatViewController {
-    KSTLog(@"text=%@",chatViewController.text);
+//    KSTLog(@"text=%@",chatViewController.text);
 }
 
 - (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldShowCompletionsForPrefix:(NSString *)prefix text:(NSString *)text {

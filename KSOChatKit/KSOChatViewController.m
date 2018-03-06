@@ -99,6 +99,13 @@
     [self.viewModel removeCompletionCellClassForPrefix:prefix];
 }
 #pragma mark -
+- (void)addMarkdownSymbol:(NSString *)markdownSymbol title:(NSString *)title; {
+    
+}
+- (void)removeMarkdownSymbol:(NSString *)markdownSymbol; {
+    
+}
+#pragma mark -
 - (void)editText:(NSString *)text; {
     [self.viewModel editText:text];
 }
@@ -153,6 +160,13 @@
 - (void)setTextPlaceholder:(NSString *)textPlaceholder {
     self.viewModel.textPlaceholder = textPlaceholder;
 }
+@dynamic editingTitle;
+- (NSString *)editingTitle {
+    return self.viewModel.editingTitle;
+}
+- (void)setEditingTitle:(NSString *)editingTitle {
+    self.viewModel.editingTitle = editingTitle;
+}
 @dynamic doneButtonTitle;
 - (NSString *)doneButtonTitle {
     return self.viewModel.doneButtonTitle;
@@ -160,12 +174,33 @@
 - (void)setDoneButtonTitle:(NSString *)doneButtonTitle {
     self.viewModel.doneButtonTitle = doneButtonTitle;
 }
+@dynamic editingCancelButtonTitle;
+- (NSString *)editingCancelButtonTitle {
+    return self.viewModel.editingCancelButtonTitle;
+}
+- (void)setEditingCancelButtonTitle:(NSString *)editingCancelButtonTitle {
+    self.viewModel.editingCancelButtonTitle = editingCancelButtonTitle;
+}
+@dynamic editingDoneButtonTitle;
+- (NSString *)editingDoneButtonTitle {
+    return self.viewModel.editingDoneButtonTitle;
+}
+- (void)setEditingDoneButtonTitle:(NSString *)editingDoneButtonTitle {
+    self.viewModel.editingDoneButtonTitle = editingDoneButtonTitle;
+}
 @dynamic prefixesForCompletion;
 - (NSSet<NSString *> *)prefixesForCompletion {
     return self.viewModel.prefixesForCompletion;
 }
 - (void)setPrefixesForCompletion:(NSSet<NSString *> *)prefixesForCompletion {
     self.viewModel.prefixesForCompletion = prefixesForCompletion;
+}
+@dynamic markdownSymbolsToTitles;
+- (NSArray<NSDictionary<NSString *,NSString *> *> *)markdownSymbolsToTitles {
+    return self.viewModel.markdownSymbolsToTitles;
+}
+- (void)setMarkdownSymbolsToTitles:(NSArray<NSDictionary<NSString *,NSString *> *> *)markdownSymbolsToTitles {
+    self.viewModel.markdownSymbolsToTitles = markdownSymbolsToTitles;
 }
 #pragma mark *** Private Methods ***
 - (void)_addContentViewControllerIfNecessary; {

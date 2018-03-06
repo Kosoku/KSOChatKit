@@ -1,5 +1,5 @@
 //
-//  KSOChatMarkdownView.h
+//  KSOChatMarkdownCollectionViewCell.h
 //  KSOChatKit
 //
 //  Created by William Towe on 3/6/18.
@@ -15,10 +15,8 @@
 
 #import <UIKit/UIKit.h>
 
-@class KSOChatViewModel;
+@interface KSOChatMarkdownCollectionViewCell : UICollectionViewCell
 
-@interface KSOChatMarkdownView : UIView
-
-- (instancetype)initWithViewModel:(KSOChatViewModel *)viewModel;
+@property (copy,nonatomic) NSString *title;
 
 @end
