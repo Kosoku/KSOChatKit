@@ -82,6 +82,7 @@ KSOChatViewControllerMediaTypes KSOChatViewControllerMediaTypesFromUTIs(NSArray<
 NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 
 @interface KSOChatViewController ()
+@property (readwrite,strong,nonatomic) UILayoutGuide *chatBottomLayoutGuide;
 @property (strong,nonatomic) KSOChatContainerView *chatContainerView;
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
@@ -115,6 +116,12 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     self.KDI_customConstraints = [self _chatContainerViewLayoutConstraintsForKeyboardFrame:CGRectZero];
     
     [self _addContentViewControllerIfNecessary];
+    
+    self.chatBottomLayoutGuide = [[UILayoutGuide alloc] init];
+    [self.view addLayoutGuide:self.chatBottomLayoutGuide];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatBottomLayoutGuide}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatBottomLayoutGuide, @"bottom": self.chatContainerView}]];
     
     kstWeakify(self);
     [self KAG_addObserverForNotificationNames:@[UIKeyboardWillShowNotification,UIKeyboardWillHideNotification] object:nil block:^(NSNotification * _Nonnull notification) {
