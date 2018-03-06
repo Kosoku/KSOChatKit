@@ -22,18 +22,21 @@
 
 @interface KSOChatViewModel ()
 @property (readwrite,weak,nonatomic) KSOChatViewController *chatViewController;
+@property (readwrite,assign,nonatomic,getter=isEditing) BOOL editing;
 @property (readwrite,copy,nonatomic) NSDictionary<NSRegularExpression *, NSDictionary<NSAttributedStringKey, id> *> *syntaxHighlightingRegularExpressionsToTextAttributes;
 @property (readwrite,copy,nonatomic) NSDictionary<NSString *, Class<KSOChatCompletionCell>> *prefixesToCompletionCellClasses;
+@property (readwrite,strong,nonatomic) KAGAction *cancelAction;
 @property (readwrite,strong,nonatomic) KAGAction *doneAction;
 
 @property (strong,nonatomic) NSHashTable<id<KSOChatViewModelViewDelegate>> *viewDelegatesHashTable;
+@property (copy,nonatomic) NSString *textBeforeEditing;
 
 + (NSString *)_defaultTextPlaceholder;
 + (NSString *)_defaultDoneButtonTitle;
 @end
 
 @implementation KSOChatViewModel
-
+#pragma mark *** Public Methods ***
 - (instancetype)initWithChatViewController:(KSOChatViewController *)chatViewController; {
     if (!(self = [super init]))
         return nil;
@@ -50,14 +53,30 @@
     _textPlaceholder = [self.class _defaultTextPlaceholder];
     _doneButtonTitle = [self.class _defaultDoneButtonTitle];
     
+    _cancelAction = [[KAGAction alloc] initWithAsynchronousValueErrorBlock:^(KAGValueErrorBlock  _Nonnull completion) {
+        kstStrongify(self);
+        self.editing = NO;
+        self.text = self.textBeforeEditing;
+        self.textBeforeEditing = nil;
+        
+        completion(@NO,nil);
+    }];
     _doneAction = [[KAGAction alloc] initWithAsynchronousValueErrorBlock:^(KAGValueErrorBlock  _Nonnull completion) {
         kstStrongify(self);
         if ([self.delegate respondsToSelector:@selector(chatViewControllerDidTapDoneButton:completion:)]) {
             [self.delegate chatViewControllerDidTapDoneButton:self.chatViewController completion:^(BOOL success) {
+                kstStrongify(self);
                 completion(@(success),nil);
                 
                 if (success) {
-                    self.text = nil;
+                    if (self.isEditing) {
+                        self.editing = NO;
+                        self.text = self.textBeforeEditing;
+                        self.textBeforeEditing = nil;
+                    }
+                    else {
+                        self.text = nil;
+                    }
                 }
             }];
         }
@@ -73,14 +92,14 @@
     
     return self;
 }
-
+#pragma mark -
 - (void)addViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate; {
     [self.viewDelegatesHashTable addObject:viewDelegate];
 }
 - (void)removeViewDelegate:(id<KSOChatViewModelViewDelegate>)viewDelegate; {
     [self.viewDelegatesHashTable removeObject:viewDelegate];
 }
-
+#pragma mark -
 - (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes; {
     NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithDictionary:self.syntaxHighlightingRegularExpressionsToTextAttributes];
     
@@ -91,7 +110,7 @@
 - (void)removeSyntaxHighlightingRegularExpressions; {
     self.syntaxHighlightingRegularExpressionsToTextAttributes = nil;
 }
-
+#pragma mark -
 - (void)setCompletionCellClass:(Class<KSOChatCompletionCell>)completionCellClass forPrefix:(NSString *)prefix; {
     NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithDictionary:self.prefixesToCompletionCellClasses];
     
@@ -106,7 +125,7 @@
     
     self.prefixesToCompletionCellClasses = temp;
 }
-
+#pragma mark -
 - (BOOL)shouldChangeTextInRange:(NSRange)range text:(NSString *)text; {
     if ([text rangeOfCharacterFromSet:NSCharacterSet.newlineCharacterSet].length > 0 &&
         text.length == 1 &&
@@ -159,7 +178,7 @@
         [delegate chatViewModelHideCompletions:self];
     }
 }
-
+#pragma mark -
 - (void)requestCompletionsWithCompletion:(KSOChatViewModelRequestCompletionsBlock)completion {
     if (![self.delegate respondsToSelector:@selector(chatViewController:completionsForPrefix:text:)]) {
         completion(nil);
@@ -193,7 +212,16 @@
     
     [self hideCompletions];
 }
-
+#pragma mark -
+- (void)editText:(NSString *)text; {
+    self.textBeforeEditing = self.text;
+    self.text = text;
+    self.editing = YES;
+}
+- (void)cancelTextEditing; {
+    [self.cancelAction execute];
+}
+#pragma mark Properties
 - (NSSet<id<KSOChatViewModelViewDelegate>> *)viewDelegates {
     return self.viewDelegatesHashTable.setRepresentation;
 }
@@ -214,7 +242,7 @@
 - (void)setDoneButtonTitle:(NSString *)doneButtonTitle {
     _doneButtonTitle = doneButtonTitle ?: [self.class _defaultDoneButtonTitle];
 }
-
+#pragma mark *** Private Methods ***
 + (NSString *)_defaultTextPlaceholder; {
     return @"Enter Message…";
 }

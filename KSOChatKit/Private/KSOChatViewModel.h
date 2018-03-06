@@ -34,6 +34,8 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 
 @property (assign,nonatomic) KSOChatViewControllerOptions options;
 
+@property (readonly,assign,nonatomic,getter=isEditing) BOOL editing;
+
 @property (strong,nonatomic) KSOChatTheme *theme;
 
 @property (copy,nonatomic) NSString *text;
@@ -46,6 +48,7 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @property (copy,nonatomic) NSSet<NSString *> *prefixesForCompletion;
 @property (readonly,copy,nonatomic) NSDictionary<NSString *, Class<KSOChatCompletionCell>> *prefixesToCompletionCellClasses;
 
+@property (readonly,strong,nonatomic) KAGAction *cancelAction;
 @property (readonly,strong,nonatomic) KAGAction *doneAction;
 
 - (instancetype)initWithChatViewController:(KSOChatViewController *)chatViewController;
@@ -66,6 +69,9 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 
 - (void)requestCompletionsWithCompletion:(KSOChatViewModelRequestCompletionsBlock)completion;
 - (void)selectCompletion:(id<KSOChatCompletion>)completion;
+
+- (void)editText:(NSString *)text;
+- (void)cancelTextEditing;
 
 @end
 

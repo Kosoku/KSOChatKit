@@ -44,6 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setCompletionCellClass:(Class<KSOChatCompletionCell>)completionCellClass forPrefix:(NSString *)prefix;
 - (void)removeCompletionCellClassForPrefix:(NSString *)prefix;
 
+- (void)editText:(NSString *)text;
+- (void)cancelTextEditing;
+
 @end
 
 NS_ASSUME_NONNULL_END

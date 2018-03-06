@@ -16,6 +16,7 @@
 #import "KSOChatInputView.h"
 #import "KSOChatViewModel.h"
 #import "KSOChatTheme.h"
+#import "KSOChatEditingView.h"
 
 #import <Ditko/Ditko.h>
 #import <Stanley/Stanley.h>
@@ -24,9 +25,11 @@
 @interface KSOChatInputView () <KSOChatViewModelDataSource,UITextViewDelegate,NSTextStorageDelegate>
 @property (strong,nonatomic) UIVisualEffectView *visualEffectView;
 @property (strong,nonatomic) UIStackView *stackView;
+@property (strong,nonatomic) UIStackView *inputStackView;
 
 @property (strong,nonatomic) KDITextView *textView;
 @property (strong,nonatomic) KDIButton *doneButton;
+@property (strong,nonatomic) KSOChatEditingView *editingView;
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
 
@@ -111,10 +114,16 @@
     
     _stackView = [[UIStackView alloc] initWithFrame:CGRectZero];
     _stackView.translatesAutoresizingMaskIntoConstraints = NO;
-    _stackView.axis = UILayoutConstraintAxisHorizontal;
-    _stackView.alignment = UIStackViewAlignmentBottom;
+    _stackView.axis = UILayoutConstraintAxisVertical;
     _stackView.spacing = 8.0;
     [_visualEffectView.contentView addSubview:_stackView];
+    
+    _inputStackView = [[UIStackView alloc] initWithFrame:CGRectZero];
+    _inputStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    _inputStackView.axis = UILayoutConstraintAxisHorizontal;
+    _inputStackView.alignment = UIStackViewAlignmentBottom;
+    _inputStackView.spacing = 8.0;
+    [_stackView addArrangedSubview:_inputStackView];
     
     _textView = [[KDITextView alloc] initWithFrame:CGRectZero textContainer:nil];
     _textView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -123,15 +132,15 @@
     _textView.textStorage.delegate = self;
     _textView.KDI_dynamicTypeTextStyle = UIFontTextStyleBody;
     _textView.KDI_cornerRadius = 5.0;
-    [_stackView addArrangedSubview:_textView];
+    [_inputStackView addArrangedSubview:_textView];
     
     _doneButton = [KDIButton buttonWithType:UIButtonTypeSystem];
     _doneButton.translatesAutoresizingMaskIntoConstraints = NO;
     _doneButton.titleLabel.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
     _doneButton.KAG_action = _viewModel.doneAction;
-    [_stackView addArrangedSubview:_doneButton];
+    [_inputStackView addArrangedSubview:_doneButton];
     
-    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,options),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,options),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,editing)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
         if ([keyPath isEqualToString:@kstKeypath(self.viewModel,text)]) {
             self.textView.text = self.viewModel.text;
@@ -144,6 +153,23 @@
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,textPlaceholder)]) {
             self.textView.placeholder = self.viewModel.textPlaceholder;
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,editing)]) {
+            self.doneButton.hidden = self.viewModel.isEditing;
+            
+            if (self.viewModel.isEditing) {
+                if (self.editingView == nil) {
+                    self.editingView = [[KSOChatEditingView alloc] initWithViewModel:self.viewModel];
+                    [self.stackView insertArrangedSubview:self.editingView atIndex:0];
+                }
+                self.editingView.hidden = NO;
+            }
+            else {
+                if (self.editingView != nil) {
+                    [self.editingView removeFromSuperview];
+                    self.editingView = nil;
+                }
+            }
         }
     }];
     

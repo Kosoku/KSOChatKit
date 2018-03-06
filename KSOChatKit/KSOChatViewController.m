@@ -42,6 +42,10 @@
     
     return self;
 }
+
+- (BOOL)isEditing {
+    return self.viewModel.isEditing;
+}
 #pragma mark -
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -93,6 +97,13 @@
 }
 - (void)removeCompletionCellClassForPrefix:(NSString *)prefix; {
     [self.viewModel removeCompletionCellClassForPrefix:prefix];
+}
+#pragma mark -
+- (void)editText:(NSString *)text; {
+    [self.viewModel editText:text];
+}
+- (void)cancelTextEditing; {
+    [self.viewModel cancelTextEditing];
 }
 #pragma mark Properties
 @dynamic delegate;

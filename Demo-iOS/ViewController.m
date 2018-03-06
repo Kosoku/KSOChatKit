@@ -24,6 +24,7 @@
 @interface User : NSObject <KSOChatCompletion>
 @property (copy,nonatomic) NSString *name;
 @property (copy,nonatomic) NSString *screenName;
+@property (strong,nonatomic) UIImage *image;
 @end
 
 @implementation User
@@ -42,6 +43,22 @@
 }
 - (NSString *)chatCompletionSubtitle {
     return self.screenName;
+}
+- (UIImage *)image {
+    if (_image == nil) {
+        CGSize size = CGSizeMake(32, 32);
+        UIGraphicsBeginImageContext(size);
+        
+        [KDIColorRandomRGB() setFill];
+        UIRectFill(CGRectMake(0, 0, size.width, size.height));
+        
+        UIImage *retval = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
+        
+        _image = retval;
+    }
+    return _image;
 }
 @end
 
@@ -66,6 +83,7 @@
 
 @interface Message : NSObject
 @property (copy,nonatomic) NSString *text;
+@property (strong,nonatomic) User *user;
 - (instancetype)initWithText:(NSString *)text;
 @end
 
@@ -78,13 +96,13 @@
         return nil;
     
     _text = text ?: [LoremIpsum sentence];
+    _user = [[User alloc] init];
     
     return self;
 }
 @end
 
 @interface UserTableViewCell : KDITableViewCell <KSOChatCompletionCell>
-@property (readonly,nonatomic) UIImage *placeholderImage;
 @end
 
 @implementation UserTableViewCell
@@ -96,21 +114,7 @@
     
     self.title = user.name;
     self.subtitle = user.screenName;
-    self.icon = self.placeholderImage;
-}
-
-- (UIImage *)placeholderImage {
-    CGSize size = CGSizeMake(32, 32);
-    UIGraphicsBeginImageContextWithOptions(size, YES, 0.0);
-    
-    [KDIColorRandomRGB() setFill];
-    UIRectFill(CGRectMake(0, 0, size.width, size.height));
-    
-    UIImage *retval = UIGraphicsGetImageFromCurrentImageContext();
-    
-    UIGraphicsEndImageContext();
-    
-    return retval;
+    self.icon = user.image;
 }
 @end
 
@@ -118,6 +122,7 @@
 @property (strong,nonatomic) UITableView *tableView;
 
 @property (copy,nonatomic) NSArray<Message *> *messages;
+@property (strong,nonatomic) Message *editingMessage;
 
 - (void)addMessageWithText:(NSString *)text;
 @end
@@ -131,7 +136,7 @@
     
     NSMutableArray *temp = [[NSMutableArray alloc] init];
     
-    for (NSUInteger i=0; i<25; i++) {
+    for (NSUInteger i=0; i<15; i++) {
         [temp addObject:[[Message alloc] init]];
     }
     
@@ -156,11 +161,19 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     KDITableViewCell *retval = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(KDITableViewCell.class) forIndexPath:indexPath];
     
-    retval.contentView.backgroundColor = KDIColorRandomRGB();
-    retval.titleColor = [retval.contentView.backgroundColor KDI_contrastingColor];
-    retval.title = self.messages[indexPath.row].text;
+    retval.title = self.messages[indexPath.row].user.name;
+    retval.subtitle = self.messages[indexPath.row].text;
+    retval.icon = self.messages[indexPath.row].user.image;
     
     return retval;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    self.editingMessage = self.messages[indexPath.row];
+    
+    [self.KSO_chatViewController editText:self.editingMessage.text];
 }
 
 - (void)addMessageWithText:(NSString *)text {
@@ -172,6 +185,14 @@
     
     [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
+- (void)editMessageWithText:(NSString *)text {
+    self.editingMessage.text = text;
+    
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[self.messages indexOfObject:self.editingMessage] inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    self.editingMessage = nil;
+}
+
 @end
 
 @interface ViewController () <KSOChatViewControllerDelegate>
@@ -209,9 +230,14 @@
 - (void)chatViewControllerDidTapDoneButton:(KSOChatViewController *)chatViewController completion:(KSOChatViewControllerCompletionBlock)completion {
     ContentViewController *viewController = chatViewController.contentViewController;
     
-    [viewController addMessageWithText:chatViewController.text];
-    
-    [viewController.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:viewController.messages.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    if (chatViewController.isEditing) {
+        [viewController editMessageWithText:chatViewController.text];
+    }
+    else {
+        [viewController addMessageWithText:chatViewController.text];
+        
+        [viewController.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:viewController.messages.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    }
     
     completion(YES);
 }
