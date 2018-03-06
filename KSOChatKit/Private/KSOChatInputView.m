@@ -87,6 +87,11 @@
         [self.viewModel hideCompletions];
     }
 }
+- (void)textViewDidChangeSelection:(UITextView *)textView {
+    if (self.viewModel.selectedRange.length > 0) {
+        [self.viewModel hideCompletions];
+    }
+}
 #pragma mark KSOChatViewModelDataSource
 - (NSRange)selectedRangeForChatViewModel:(KSOChatViewModel *)chatViewModel {
     return KDISelectedRangeFromTextInput(self.textView);
