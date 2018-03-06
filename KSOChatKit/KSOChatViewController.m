@@ -89,10 +89,10 @@
 }
 #pragma mark -
 - (void)setCompletionCellClass:(Class<KSOChatCompletionCell>)completionCellClass forPrefix:(NSString *)prefix; {
-    
+    [self.viewModel setCompletionCellClass:completionCellClass forPrefix:prefix];
 }
 - (void)removeCompletionCellClassForPrefix:(NSString *)prefix; {
-    
+    [self.viewModel removeCompletionCellClassForPrefix:prefix];
 }
 #pragma mark Properties
 @dynamic delegate;

@@ -83,6 +83,46 @@
 }
 @end
 
+@interface UserTableViewCell : KDITableViewCell <KSOChatCompletionCell>
+@property (readonly,nonatomic) UIImage *placeholderImage;
+@end
+
+@implementation UserTableViewCell
+@synthesize completion=_completion;
+- (void)setCompletion:(id<KSOChatCompletion>)completion {
+    _completion = completion;
+    
+    User *user = (User *)_completion;
+    
+    self.title = user.name;
+    self.subtitle = user.screenName;
+    if (self.icon == nil) {
+        self.icon = self.placeholderImage;
+    }
+    
+    [LoremIpsum asyncPlaceholderImageWithSize:self.placeholderImage.size completion:^(UIImage *image) {
+        self.icon = image;
+    }];
+}
+
+- (UIImage *)placeholderImage {
+    static UIImage *kRetval;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        CGSize size = CGSizeMake(32, 32);
+        UIGraphicsBeginImageContextWithOptions(size, YES, 0.0);
+        
+        [UIColor.lightGrayColor setFill];
+        UIRectFill(CGRectMake(0, 0, size.width, size.height));
+        
+        kRetval = UIGraphicsGetImageFromCurrentImageContext();
+        
+        UIGraphicsEndImageContext();
+    });
+    return kRetval;
+}
+@end
+
 @interface ContentViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (strong,nonatomic) UITableView *tableView;
 
@@ -160,6 +200,7 @@
     self.chatViewController.contentViewController = [[ContentViewController alloc] initWithNibName:nil bundle:nil];
     [self.chatViewController addSyntaxHighlightingRegularExpression:[NSRegularExpression regularExpressionWithPattern:@"#\\w+" options:0 error:NULL] textAttributes:@{NSForegroundColorAttributeName: UIColor.orangeColor}];
     [self.chatViewController addSyntaxHighlightingRegularExpression:[NSRegularExpression regularExpressionWithPattern:@"@\\w+" options:0 error:NULL] textAttributes:@{NSForegroundColorAttributeName: UIColor.redColor}];
+    [self.chatViewController setCompletionCellClass:UserTableViewCell.class forPrefix:@"@"];
     
     self.contentViewController = [[UINavigationController alloc] initWithRootViewController:self.chatViewController];
     self.contentViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
