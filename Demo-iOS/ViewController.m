@@ -237,6 +237,17 @@
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
+    
+    KDIButton *bottomButton = [KDIButton buttonWithType:UIButtonTypeSystem];
+    
+    bottomButton.translatesAutoresizingMaskIntoConstraints = NO;
+    bottomButton.contentEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
+    [bottomButton setImage:[UIImage KSO_fontAwesomeImageWithIcon:KSOFontAwesomeIconCog size:CGSizeMake(25, 25)].KDI_templateImage forState:UIControlStateNormal];
+    bottomButton.inverted = YES;
+    [self.chatViewController.view addSubview:bottomButton];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]" options:0 metrics:nil views:@{@"view": bottomButton}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": bottomButton, @"bottom": self.chatViewController.chatBottomLayoutGuide}]];
 }
 
 - (UIScrollView *)scrollViewForChatViewController:(KSOChatViewController *)chatViewController {
