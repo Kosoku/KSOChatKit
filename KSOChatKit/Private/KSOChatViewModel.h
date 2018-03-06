@@ -52,6 +52,7 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @property (copy,nonatomic) NSSet<NSString *> *prefixesForCompletion;
 @property (readonly,copy,nonatomic) NSDictionary<NSString *, Class<KSOChatCompletionCell>> *prefixesToCompletionCellClasses;
 @property (copy,nonatomic) NSArray<NSDictionary<NSString *, NSString *> *> *markdownSymbolsToTitles;
+@property (readonly,copy,nonatomic) NSArray<NSString *> *markdownSymbols;
 
 @property (readonly,strong,nonatomic) KAGAction *cancelAction;
 @property (readonly,strong,nonatomic) KAGAction *doneAction;

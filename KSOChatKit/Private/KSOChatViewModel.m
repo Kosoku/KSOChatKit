@@ -19,6 +19,7 @@
 
 #import <Agamotto/Agamotto.h>
 #import <Stanley/Stanley.h>
+#import <Quicksilver/Quicksilver.h>
 
 @interface KSOChatViewModel ()
 @property (readwrite,weak,nonatomic) KSOChatViewController *chatViewController;
@@ -142,9 +143,83 @@
             return NO;
         }
     }
+    else if (self.markdownSymbolsToTitles.count > 0 &&
+             range.location > 0 &&
+             text.length > 0 &&
+             [NSCharacterSet.whitespaceCharacterSet characterIsMember:[text characterAtIndex:0]] &&
+             [NSCharacterSet.whitespaceCharacterSet characterIsMember:[self.text characterAtIndex:range.location - 1]]) {
+        
+        if ([self.text substringToIndex:self.selectedRange.location].length < 2) {
+            return YES;
+        }
+        
+        NSRange wordRange = range;
+        
+        wordRange.location -= 2;
+        
+        if (wordRange.location == NSNotFound) {
+            return YES;
+        }
+        
+        NSMutableCharacterSet *invalidCharacterSet = [NSCharacterSet.whitespaceAndNewlineCharacterSet mutableCopy];
+        
+        [invalidCharacterSet formUnionWithCharacterSet:NSCharacterSet.punctuationCharacterSet];
+        [invalidCharacterSet removeCharactersInString:[self.markdownSymbols componentsJoinedByString:@""]];
+        
+        BOOL shouldChange = YES;
+        
+        for (NSString *symbol in self.markdownSymbols) {
+            NSRange searchRange = NSMakeRange(0, wordRange.location);
+            NSRange prefixRange = [self.text rangeOfString:symbol options:NSBackwardsSearch range:searchRange];
+            
+            if (prefixRange.length == 0) {
+                continue;
+            }
+            
+            NSRange nextCharRange = NSMakeRange(prefixRange.location+1, 1);
+            NSString *charAfterSymbol = [self.text substringWithRange:nextCharRange];
+            
+            if ([invalidCharacterSet characterIsMember:[charAfterSymbol characterAtIndex:0]]) {
+                continue;
+            }
+            
+            NSRange suffixRange;
+            [self.text KST_wordAtRange:wordRange outRange:&suffixRange];
+            
+            // Skip if the detected word already has a suffix
+            if ([[self.text substringWithRange:suffixRange] hasSuffix:symbol]) {
+                continue;
+            }
+            
+            suffixRange.location += suffixRange.length;
+            suffixRange.length = 0;
+            
+            NSString *lastCharacter = [self.text substringWithRange:NSMakeRange(suffixRange.location, 1)];
+            
+            // Checks if the last character was a line break, so we append the symbol in the next line too
+            if ([[NSCharacterSet newlineCharacterSet] characterIsMember:[lastCharacter characterAtIndex:0]]) {
+                suffixRange.location += 1;
+            }
+            
+            self.text = [self.text stringByReplacingCharactersInRange:suffixRange withString:symbol];
+            shouldChange = NO;
+            
+            // Reset the original cursor location +1 for the new character
+            NSRange adjustedCursorPosition = NSMakeRange(range.location + 1, 0);
+            self.selectedRange = adjustedCursorPosition;
+            
+            break;
+        }
+        
+        return shouldChange;
+    }
     return YES;
 }
 - (BOOL)shouldShowCompletionsForRange:(NSRange)range prefix:(NSString **)outPrefix text:(NSString **)outText range:(NSRangePointer)outRange; {
+    if (self.prefixesForCompletion.count == 0) {
+        return NO;
+    }
+    
     NSString *text = [self.text KST_wordAtRange:range outRange:outRange];
     
     if (text.length == 0) {
@@ -284,6 +359,11 @@
 }
 - (void)setEditingDoneButtonTitle:(NSString *)editingDoneButtonTitle {
     _editingDoneButtonTitle = editingDoneButtonTitle ?: [self.class _defaultEditingDoneButtonTitle];
+}
+- (NSArray<NSString *> *)markdownSymbols {
+    return [self.markdownSymbolsToTitles KQS_map:^id _Nullable(NSDictionary<NSString *,NSString *> * _Nonnull object, NSInteger index) {
+        return object.allKeys.firstObject;
+    }];
 }
 #pragma mark *** Private Methods ***
 + (NSString *)_defaultTextPlaceholder; {
