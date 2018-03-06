@@ -25,6 +25,8 @@ typedef void(^KSOChatViewControllerCompletionBlock)(BOOL success);
 
 @protocol KSOChatViewControllerDelegate <NSObject>
 @optional
+- (nullable UIScrollView *)scrollViewForChatViewController:(KSOChatViewController *)chatViewController;
+
 - (BOOL)chatViewControllerReturnShouldTapDoneButton:(KSOChatViewController *)chatViewController;
 - (void)chatViewControllerDidTapDoneButton:(KSOChatViewController *)chatViewController completion:(KSOChatViewControllerCompletionBlock)completion;
 

@@ -230,6 +230,10 @@
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
 }
 
+- (UIScrollView *)scrollViewForChatViewController:(KSOChatViewController *)chatViewController {
+    return [(ContentViewController *)chatViewController.contentViewController tableView];
+}
+
 - (BOOL)chatViewControllerReturnShouldTapDoneButton:(KSOChatViewController *)chatViewController {
     return YES;
 }

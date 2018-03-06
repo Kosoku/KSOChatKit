@@ -87,7 +87,7 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
 
 - (void)_addContentViewControllerIfNecessary;
-- (void)_adjustContentInsetsIfNecessary;
+- (void)_adjustContentInsetsIfNecessaryForKeyboardNotification:(NSNotification *)notification;
 - (NSArray<NSLayoutConstraint *> *)_chatContainerViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame;
 @end
 
@@ -128,6 +128,8 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
         }
         else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
             self.KDI_customConstraints = [self _chatContainerViewLayoutConstraintsForKeyboardFrame:CGRectZero];
+            
+            [self.viewModel hideCompletions];
         }
         
         [self.view setNeedsLayout];
@@ -135,13 +137,15 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
             [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
             
             [self.view layoutIfNeeded];
+            
+            [self _adjustContentInsetsIfNecessaryForKeyboardNotification:notification];
         }];
     }];
 }
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    [self _adjustContentInsetsIfNecessary];
+    [self _adjustContentInsetsIfNecessaryForKeyboardNotification:nil];
 }
 #pragma mark *** Public Methods ***
 - (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes; {
@@ -156,13 +160,6 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 }
 - (void)removeCompletionCellClassForPrefix:(NSString *)prefix; {
     [self.viewModel removeCompletionCellClassForPrefix:prefix];
-}
-#pragma mark -
-- (void)addMarkdownSymbol:(NSString *)markdownSymbol title:(NSString *)title; {
-    
-}
-- (void)removeMarkdownSymbol:(NSString *)markdownSymbol; {
-    
 }
 #pragma mark -
 - (void)editText:(NSString *)text; {
@@ -283,18 +280,28 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     
     [self.contentViewController didMoveToParentViewController:self];
 }
-- (void)_adjustContentInsetsIfNecessary; {
-    UIScrollView *scrollView = [[self.contentViewController.view KDI_recursiveSubviews] KQS_find:^BOOL(__kindof UIView * _Nonnull object, NSInteger index) {
-        return [object isKindOfClass:UIScrollView.class];
-    }];
+- (void)_adjustContentInsetsIfNecessaryForKeyboardNotification:(NSNotification *)notification {
+    UIScrollView *scrollView = nil;
+    
+    if ([self.delegate respondsToSelector:@selector(scrollViewForChatViewController:)]) {
+        scrollView = [self.delegate scrollViewForChatViewController:self];
+    }
     
     if (scrollView == nil) {
-        if ([self.contentViewController.view isKindOfClass:UIScrollView.class]) {
-            scrollView = (UIScrollView *)self.contentViewController.view;
-        }
+        return;
     }
     
     scrollView.contentInset = UIEdgeInsetsMake(0, 0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(self.chatContainerView.frame), 0);
+    
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+        if (scrollView.contentSize.height < CGRectGetHeight(scrollView.frame)) {
+            return;
+        }
+        
+        CGRect bottomRect = CGRectMake(0.0, scrollView.contentSize.height - CGRectGetHeight(scrollView.bounds) + scrollView.contentInset.bottom, CGRectGetWidth(scrollView.bounds), CGRectGetHeight(scrollView.bounds));
+        
+        [scrollView setContentOffset:bottomRect.origin animated:YES];
+    }
 }
 - (NSArray<NSLayoutConstraint *> *)_chatContainerViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame {
     return [@[[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatContainerView}],CGRectIsEmpty(keyboardFrame) ? [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatContainerView, @"bottom": self.bottomLayoutGuide}] : [NSLayoutConstraint constraintsWithVisualFormat:@"V:[view]-bottom-|" options:0 metrics:@{@"bottom": @(CGRectGetHeight(CGRectIntersection(self.view.bounds, keyboardFrame)))} views:@{@"view": self.chatContainerView}]] KQS_flatten];
