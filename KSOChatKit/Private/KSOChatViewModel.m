@@ -231,29 +231,6 @@
     [self hideCompletions];
 }
 #pragma mark -
-- (void)showMarkdownSymbols; {
-    if (self.markdownSymbolsToTitles.count == 0) {
-        return;
-    }
-    
-    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegates) {
-        if ([delegate respondsToSelector:@selector(chatViewModelShowMarkdownSymbols:)]) {
-            [delegate chatViewModelShowMarkdownSymbols:self];
-        }
-    }
-}
-- (void)hideMarkdownSymbols; {
-    if (self.markdownSymbolsToTitles.count == 0) {
-        return;
-    }
-    
-    for (id<KSOChatViewModelViewDelegate> delegate in self.viewDelegates) {
-        if ([delegate respondsToSelector:@selector(chatViewModelHideMarkdownSymbols:)]) {
-            [delegate chatViewModelHideMarkdownSymbols:self];
-        }
-    }
-}
-#pragma mark -
 - (void)applyMarkdownSymbolToSelectedRange:(NSString *)markdownSymbol; {
     NSRange range = self.selectedRange;
     
@@ -266,9 +243,7 @@
     
     self.text = [self.text stringByReplacingCharactersInRange:range withString:insertString];
     
-    self.selectedRange = NSMakeRange(range.location, insertString.length);
-    
-    [self hideMarkdownSymbols];
+    self.selectedRange = NSMakeRange(range.location + insertString.length, 0);
 }
 #pragma mark -
 - (void)editText:(NSString *)text; {

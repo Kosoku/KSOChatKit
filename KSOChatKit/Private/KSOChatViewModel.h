@@ -75,9 +75,6 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 - (void)requestCompletionsWithCompletion:(KSOChatViewModelRequestCompletionsBlock)completion;
 - (void)selectCompletion:(id<KSOChatCompletion>)completion;
 
-- (void)showMarkdownSymbols;
-- (void)hideMarkdownSymbols;
-
 - (void)applyMarkdownSymbolToSelectedRange:(NSString *)markdownSymbol;
 
 - (void)editText:(NSString *)text;
@@ -95,7 +92,4 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @optional
 - (void)chatViewModelShowCompletions:(KSOChatViewModel *)chatViewModel;
 - (void)chatViewModelHideCompletions:(KSOChatViewModel *)chatViewModel;
-
-- (void)chatViewModelShowMarkdownSymbols:(KSOChatViewModel *)chatViewModel;
-- (void)chatViewModelHideMarkdownSymbols:(KSOChatViewModel *)chatViewModel;
 @end

@@ -17,6 +17,7 @@
 #import "KSOChatViewModel.h"
 #import "KSOChatTheme.h"
 #import "KSOChatEditingView.h"
+#import "KSOChatTextView.h"
 
 #import <Ditko/Ditko.h>
 #import <Stanley/Stanley.h>
@@ -27,7 +28,7 @@
 @property (strong,nonatomic) UIStackView *stackView;
 @property (strong,nonatomic) UIStackView *inputStackView;
 
-@property (strong,nonatomic) KDITextView *textView;
+@property (strong,nonatomic) KSOChatTextView *textView;
 @property (strong,nonatomic) KDIButton *doneButton;
 @property (strong,nonatomic) KSOChatEditingView *editingView;
 
@@ -90,10 +91,6 @@
 - (void)textViewDidChangeSelection:(UITextView *)textView {
     if (self.viewModel.selectedRange.length > 0) {
         [self.viewModel hideCompletions];
-        [self.viewModel showMarkdownSymbols];
-    }
-    else {
-        [self.viewModel hideMarkdownSymbols];
     }
 }
 #pragma mark KSOChatViewModelDataSource
@@ -134,16 +131,9 @@
     _inputStackView.spacing = 8.0;
     [_stackView addArrangedSubview:_inputStackView];
     
-    _textView = [[KDITextView alloc] initWithFrame:CGRectZero textContainer:nil];
-    _textView.translatesAutoresizingMaskIntoConstraints = NO;
-    _textView.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
+    _textView = [[KSOChatTextView alloc] initWithViewModel:self.viewModel];
     _textView.delegate = self;
     _textView.textStorage.delegate = self;
-    _textView.font = _viewModel.theme.textFont;
-    if (_viewModel.theme.textStyle != nil) {
-        _textView.KDI_dynamicTypeTextStyle = _viewModel.theme.textStyle;
-    }
-    _textView.KDI_cornerRadius = 5.0;
     [_inputStackView addArrangedSubview:_textView];
     
     _doneButton = [KDIButton buttonWithType:UIButtonTypeSystem];

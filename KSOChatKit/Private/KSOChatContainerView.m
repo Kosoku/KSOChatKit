@@ -17,14 +17,12 @@
 #import "KSOChatViewModel.h"
 #import "KSOChatInputView.h"
 #import "KSOChatCompletionsView.h"
-#import "KSOChatMarkdownView.h"
 
 @interface KSOChatContainerView () <KSOChatViewModelViewDelegate>
 @property (strong,nonatomic) UIStackView *stackView;
 
 @property (strong,nonatomic) KSOChatInputView *chatInputView;
 @property (strong,nonatomic) KSOChatCompletionsView *chatCompletionsView;
-@property (strong,nonatomic) KSOChatMarkdownView *chatMarkdownView;
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
 @end
@@ -65,19 +63,6 @@
     if (self.chatCompletionsView != nil) {
         [self.chatCompletionsView removeFromSuperview];
         self.chatCompletionsView = nil;
-    }
-}
-- (void)chatViewModelShowMarkdownSymbols:(KSOChatViewModel *)chatViewModel {
-    if (self.chatMarkdownView == nil) {
-        self.chatMarkdownView = [[KSOChatMarkdownView alloc] initWithViewModel:self.viewModel];
-        [self.stackView insertArrangedSubview:self.chatMarkdownView atIndex:0];
-    }
-    self.chatMarkdownView.hidden = NO;
-}
-- (void)chatViewModelHideMarkdownSymbols:(KSOChatViewModel *)chatViewModel {
-    if (self.chatMarkdownView != nil) {
-        [self.chatMarkdownView removeFromSuperview];
-        self.chatMarkdownView = nil;
     }
 }
 

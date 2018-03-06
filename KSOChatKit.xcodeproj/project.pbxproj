@@ -32,8 +32,8 @@
 		070F990E204B7628001CFEFE /* Quicksilver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 070F990C204B7628001CFEFE /* Quicksilver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		070F990F204B762F001CFEFE /* Quicksilver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 070F9910204B762F001CFEFE /* Quicksilver.framework */; };
 		070F9916204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 070F9915204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		071CD845204E955300CB063C /* KSOChatMarkdownCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 071CD843204E955300CB063C /* KSOChatMarkdownCollectionViewCell.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		071CD846204E955300CB063C /* KSOChatMarkdownCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 071CD844204E955300CB063C /* KSOChatMarkdownCollectionViewCell.m */; };
+		0721D8EF204EFD41000F0A6A /* KSOChatTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0721D8ED204EFD41000F0A6A /* KSOChatTextView.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		0721D8F0204EFD41000F0A6A /* KSOChatTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0721D8EE204EFD41000F0A6A /* KSOChatTextView.m */; };
 		0746166B204B4A4600F2192A /* KSOChatKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 07461669204B4A4600F2192A /* KSOChatKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0746167A204B4EB900F2192A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07461679204B4EB900F2192A /* AppDelegate.m */; };
 		0746167D204B4EB900F2192A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746167C204B4EB900F2192A /* ViewController.m */; };
@@ -59,8 +59,6 @@
 		07EFB2C0204E173500FDEA13 /* KSOChatDefaultCompletionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 07EFB2BE204E173500FDEA13 /* KSOChatDefaultCompletionTableViewCell.m */; };
 		07EFB2C3204E524200FDEA13 /* KSOChatEditingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 07EFB2C1204E524200FDEA13 /* KSOChatEditingView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		07EFB2C4204E524200FDEA13 /* KSOChatEditingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07EFB2C2204E524200FDEA13 /* KSOChatEditingView.m */; };
-		07EFB2C7204E691A00FDEA13 /* KSOChatMarkdownView.h in Headers */ = {isa = PBXBuildFile; fileRef = 07EFB2C5204E691A00FDEA13 /* KSOChatMarkdownView.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		07EFB2C8204E691A00FDEA13 /* KSOChatMarkdownView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07EFB2C6204E691A00FDEA13 /* KSOChatMarkdownView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,8 +109,8 @@
 		070F990C204B7628001CFEFE /* Quicksilver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Quicksilver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		070F9910204B762F001CFEFE /* Quicksilver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Quicksilver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		070F9915204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatViewControllerDelegate.h; sourceTree = "<group>"; };
-		071CD843204E955300CB063C /* KSOChatMarkdownCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatMarkdownCollectionViewCell.h; sourceTree = "<group>"; };
-		071CD844204E955300CB063C /* KSOChatMarkdownCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatMarkdownCollectionViewCell.m; sourceTree = "<group>"; };
+		0721D8ED204EFD41000F0A6A /* KSOChatTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatTextView.h; sourceTree = "<group>"; };
+		0721D8EE204EFD41000F0A6A /* KSOChatTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatTextView.m; sourceTree = "<group>"; };
 		07461666204B4A4600F2192A /* KSOChatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KSOChatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		07461669204B4A4600F2192A /* KSOChatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatKit.h; sourceTree = "<group>"; };
 		0746166A204B4A4600F2192A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -146,8 +144,6 @@
 		07EFB2BE204E173500FDEA13 /* KSOChatDefaultCompletionTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatDefaultCompletionTableViewCell.m; sourceTree = "<group>"; };
 		07EFB2C1204E524200FDEA13 /* KSOChatEditingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatEditingView.h; sourceTree = "<group>"; };
 		07EFB2C2204E524200FDEA13 /* KSOChatEditingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatEditingView.m; sourceTree = "<group>"; };
-		07EFB2C5204E691A00FDEA13 /* KSOChatMarkdownView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatMarkdownView.h; sourceTree = "<group>"; };
-		07EFB2C6204E691A00FDEA13 /* KSOChatMarkdownView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatMarkdownView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,7 +206,6 @@
 				07EFB2D2204E89F000FDEA13 /* Input */,
 				07EFB2CC204E7AAF00FDEA13 /* Editing */,
 				07EFB2CB204E7A9800FDEA13 /* Completions */,
-				07EFB2CA204E7A6F00FDEA13 /* Markdown */,
 			);
 			path = Private;
 			sourceTree = "<group>";
@@ -289,17 +284,6 @@
 			path = "Demo-iOS";
 			sourceTree = "<group>";
 		};
-		07EFB2CA204E7A6F00FDEA13 /* Markdown */ = {
-			isa = PBXGroup;
-			children = (
-				07EFB2C5204E691A00FDEA13 /* KSOChatMarkdownView.h */,
-				07EFB2C6204E691A00FDEA13 /* KSOChatMarkdownView.m */,
-				071CD843204E955300CB063C /* KSOChatMarkdownCollectionViewCell.h */,
-				071CD844204E955300CB063C /* KSOChatMarkdownCollectionViewCell.m */,
-			);
-			name = Markdown;
-			sourceTree = "<group>";
-		};
 		07EFB2CB204E7A9800FDEA13 /* Completions */ = {
 			isa = PBXGroup;
 			children = (
@@ -325,6 +309,8 @@
 			children = (
 				070F98FB204B50CF001CFEFE /* KSOChatInputView.h */,
 				070F98FC204B50CF001CFEFE /* KSOChatInputView.m */,
+				0721D8ED204EFD41000F0A6A /* KSOChatTextView.h */,
+				0721D8EE204EFD41000F0A6A /* KSOChatTextView.m */,
 			);
 			name = Input;
 			sourceTree = "<group>";
@@ -336,7 +322,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				071CD845204E955300CB063C /* KSOChatMarkdownCollectionViewCell.h in Headers */,
 				07490A67204CFCFF004CB5C8 /* KSOChatCompletion.h in Headers */,
 				07CDA875204CE31700089406 /* KSOChatCompletionsView.h in Headers */,
 				07EFB2B9204DFDBB00FDEA13 /* KSOChatTheme.h in Headers */,
@@ -345,13 +330,13 @@
 				07EFB2BF204E173500FDEA13 /* KSOChatDefaultCompletionTableViewCell.h in Headers */,
 				07EFB2C3204E524200FDEA13 /* KSOChatEditingView.h in Headers */,
 				07CDA86A204CA2D300089406 /* KSOChatViewControllerDefines.h in Headers */,
+				0721D8EF204EFD41000F0A6A /* KSOChatTextView.h in Headers */,
 				0746166B204B4A4600F2192A /* KSOChatKit.h in Headers */,
 				070F9901204B6230001CFEFE /* KSOChatViewController.h in Headers */,
 				070F98FD204B50CF001CFEFE /* KSOChatInputView.h in Headers */,
 				07490A64204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h in Headers */,
 				07CDA86D204CA3E200089406 /* KSOChatViewModel.h in Headers */,
 				07CDA879204CE74300089406 /* KSOChatContainerView.h in Headers */,
-				07EFB2C7204E691A00FDEA13 /* KSOChatMarkdownView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,14 +447,13 @@
 				07CDA876204CE31700089406 /* KSOChatCompletionsView.m in Sources */,
 				07EFB2C4204E524200FDEA13 /* KSOChatEditingView.m in Sources */,
 				07EFB2C0204E173500FDEA13 /* KSOChatDefaultCompletionTableViewCell.m in Sources */,
+				0721D8F0204EFD41000F0A6A /* KSOChatTextView.m in Sources */,
 				07CDA86E204CA3E200089406 /* KSOChatViewModel.m in Sources */,
 				07EFB2BA204DFDBB00FDEA13 /* KSOChatTheme.m in Sources */,
 				070F9902204B6230001CFEFE /* KSOChatViewController.m in Sources */,
 				07490A65204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m in Sources */,
 				07CDA87A204CE74300089406 /* KSOChatContainerView.m in Sources */,
 				070F98FE204B50CF001CFEFE /* KSOChatInputView.m in Sources */,
-				071CD846204E955300CB063C /* KSOChatMarkdownCollectionViewCell.m in Sources */,
-				07EFB2C8204E691A00FDEA13 /* KSOChatMarkdownView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
