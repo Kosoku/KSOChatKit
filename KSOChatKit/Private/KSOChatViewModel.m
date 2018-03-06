@@ -51,6 +51,7 @@
     _viewDelegatesHashTable = [NSHashTable weakObjectsHashTable];
     
     _options = KSOChatViewControllerOptionsShowDoneButton;
+    _pastableMediaTypes = KSOChatViewControllerMediaTypesAll;
     
     _theme = KSOChatTheme.defaultTheme;
     
@@ -319,6 +320,19 @@
     self.text = [self.text stringByReplacingCharactersInRange:range withString:insertString];
     
     self.selectedRange = NSMakeRange(range.location + insertString.length, 0);
+}
+#pragma mark -
+- (void)insertTextAtSelectedRange:(NSString *)text; {
+    NSRange range = self.selectedRange;
+    
+    self.text = [self.text stringByReplacingCharactersInRange:range withString:text];
+    
+    if (range.length > 0) {
+        self.selectedRange = NSMakeRange(range.location, text.length);
+    }
+    else {
+        self.selectedRange = NSMakeRange(range.location + text.length, 0);
+    }
 }
 #pragma mark -
 - (void)editText:(NSString *)text; {

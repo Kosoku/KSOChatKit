@@ -252,6 +252,10 @@
 //    KSTLog(@"text=%@",chatViewController.text);
 }
 
+- (void)chatViewController:(KSOChatViewController *)chatViewController didPasteMediaType:(KSOChatViewControllerMediaTypes)mediaType data:(NSData *)data {
+    KSTLogObject(KSOChatViewControllerUTIsForMediaTypes(mediaType));
+}
+
 - (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldShowCompletionsForPrefix:(NSString *)prefix text:(NSString *)text {
     return YES;
 }

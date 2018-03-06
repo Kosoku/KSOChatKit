@@ -43,6 +43,7 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
 
 - (void)_addMarkdownMenuItem;
 - (void)_applyMarkdownSymbolForTitle:(NSString *)title;
+- (NSString *)_pasteboardSupportedUTI;
 @end
 
 @implementation KSOChatTextView
@@ -83,10 +84,37 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
         return title.length > 0;
     }
     
-    if (action == @selector(_markdownMenuItemAction:)) {
+    if (action == @selector(paste:)) {
+        return [self _pasteboardSupportedUTI] != nil;
+    }
+    else if (action == @selector(_markdownMenuItemAction:)) {
         return self.selectedRange.length > 0;
     }
     return [super canPerformAction:action withSender:sender];
+}
+- (void)paste:(id)sender {
+    NSString *string = nil;
+    
+    if (UIPasteboard.generalPasteboard.URL != nil) {
+        string = UIPasteboard.generalPasteboard.URL.absoluteString;
+    }
+    else if (UIPasteboard.generalPasteboard.string != nil) {
+        string = UIPasteboard.generalPasteboard.string;
+    }
+    
+    if (string == nil) {
+        NSString *UTI = [self _pasteboardSupportedUTI];
+        NSData *data = [UIPasteboard.generalPasteboard dataForPasteboardType:UTI];
+        
+        if (data != nil) {
+            if ([self.viewModel.delegate respondsToSelector:@selector(chatViewController:didPasteMediaType:data:)]) {
+                [self.viewModel.delegate chatViewController:self.viewModel.chatViewController didPasteMediaType:KSOChatViewControllerMediaTypesFromUTIs(@[UTI]) data:data];
+            }
+        }
+    }
+    else {
+        [self.viewModel insertTextAtSelectedRange:string];
+    }
 }
 
 - (instancetype)initWithViewModel:(KSOChatViewModel *)viewModel; {
@@ -149,6 +177,15 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
     }].allKeys.firstObject;
     
     [self.viewModel applyMarkdownSymbolToSelectedRange:symbol];
+}
+- (NSString *)_pasteboardSupportedUTI; {
+    NSMutableArray *predicates = [[NSMutableArray alloc] init];
+    
+    for (NSString *type in KSOChatViewControllerUTIsForMediaTypes(self.viewModel.pastableMediaTypes)) {
+        [predicates addObject:[NSPredicate predicateWithFormat:@"self == %@",type]];
+    }
+    
+    return [UIPasteboard.generalPasteboard.pasteboardTypes filteredArrayUsingPredicate:[NSCompoundPredicate orPredicateWithSubpredicates:predicates]].firstObject;
 }
 
 @end

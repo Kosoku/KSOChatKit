@@ -33,6 +33,7 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @property (readonly,nonatomic) NSSet<id<KSOChatViewModelViewDelegate>> *viewDelegates;
 
 @property (assign,nonatomic) KSOChatViewControllerOptions options;
+@property (assign,nonatomic) KSOChatViewControllerMediaTypes pastableMediaTypes;
 
 @property (readonly,assign,nonatomic,getter=isEditing) BOOL editing;
 
@@ -77,6 +78,8 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 - (void)selectCompletion:(id<KSOChatCompletion>)completion;
 
 - (void)applyMarkdownSymbolToSelectedRange:(NSString *)markdownSymbol;
+
+- (void)insertTextAtSelectedRange:(NSString *)text;
 
 - (void)editText:(NSString *)text;
 - (void)cancelTextEditing;

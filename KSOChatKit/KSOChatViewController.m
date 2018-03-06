@@ -22,6 +22,65 @@
 #import <Ditko/Ditko.h>
 #import <Quicksilver/Quicksilver.h>
 
+#import <MobileCoreServices/MobileCoreServices.h>
+
+NSArray<NSString*>* KSOChatViewControllerUTIsForMediaTypes(KSOChatViewControllerMediaTypes mediaTypes) {
+    NSMutableArray *retval = [[NSMutableArray alloc] init];
+    
+    if (mediaTypes & KSOChatViewControllerMediaTypesPlainText) {
+        [retval addObject:(__bridge id)kUTTypeUTF8PlainText];
+    }
+    if (mediaTypes & KSOChatViewControllerMediaTypesPNG) {
+        [retval addObject:(__bridge id)kUTTypePNG];
+    }
+    if (mediaTypes & KSOChatViewControllerMediaTypesJPEG) {
+        [retval addObject:(__bridge id)kUTTypeJPEG];
+    }
+    if (mediaTypes & KSOChatViewControllerMediaTypesTIFF) {
+        [retval addObject:(__bridge id)kUTTypeTIFF];
+    }
+    if (mediaTypes & KSOChatViewControllerMediaTypesGIF) {
+        [retval addObject:(__bridge id)kUTTypeGIF];
+    }
+    if (mediaTypes & KSOChatViewControllerMediaTypesMOV) {
+        [retval addObject:(__bridge id)kUTTypeQuickTimeMovie];
+    }
+    if (mediaTypes & KSOChatViewControllerMediaTypesPassbook) {
+        [retval addObject:KSOChatViewControllerUTIPassbook];
+    }
+    
+    return [retval copy];
+}
+KSOChatViewControllerMediaTypes KSOChatViewControllerMediaTypesFromUTIs(NSArray<NSString *> *UTIs) {
+    KSOChatViewControllerMediaTypes retval = KSOChatViewControllerMediaTypesNone;
+    
+    if ([UTIs containsObject:(__bridge id)kUTTypeUTF8PlainText]) {
+        retval |= KSOChatViewControllerMediaTypesPlainText;
+    }
+    if ([UTIs containsObject:(__bridge id)kUTTypePNG]) {
+        retval |= KSOChatViewControllerMediaTypesPNG;
+    }
+    if ([UTIs containsObject:(__bridge id)kUTTypeJPEG]) {
+        retval |= KSOChatViewControllerMediaTypesJPEG;
+    }
+    if ([UTIs containsObject:(__bridge id)kUTTypeTIFF]) {
+        retval |= KSOChatViewControllerMediaTypesTIFF;
+    }
+    if ([UTIs containsObject:(__bridge id)kUTTypeGIF]) {
+        retval |= KSOChatViewControllerMediaTypesGIF;
+    }
+    if ([UTIs containsObject:(__bridge id)kUTTypeQuickTimeMovie]) {
+        retval |= KSOChatViewControllerMediaTypesMOV;
+    }
+    if ([UTIs containsObject:KSOChatViewControllerUTIPassbook]) {
+        retval |= KSOChatViewControllerMediaTypesPassbook;
+    }
+    
+    return retval;
+}
+
+NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
+
 @interface KSOChatViewController ()
 @property (strong,nonatomic) KSOChatContainerView *chatContainerView;
 
@@ -126,6 +185,13 @@
 }
 - (void)setOptions:(KSOChatViewControllerOptions)options {
     self.viewModel.options = options;
+}
+@dynamic pastableMediaTypes;
+- (KSOChatViewControllerMediaTypes)pastableMediaTypes {
+    return self.viewModel.pastableMediaTypes;
+}
+- (void)setPastableMediaTypes:(KSOChatViewControllerMediaTypes)pastableMediaTypes {
+    self.viewModel.pastableMediaTypes = pastableMediaTypes;
 }
 @dynamic theme;
 - (KSOChatTheme *)theme {

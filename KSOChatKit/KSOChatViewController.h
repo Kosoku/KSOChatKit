@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak,nonatomic,nullable) id<KSOChatViewControllerDelegate> delegate;
 
 @property (assign,nonatomic) KSOChatViewControllerOptions options;
+@property (assign,nonatomic) KSOChatViewControllerMediaTypes pastableMediaTypes;
 
 @property (strong,nonatomic,null_resettable) KSOChatTheme *theme;
 

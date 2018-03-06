@@ -23,4 +23,23 @@ typedef NS_OPTIONS(NSUInteger, KSOChatViewControllerOptions) {
     KSOChatViewControllerOptionsShowDoneButton = 1 << 0
 };
 
+typedef NS_OPTIONS(NSUInteger, KSOChatViewControllerMediaTypes) {
+    KSOChatViewControllerMediaTypesNone = 0,
+    KSOChatViewControllerMediaTypesPlainText = 1 << 0,
+    KSOChatViewControllerMediaTypesPNG = 1 << 1,
+    KSOChatViewControllerMediaTypesJPEG = 1 << 2,
+    KSOChatViewControllerMediaTypesTIFF = 1 << 3,
+    KSOChatViewControllerMediaTypesGIF = 1 << 4,
+    KSOChatViewControllerMediaTypesMOV = 1 << 5,
+    KSOChatViewControllerMediaTypesPassbook = 1 << 6,
+    KSOChatViewControllerMediaTypesImages = KSOChatViewControllerMediaTypesPNG|KSOChatViewControllerMediaTypesJPEG|KSOChatViewControllerMediaTypesTIFF|KSOChatViewControllerMediaTypesGIF,
+    KSOChatViewControllerMediaTypesVideos = KSOChatViewControllerMediaTypesMOV,
+    KSOChatViewControllerMediaTypesAll = KSOChatViewControllerMediaTypesPlainText|KSOChatViewControllerMediaTypesPNG|KSOChatViewControllerMediaTypesJPEG|KSOChatViewControllerMediaTypesTIFF|KSOChatViewControllerMediaTypesGIF|KSOChatViewControllerMediaTypesMOV|KSOChatViewControllerMediaTypesPassbook
+};
+
+FOUNDATION_EXTERN NSArray<NSString*>* KSOChatViewControllerUTIsForMediaTypes(KSOChatViewControllerMediaTypes mediaTypes);
+FOUNDATION_EXTERN KSOChatViewControllerMediaTypes KSOChatViewControllerMediaTypesFromUTIs(NSArray<NSString *> *UTIs);
+
+FOUNDATION_EXTERN NSString *const KSOChatViewControllerUTIPassbook;
+
 #endif
