@@ -308,13 +308,7 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     scrollView.contentInset = UIEdgeInsetsMake(0, 0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(self.chatContainerView.frame), 0);
     
     if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        if (scrollView.contentSize.height < CGRectGetHeight(scrollView.frame)) {
-            return;
-        }
-        
-        CGRect bottomRect = CGRectMake(0.0, scrollView.contentSize.height - CGRectGetHeight(scrollView.bounds) + scrollView.contentInset.bottom, CGRectGetWidth(scrollView.bounds), CGRectGetHeight(scrollView.bounds));
-        
-        [scrollView setContentOffset:bottomRect.origin animated:YES];
+        [scrollView KDI_scrollToBottomAnimated:YES];
     }
 }
 - (NSArray<NSLayoutConstraint *> *)_chatContainerViewLayoutConstraintsForKeyboardFrame:(CGRect)keyboardFrame {
