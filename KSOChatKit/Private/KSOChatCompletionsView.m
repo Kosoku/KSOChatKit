@@ -15,6 +15,7 @@
 
 #import "KSOChatCompletionsView.h"
 #import "KSOChatViewModel.h"
+#import "KSOChatDefaultCompletionTableViewCell.h"
 
 #import <Ditko/Ditko.h>
 #import <Stanley/Stanley.h>
@@ -25,6 +26,7 @@
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
 @property (copy,nonatomic) NSArray<id<KSOChatCompletion>> *completions;
+@property (strong,nonatomic) NSMutableSet<Class<KSOChatCompletionCell>> *registeredCompletionCellClasses;
 
 @end
 
@@ -35,22 +37,25 @@
     return self.completions.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    KDITableViewCell *retval = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(KDITableViewCell.class) forIndexPath:indexPath];
+    NSString *identifier = NSStringFromClass(KSOChatDefaultCompletionTableViewCell.class);
+    NSString *prefix;
+    if ([self.viewModel shouldShowCompletionsForRange:self.viewModel.selectedRange prefix:&prefix text:NULL range:NULL]) {
+        if (self.viewModel.prefixesToCompletionCellClasses[prefix] != nil) {
+            Class<KSOChatCompletionCell> completionCellClass = self.viewModel.prefixesToCompletionCellClasses[prefix];
+            
+            if (![self.registeredCompletionCellClasses containsObject:completionCellClass]) {
+                [self.registeredCompletionCellClasses addObject:completionCellClass];
+                
+                [tableView registerClass:completionCellClass forCellReuseIdentifier:NSStringFromClass(completionCellClass)];
+            }
+            
+            identifier = NSStringFromClass(completionCellClass);
+        }
+    }
+    UITableViewCell<KSOChatCompletionCell> *retval = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     id<KSOChatCompletion> completion = self.completions[indexPath.row];
     
-    retval.title = completion.chatCompletionTitle;
-    if ([completion respondsToSelector:@selector(chatCompletionSubtitle)]) {
-        retval.subtitle = completion.chatCompletionSubtitle;
-    }
-    else {
-        retval.subtitle = nil;
-    }
-    if ([completion respondsToSelector:@selector(chatCompletionImage)]) {
-        retval.icon = completion.chatCompletionImage;
-    }
-    else {
-        retval.icon = nil;
-    }
+    retval.completion = completion;
     
     return retval;
 }
@@ -80,6 +85,8 @@
     _viewModel = viewModel;
     [_viewModel addViewDelegate:self];
     
+    _registeredCompletionCellClasses = [[NSMutableSet alloc] init];
+    
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.hidden = YES;
     self.backgroundColor = UIColor.clearColor;
@@ -89,7 +96,7 @@
     _tableView.estimatedRowHeight = 44.0;
     _tableView.dataSource = self;
     _tableView.delegate = self;
-    [_tableView registerClass:KDITableViewCell.class forCellReuseIdentifier:NSStringFromClass(KDITableViewCell.class)];
+    [_tableView registerClass:KSOChatDefaultCompletionTableViewCell.class forCellReuseIdentifier:NSStringFromClass(KSOChatDefaultCompletionTableViewCell.class)];
     [self addSubview:_tableView];
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _tableView}]];

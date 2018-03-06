@@ -87,6 +87,13 @@
 - (void)removeSyntaxHighlightingRegularExpressions; {
     [self.viewModel removeSyntaxHighlightingRegularExpressions];
 }
+#pragma mark -
+- (void)setCompletionCellClass:(Class<KSOChatCompletionCell>)completionCellClass forPrefix:(NSString *)prefix; {
+    
+}
+- (void)removeCompletionCellClassForPrefix:(NSString *)prefix; {
+    
+}
 #pragma mark Properties
 @dynamic delegate;
 - (id<KSOChatViewControllerDelegate>)delegate {

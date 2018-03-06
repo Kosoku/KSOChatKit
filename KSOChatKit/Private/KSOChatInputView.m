@@ -57,7 +57,7 @@
         
         [textStorage addAttribute:NSForegroundColorAttributeName value:self.viewModel.theme.textColor range:lineRange];
         
-        [self.viewModel.regularExpressionsToTextAttributes enumerateKeysAndObjectsUsingBlock:^(NSRegularExpression * _Nonnull key, NSDictionary<NSAttributedStringKey,id> * _Nonnull obj, BOOL * _Nonnull stop) {
+        [self.viewModel.syntaxHighlightingRegularExpressionsToTextAttributes enumerateKeysAndObjectsUsingBlock:^(NSRegularExpression * _Nonnull key, NSDictionary<NSAttributedStringKey,id> * _Nonnull obj, BOOL * _Nonnull stop) {
             [key enumerateMatchesInString:textStorage.string options:0 range:lineRange usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop) {
                 [textStorage addAttributes:obj range:result.range];
             }];
@@ -77,7 +77,7 @@
     
     NSString *outPrefix;
     NSString *outText;
-    if ([self.viewModel shouldShowCompletionsForRange:KDISelectedRangeFromTextInput(self.textView) prefix:&outPrefix text:&outText range:NULL]) {
+    if ([self.viewModel shouldShowCompletionsForRange:self.viewModel.selectedRange prefix:&outPrefix text:&outText range:NULL]) {
         [self.viewModel showCompletionsForPrefix:outPrefix text:outText];
     }
     else {
@@ -87,6 +87,9 @@
 #pragma mark KSOChatViewModelDataSource
 - (NSRange)selectedRangeForChatViewModel:(KSOChatViewModel *)chatViewModel {
     return KDISelectedRangeFromTextInput(self.textView);
+}
+- (void)chatViewModel:(KSOChatViewModel *)chatViewModel didChangeSelectedRange:(NSRange)selectedRange {
+    self.textView.selectedRange = selectedRange;
 }
 
 #pragma mark *** Public Methods ***

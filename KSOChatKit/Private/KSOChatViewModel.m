@@ -22,7 +22,8 @@
 
 @interface KSOChatViewModel ()
 @property (readwrite,weak,nonatomic) KSOChatViewController *chatViewController;
-@property (readwrite,copy,nonatomic) NSDictionary<NSRegularExpression *, NSDictionary<NSAttributedStringKey, id> *> *regularExpressionsToTextAttributes;
+@property (readwrite,copy,nonatomic) NSDictionary<NSRegularExpression *, NSDictionary<NSAttributedStringKey, id> *> *syntaxHighlightingRegularExpressionsToTextAttributes;
+@property (readwrite,copy,nonatomic) NSDictionary<NSString *, Class<KSOChatCompletionCell>> *prefixesToCompletionCellClasses;
 @property (readwrite,strong,nonatomic) KAGAction *doneAction;
 
 @property (strong,nonatomic) NSHashTable<id<KSOChatViewModelViewDelegate>> *viewDelegatesHashTable;
@@ -76,14 +77,29 @@
 }
 
 - (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes; {
-    NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithDictionary:self.regularExpressionsToTextAttributes];
+    NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithDictionary:self.syntaxHighlightingRegularExpressionsToTextAttributes];
     
     temp[regularExpression] = textAttributes;
     
-    self.regularExpressionsToTextAttributes = temp;
+    self.syntaxHighlightingRegularExpressionsToTextAttributes = temp;
 }
 - (void)removeSyntaxHighlightingRegularExpressions; {
-    self.regularExpressionsToTextAttributes = nil;
+    self.syntaxHighlightingRegularExpressionsToTextAttributes = nil;
+}
+
+- (void)setCompletionCellClass:(Class<KSOChatCompletionCell>)completionCellClass forPrefix:(NSString *)prefix; {
+    NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithDictionary:self.prefixesToCompletionCellClasses];
+    
+    temp[prefix] = completionCellClass;
+    
+    self.prefixesToCompletionCellClasses = temp;
+}
+- (void)removeCompletionCellClassForPrefix:(NSString *)prefix; {
+    NSMutableDictionary *temp = [NSMutableDictionary dictionaryWithDictionary:self.prefixesToCompletionCellClasses];
+    
+    [temp removeObjectForKey:prefix];
+    
+    self.prefixesToCompletionCellClasses = temp;
 }
 
 - (BOOL)shouldChangeTextInRange:(NSRange)range text:(NSString *)text; {
@@ -178,6 +194,13 @@
 }
 - (void)setTheme:(KSOChatTheme *)theme {
     _theme = theme ?: KSOChatTheme.defaultTheme;
+}
+@dynamic selectedRange;
+- (NSRange)selectedRange {
+    return [self.dataSource selectedRangeForChatViewModel:self];
+}
+- (void)setSelectedRange:(NSRange)selectedRange {
+    [self.dataSource chatViewModel:self didChangeSelectedRange:selectedRange];
 }
 
 @end

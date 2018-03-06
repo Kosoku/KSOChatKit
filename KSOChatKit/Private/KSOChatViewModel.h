@@ -17,6 +17,7 @@
 #import <Agamotto/KAGAction.h>
 #import "KSOChatViewControllerDefines.h"
 #import "KSOChatViewControllerDelegate.h"
+#import "KSOChatCompletionCell.h"
 
 typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatCompletion>> *completions);
 
@@ -36,9 +37,11 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @property (strong,nonatomic) KSOChatTheme *theme;
 
 @property (copy,nonatomic) NSString *text;
+@property (assign,nonatomic) NSRange selectedRange;
 
-@property (readonly,copy,nonatomic) NSDictionary<NSRegularExpression *, NSDictionary<NSAttributedStringKey, id> *> *regularExpressionsToTextAttributes;
+@property (readonly,copy,nonatomic) NSDictionary<NSRegularExpression *, NSDictionary<NSAttributedStringKey, id> *> *syntaxHighlightingRegularExpressionsToTextAttributes;
 @property (copy,nonatomic) NSSet<NSString *> *prefixesForCompletion;
+@property (readonly,copy,nonatomic) NSDictionary<NSString *, Class<KSOChatCompletionCell>> *prefixesToCompletionCellClasses;
 
 @property (readonly,strong,nonatomic) KAGAction *doneAction;
 
@@ -49,6 +52,9 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 
 - (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes;
 - (void)removeSyntaxHighlightingRegularExpressions;
+
+- (void)setCompletionCellClass:(Class<KSOChatCompletionCell>)completionCellClass forPrefix:(NSString *)prefix;
+- (void)removeCompletionCellClassForPrefix:(NSString *)prefix;
 
 - (BOOL)shouldChangeTextInRange:(NSRange)range text:(NSString *)text;
 - (BOOL)shouldShowCompletionsForRange:(NSRange)range prefix:(NSString **)outPrefix text:(NSString **)outText range:(NSRangePointer)outRange;
@@ -63,6 +69,7 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @protocol KSOChatViewModelDataSource <NSObject>
 @required
 - (NSRange)selectedRangeForChatViewModel:(KSOChatViewModel *)chatViewModel;
+- (void)chatViewModel:(KSOChatViewModel *)chatViewModel didChangeSelectedRange:(NSRange)selectedRange;
 @end
 
 @protocol KSOChatViewModelViewDelegate <NSObject>

@@ -24,6 +24,7 @@ FOUNDATION_EXPORT const unsigned char KSOChatKitVersionString[];
 #import <KSOChatKit/KSOChatViewControllerDefines.h>
 #import <KSOChatKit/KSOChatViewControllerDelegate.h>
 #import <KSOChatKit/KSOChatCompletion.h>
+#import <KSOChatKit/KSOChatCompletionCell.h>
 #import <KSOChatKit/KSOChatTheme.h>
 #import <KSOChatKit/KSOChatViewController.h>
 #import <KSOChatKit/UIViewController+KSOChatKitExtensions.h>
