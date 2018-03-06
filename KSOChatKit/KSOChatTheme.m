@@ -21,6 +21,11 @@
 @property (readwrite,copy,nonatomic) NSString *identifier;
 
 + (UIColor *)_defaultTextColor;
++ (UIFont *)_defaultTextFont;
++ (UIFontTextStyle)_defaultTextStyle;
+
++ (UIFont *)_defaultButtonFont;
++ (UIFontTextStyle)_defaultButtonTextStyle;
 @end
 
 @implementation KSOChatTheme
@@ -37,6 +42,11 @@
     KSOChatTheme *retval = [[KSOChatTheme alloc] initWithIdentifier:[NSString stringWithFormat:@"%@.copy",self.identifier]];
     
     retval->_textColor = _textColor;
+    retval->_textFont = _textFont;
+    retval->_textStyle = _textStyle;
+    
+    retval->_buttonFont = _buttonFont;
+    retval->_buttonTextStyle = _buttonTextStyle;
     
     return retval;
 }
@@ -48,6 +58,11 @@
     _identifier = [identifier copy];
     
     _textColor = [self.class _defaultTextColor];
+    _textFont = [self.class _defaultTextFont];
+    _textStyle = [self.class _defaultTextStyle];
+    
+    _buttonFont = [self.class _defaultButtonFont];
+    _buttonTextStyle = [self.class _defaultButtonTextStyle];
     
     return self;
 }
@@ -63,9 +78,34 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
 - (void)setTextColor:(UIColor *)textColor {
     _textColor = textColor ?: [self.class _defaultTextColor];
 }
+- (void)setTextFont:(UIFont *)textFont {
+    _textFont = textFont ?: [self.class _defaultTextFont];
+}
+- (void)setTextStyle:(UIFontTextStyle)textStyle {
+    _textStyle = textStyle ?: [self.class _defaultTextStyle];
+}
+
+- (void)setButtonFont:(UIFont *)buttonFont {
+    _buttonFont = buttonFont ?: [self.class _defaultButtonFont];
+}
+- (void)setButtonTextStyle:(UIFontTextStyle)buttonTextStyle {
+    _buttonTextStyle = buttonTextStyle ?: [self.class _defaultButtonTextStyle];
+}
 
 + (UIColor *)_defaultTextColor; {
     return UIColor.blackColor;
+}
++ (UIFont *)_defaultTextFont; {
+    return [UIFont systemFontOfSize:17.0];
+}
++ (UIFontTextStyle)_defaultTextStyle; {
+    return UIFontTextStyleBody;
+}
++ (UIFont *)_defaultButtonFont; {
+    return [UIFont systemFontOfSize:15.0];
+}
++ (UIFontTextStyle)_defaultButtonTextStyle; {
+    return UIFontTextStyleCallout;
 }
 
 @end

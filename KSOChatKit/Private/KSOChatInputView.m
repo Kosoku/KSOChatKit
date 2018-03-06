@@ -135,13 +135,19 @@
     _textView.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
     _textView.delegate = self;
     _textView.textStorage.delegate = self;
-    _textView.KDI_dynamicTypeTextStyle = UIFontTextStyleBody;
+    _textView.font = _viewModel.theme.textFont;
+    if (_viewModel.theme.textStyle != nil) {
+        _textView.KDI_dynamicTypeTextStyle = _viewModel.theme.textStyle;
+    }
     _textView.KDI_cornerRadius = 5.0;
     [_inputStackView addArrangedSubview:_textView];
     
     _doneButton = [KDIButton buttonWithType:UIButtonTypeSystem];
     _doneButton.translatesAutoresizingMaskIntoConstraints = NO;
-    _doneButton.titleLabel.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
+    _doneButton.titleLabel.font = _viewModel.theme.buttonFont;
+    if (_viewModel.theme.buttonTextStyle != nil) {
+        _doneButton.titleLabel.KDI_dynamicTypeTextStyle = _viewModel.theme.buttonTextStyle;
+    }
     _doneButton.KAG_action = _viewModel.doneAction;
     [_inputStackView addArrangedSubview:_doneButton];
     

@@ -24,6 +24,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly,copy,nonatomic) NSString *identifier;
 
 @property (strong,nonatomic,null_resettable) UIColor *textColor;
+@property (strong,nonatomic,null_resettable) UIFont *textFont;
+@property (copy,nonatomic,nullable) UIFontTextStyle textStyle;
+
+@property (strong,nonatomic,null_resettable) UIFont *buttonFont;
+@property (copy,nonatomic,nullable) UIFontTextStyle buttonTextStyle;
 
 - (instancetype)initWithIdentifier:(NSString *)identifier NS_DESIGNATED_INITIALIZER;
 

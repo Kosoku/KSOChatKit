@@ -15,6 +15,7 @@
 
 #import "KSOChatEditingView.h"
 #import "KSOChatViewModel.h"
+#import "KSOChatTheme.h"
 
 #import <Ditko/Ditko.h>
 #import <Agamotto/Agamotto.h>
@@ -51,7 +52,7 @@
     
     _cancelButton = [KDIButton buttonWithType:UIButtonTypeSystem];
     _cancelButton.translatesAutoresizingMaskIntoConstraints = NO;
-    _cancelButton.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
+    _cancelButton.titleLabel.font = _viewModel.theme.buttonFont;
     _cancelButton.KAG_action = _viewModel.cancelAction;
     [_cancelButton setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
     [_stackView addArrangedSubview:_cancelButton];
@@ -59,16 +60,20 @@
     _label = [[UILabel alloc] initWithFrame:CGRectZero];
     _label.translatesAutoresizingMaskIntoConstraints = NO;
     _label.textAlignment = NSTextAlignmentCenter;
-    _label.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
+    _label.font = _viewModel.theme.buttonFont;
     [_label setContentHuggingPriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
     [_stackView addArrangedSubview:_label];
     
     _doneButton = [KDIButton buttonWithType:UIButtonTypeSystem];
     _doneButton.translatesAutoresizingMaskIntoConstraints = NO;
-    _doneButton.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
+    _doneButton.titleLabel.font = _viewModel.theme.buttonFont;
     _doneButton.KAG_action = _viewModel.doneAction;
     [_doneButton setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
     [_stackView addArrangedSubview:_doneButton];
+    
+    if (_viewModel.theme.buttonTextStyle != nil) {
+        [NSObject KDI_registerDynamicTypeObjects:@[_cancelButton.titleLabel,_label,_doneButton.titleLabel] forTextStyle:_viewModel.theme.buttonTextStyle];
+    }
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _stackView}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": _stackView}]];
