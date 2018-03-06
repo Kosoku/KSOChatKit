@@ -36,6 +36,8 @@
     if (!(self = [super initWithFrame:CGRectZero]))
         return nil;
     
+    kstWeakify(self);
+    
     _viewModel = viewModel;
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
@@ -51,7 +53,6 @@
     _cancelButton.translatesAutoresizingMaskIntoConstraints = NO;
     _cancelButton.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
     _cancelButton.KAG_action = _viewModel.cancelAction;
-    [_cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [_cancelButton setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
     [_stackView addArrangedSubview:_cancelButton];
     
@@ -59,7 +60,6 @@
     _label.translatesAutoresizingMaskIntoConstraints = NO;
     _label.textAlignment = NSTextAlignmentCenter;
     _label.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
-    _label.text = @"Editing";
     [_label setContentHuggingPriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
     [_stackView addArrangedSubview:_label];
     
@@ -67,12 +67,24 @@
     _doneButton.translatesAutoresizingMaskIntoConstraints = NO;
     _doneButton.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
     _doneButton.KAG_action = _viewModel.doneAction;
-    [_doneButton setTitle:@"Save" forState:UIControlStateNormal];
     [_doneButton setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
     [_stackView addArrangedSubview:_doneButton];
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _stackView}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": _stackView}]];
+    
+    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,editingTitle),@kstKeypath(_viewModel,editingCancelButtonTitle),@kstKeypath(_viewModel,editingDoneButtonTitle)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+        kstStrongify(self);
+        if ([keyPath isEqualToString:@kstKeypath(self.viewModel,editingTitle)]) {
+            self.label.text = self.viewModel.editingTitle;
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,editingCancelButtonTitle)]) {
+            [self.cancelButton setTitle:self.viewModel.editingCancelButtonTitle forState:UIControlStateNormal];
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,editingDoneButtonTitle)]) {
+            [self.doneButton setTitle:self.viewModel.editingDoneButtonTitle forState:UIControlStateNormal];
+        }
+    }];
     
     return self;
 }

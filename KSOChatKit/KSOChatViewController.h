@@ -34,7 +34,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (copy,nonatomic,nullable) NSString *text;
 @property (copy,nonatomic,null_resettable) NSString *textPlaceholder;
 
+@property (copy,nonatomic,null_resettable) NSString *editingTitle;
+
 @property (copy,nonatomic,null_resettable) NSString *doneButtonTitle;
+@property (copy,nonatomic,null_resettable) NSString *editingCancelButtonTitle;
+@property (copy,nonatomic,null_resettable) NSString *editingDoneButtonTitle;
 
 @property (copy,nonatomic,nullable) NSSet<NSString *> *prefixesForCompletion;
 

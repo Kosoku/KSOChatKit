@@ -32,7 +32,10 @@
 @property (copy,nonatomic) NSString *textBeforeEditing;
 
 + (NSString *)_defaultTextPlaceholder;
++ (NSString *)_defaultEditingTitle;
 + (NSString *)_defaultDoneButtonTitle;
++ (NSString *)_defaultEditingCancelButtonTitle;
++ (NSString *)_defaultEditingDoneButtonTitle;
 @end
 
 @implementation KSOChatViewModel
@@ -51,7 +54,10 @@
     _theme = KSOChatTheme.defaultTheme;
     
     _textPlaceholder = [self.class _defaultTextPlaceholder];
+    _editingTitle = [self.class _defaultEditingTitle];
     _doneButtonTitle = [self.class _defaultDoneButtonTitle];
+    _editingCancelButtonTitle = [self.class _defaultEditingCancelButtonTitle];
+    _editingDoneButtonTitle = [self.class _defaultEditingDoneButtonTitle];
     
     _cancelAction = [[KAGAction alloc] initWithAsynchronousValueErrorBlock:^(KAGValueErrorBlock  _Nonnull completion) {
         kstStrongify(self);
@@ -228,6 +234,9 @@
 - (void)setTheme:(KSOChatTheme *)theme {
     _theme = theme ?: KSOChatTheme.defaultTheme;
 }
+- (void)setTextPlaceholder:(NSString *)textPlaceholder {
+    _textPlaceholder = textPlaceholder ?: [self.class _defaultTextPlaceholder];
+}
 @dynamic selectedRange;
 - (NSRange)selectedRange {
     return [self.dataSource selectedRangeForChatViewModel:self];
@@ -236,18 +245,34 @@
     [self.dataSource chatViewModel:self didChangeSelectedRange:selectedRange];
 }
 
-- (void)setTextPlaceholder:(NSString *)textPlaceholder {
-    _textPlaceholder = textPlaceholder ?: [self.class _defaultTextPlaceholder];
+- (void)setEditingTitle:(NSString *)editingTitle {
+    _editingTitle = editingTitle ?: [self.class _defaultEditingTitle];
 }
+
 - (void)setDoneButtonTitle:(NSString *)doneButtonTitle {
     _doneButtonTitle = doneButtonTitle ?: [self.class _defaultDoneButtonTitle];
+}
+- (void)setEditingCancelButtonTitle:(NSString *)editingCancelButtonTitle {
+    _editingCancelButtonTitle = editingCancelButtonTitle ?: [self.class _defaultEditingCancelButtonTitle];
+}
+- (void)setEditingDoneButtonTitle:(NSString *)editingDoneButtonTitle {
+    _editingDoneButtonTitle = editingDoneButtonTitle ?: [self.class _defaultEditingDoneButtonTitle];
 }
 #pragma mark *** Private Methods ***
 + (NSString *)_defaultTextPlaceholder; {
     return @"Enter Message…";
 }
++ (NSString *)_defaultEditingTitle; {
+    return @"Editing";
+}
 + (NSString *)_defaultDoneButtonTitle; {
     return @"Send";
+}
++ (NSString *)_defaultEditingCancelButtonTitle; {
+    return @"Cancel";
+}
++ (NSString *)_defaultEditingDoneButtonTitle; {
+    return @"Save";
 }
 
 @end

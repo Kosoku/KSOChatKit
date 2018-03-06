@@ -42,7 +42,11 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @property (copy,nonatomic) NSString *textPlaceholder;
 @property (assign,nonatomic) NSRange selectedRange;
 
+@property (copy,nonatomic) NSString *editingTitle;
+
 @property (copy,nonatomic) NSString *doneButtonTitle;
+@property (copy,nonatomic) NSString *editingCancelButtonTitle;
+@property (copy,nonatomic) NSString *editingDoneButtonTitle;
 
 @property (readonly,copy,nonatomic) NSDictionary<NSRegularExpression *, NSDictionary<NSAttributedStringKey, id> *> *syntaxHighlightingRegularExpressionsToTextAttributes;
 @property (copy,nonatomic) NSSet<NSString *> *prefixesForCompletion;
