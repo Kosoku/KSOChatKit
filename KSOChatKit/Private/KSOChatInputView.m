@@ -121,7 +121,6 @@
     _textView.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
     _textView.delegate = self;
     _textView.textStorage.delegate = self;
-    _textView.placeholder = @"Message";
     _textView.KDI_dynamicTypeTextStyle = UIFontTextStyleBody;
     _textView.KDI_cornerRadius = 5.0;
     [_stackView addArrangedSubview:_textView];
@@ -130,16 +129,21 @@
     _doneButton.translatesAutoresizingMaskIntoConstraints = NO;
     _doneButton.titleLabel.KDI_dynamicTypeTextStyle = UIFontTextStyleCallout;
     _doneButton.KAG_action = _viewModel.doneAction;
-    [_doneButton setTitle:@"Send" forState:UIControlStateNormal];
     [_stackView addArrangedSubview:_doneButton];
     
-    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,options)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,options),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
         if ([keyPath isEqualToString:@kstKeypath(self.viewModel,text)]) {
             self.textView.text = self.viewModel.text;
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,options)]) {
             self.doneButton.hidden = (!(self.viewModel.options & KSOChatViewControllerOptionsShowDoneButton));
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,doneButtonTitle)]) {
+            [self.doneButton setTitle:self.viewModel.doneButtonTitle forState:UIControlStateNormal];
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,textPlaceholder)]) {
+            self.textView.placeholder = self.viewModel.textPlaceholder;
         }
     }];
     

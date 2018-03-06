@@ -96,30 +96,21 @@
     
     self.title = user.name;
     self.subtitle = user.screenName;
-    if (self.icon == nil) {
-        self.icon = self.placeholderImage;
-    }
-    
-    [LoremIpsum asyncPlaceholderImageWithSize:self.placeholderImage.size completion:^(UIImage *image) {
-        self.icon = image;
-    }];
+    self.icon = self.placeholderImage;
 }
 
 - (UIImage *)placeholderImage {
-    static UIImage *kRetval;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        CGSize size = CGSizeMake(32, 32);
-        UIGraphicsBeginImageContextWithOptions(size, YES, 0.0);
-        
-        [UIColor.lightGrayColor setFill];
-        UIRectFill(CGRectMake(0, 0, size.width, size.height));
-        
-        kRetval = UIGraphicsGetImageFromCurrentImageContext();
-        
-        UIGraphicsEndImageContext();
-    });
-    return kRetval;
+    CGSize size = CGSizeMake(32, 32);
+    UIGraphicsBeginImageContextWithOptions(size, YES, 0.0);
+    
+    [KDIColorRandomRGB() setFill];
+    UIRectFill(CGRectMake(0, 0, size.width, size.height));
+    
+    UIImage *retval = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return retval;
 }
 @end
 

@@ -28,6 +28,8 @@
 
 @property (strong,nonatomic) NSHashTable<id<KSOChatViewModelViewDelegate>> *viewDelegatesHashTable;
 
++ (NSString *)_defaultTextPlaceholder;
++ (NSString *)_defaultDoneButtonTitle;
 @end
 
 @implementation KSOChatViewModel
@@ -44,6 +46,9 @@
     _options = KSOChatViewControllerOptionsShowDoneButton;
     
     _theme = KSOChatTheme.defaultTheme;
+    
+    _textPlaceholder = [self.class _defaultTextPlaceholder];
+    _doneButtonTitle = [self.class _defaultDoneButtonTitle];
     
     _doneAction = [[KAGAction alloc] initWithAsynchronousValueErrorBlock:^(KAGValueErrorBlock  _Nonnull completion) {
         kstStrongify(self);
@@ -201,6 +206,20 @@
 }
 - (void)setSelectedRange:(NSRange)selectedRange {
     [self.dataSource chatViewModel:self didChangeSelectedRange:selectedRange];
+}
+
+- (void)setTextPlaceholder:(NSString *)textPlaceholder {
+    _textPlaceholder = textPlaceholder ?: [self.class _defaultTextPlaceholder];
+}
+- (void)setDoneButtonTitle:(NSString *)doneButtonTitle {
+    _doneButtonTitle = doneButtonTitle ?: [self.class _defaultDoneButtonTitle];
+}
+
++ (NSString *)_defaultTextPlaceholder; {
+    return @"Enter Message…";
+}
++ (NSString *)_defaultDoneButtonTitle; {
+    return @"Send";
 }
 
 @end

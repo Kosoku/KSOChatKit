@@ -135,6 +135,20 @@
 - (void)setText:(NSString *)text {
     self.viewModel.text = text;
 }
+@dynamic textPlaceholder;
+- (NSString *)textPlaceholder {
+    return self.viewModel.textPlaceholder;
+}
+- (void)setTextPlaceholder:(NSString *)textPlaceholder {
+    self.viewModel.textPlaceholder = textPlaceholder;
+}
+@dynamic doneButtonTitle;
+- (NSString *)doneButtonTitle {
+    return self.viewModel.doneButtonTitle;
+}
+- (void)setDoneButtonTitle:(NSString *)doneButtonTitle {
+    self.viewModel.doneButtonTitle = doneButtonTitle;
+}
 @dynamic prefixesForCompletion;
 - (NSSet<NSString *> *)prefixesForCompletion {
     return self.viewModel.prefixesForCompletion;

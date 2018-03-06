@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong,nonatomic,nullable) __kindof UIViewController *contentViewController;
 @property (copy,nonatomic,nullable) NSString *text;
+@property (copy,nonatomic,null_resettable) NSString *textPlaceholder;
+
+@property (copy,nonatomic,null_resettable) NSString *doneButtonTitle;
 
 @property (copy,nonatomic,nullable) NSSet<NSString *> *prefixesForCompletion;
 
