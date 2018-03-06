@@ -265,6 +265,13 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 - (void)setMarkdownSymbolsToTitles:(NSArray<NSDictionary<NSString *,NSString *> *> *)markdownSymbolsToTitles {
     self.viewModel.markdownSymbolsToTitles = markdownSymbolsToTitles;
 }
+@dynamic leadingAccessoryViews;
+- (NSArray<UIView *> *)leadingAccessoryViews {
+    return self.viewModel.leadingAccessoryViews;
+}
+- (void)setLeadingAccessoryViews:(NSArray<UIView *> *)leadingAccessoryViews {
+    self.viewModel.leadingAccessoryViews = leadingAccessoryViews;
+}
 #pragma mark *** Private Methods ***
 - (void)_addContentViewControllerIfNecessary; {
     if (self.contentViewController == nil) {

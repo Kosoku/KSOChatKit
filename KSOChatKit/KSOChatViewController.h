@@ -45,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (copy,nonatomic,nullable) NSArray<NSDictionary<NSString *, NSString *> *> *markdownSymbolsToTitles;
 
+@property (copy,nonatomic,nullable) NSArray<UIView *> *leadingAccessoryViews;
+
 - (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes;
 - (void)removeSyntaxHighlightingRegularExpressions;
 

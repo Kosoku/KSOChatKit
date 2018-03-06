@@ -27,6 +27,7 @@
 @property (strong,nonatomic) UIVisualEffectView *visualEffectView;
 @property (strong,nonatomic) UIStackView *stackView;
 @property (strong,nonatomic) UIStackView *inputStackView;
+@property (strong,nonatomic) UIStackView *leadingAccessoryStackView;
 
 @property (strong,nonatomic) KSOChatTextView *textView;
 @property (strong,nonatomic) KDIButton *doneButton;
@@ -145,7 +146,7 @@
     _doneButton.KAG_action = _viewModel.doneAction;
     [_inputStackView addArrangedSubview:_doneButton];
     
-    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,options),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,editing)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,options),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,editing),@kstKeypath(_viewModel,leadingAccessoryViews)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
         if ([keyPath isEqualToString:@kstKeypath(self.viewModel,text)]) {
             self.textView.text = self.viewModel.text;
@@ -161,6 +162,7 @@
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,editing)]) {
             self.doneButton.hidden = self.viewModel.isEditing;
+            self.leadingAccessoryStackView.hidden = self.viewModel.isEditing;
             
             if (self.viewModel.isEditing) {
                 if (self.editingView == nil) {
@@ -173,6 +175,32 @@
                 if (self.editingView != nil) {
                     [self.editingView removeFromSuperview];
                     self.editingView = nil;
+                }
+            }
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,leadingAccessoryViews)]) {
+            if (self.viewModel.leadingAccessoryViews.count > 0) {
+                if (self.leadingAccessoryStackView == nil) {
+                    self.leadingAccessoryStackView = [[UIStackView alloc] initWithFrame:CGRectZero];
+                    self.leadingAccessoryStackView.translatesAutoresizingMaskIntoConstraints = NO;
+                    self.leadingAccessoryStackView.axis = UILayoutConstraintAxisHorizontal;
+                    self.leadingAccessoryStackView.alignment = UIStackViewAlignmentCenter;
+                    self.leadingAccessoryStackView.spacing = 8.0;
+                    [self.inputStackView insertArrangedSubview:self.leadingAccessoryStackView atIndex:0];
+                }
+                
+                for (UIView *view in self.leadingAccessoryStackView.arrangedSubviews) {
+                    [view removeFromSuperview];
+                }
+                
+                for (UIView *view in self.viewModel.leadingAccessoryViews) {
+                    [self.leadingAccessoryStackView addArrangedSubview:view];
+                }
+            }
+            else {
+                if (self.leadingAccessoryStackView != nil) {
+                    [self.leadingAccessoryStackView removeFromSuperview];
+                    self.leadingAccessoryStackView = nil;
                 }
             }
         }

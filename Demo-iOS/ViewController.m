@@ -205,6 +205,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    
+    addButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [addButton setImage:[UIImage KSO_fontAwesomeImageWithIcon:KSOFontAwesomeIconPlus size:CGSizeMake(25, 25)].KDI_templateImage forState:UIControlStateNormal];
+    [addButton KDI_addBlock:^(__kindof UIControl * _Nonnull control, UIControlEvents controlEvents) {
+        [UIAlertController KDI_presentAlertControllerWithTitle:nil message:@"The add button was tapped!" cancelButtonTitle:nil otherButtonTitles:nil completion:nil];
+    } forControlEvents:UIControlEventTouchUpInside];
+    
     self.chatViewController = [[KSOChatViewController alloc] initWithNibName:nil bundle:nil];
     self.chatViewController.title = @"Chats";
     self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
@@ -216,6 +224,7 @@
                                                         @{@"`": @"Code"},
                                                         @{@"```": @"Preformatted"},
                                                         @{@"> ": @"Quote"}];
+    self.chatViewController.leadingAccessoryViews = @[addButton];
     [self.chatViewController addSyntaxHighlightingRegularExpression:[NSRegularExpression regularExpressionWithPattern:@"#\\w+" options:0 error:NULL] textAttributes:@{NSForegroundColorAttributeName: UIColor.orangeColor}];
     [self.chatViewController addSyntaxHighlightingRegularExpression:[NSRegularExpression regularExpressionWithPattern:@"@\\w+" options:0 error:NULL] textAttributes:@{NSForegroundColorAttributeName: UIColor.redColor}];
     [self.chatViewController setCompletionCellClass:UserTableViewCell.class forPrefix:@"@"];
