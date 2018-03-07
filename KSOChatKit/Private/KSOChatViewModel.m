@@ -178,10 +178,16 @@
                 continue;
             }
             
-            NSRange nextCharRange = NSMakeRange(prefixRange.location+1, 1);
+            NSRange nextCharRange = NSMakeRange(prefixRange.location + 1, 1);
             NSString *charAfterSymbol = [self.text substringWithRange:nextCharRange];
             
             if ([invalidCharacterSet characterIsMember:[charAfterSymbol characterAtIndex:0]]) {
+                continue;
+            }
+            
+            if ([self.delegate respondsToSelector:@selector(chatViewController:shouldInsertSuffixForMarkdownSymbol:)] &&
+                ![self.delegate chatViewController:self.chatViewController shouldInsertSuffixForMarkdownSymbol:symbol]) {
+                
                 continue;
             }
             
@@ -316,7 +322,13 @@
     }
     
     NSString *substring = [self.text substringWithRange:range];
-    NSString *insertString = [NSString stringWithFormat:@"%@%@%@",markdownSymbol,substring,markdownSymbol];
+    NSString *insertString = [NSString stringWithFormat:@"%@%@",markdownSymbol,substring];
+    
+    if (![self.delegate respondsToSelector:@selector(chatViewController:shouldInsertSuffixForMarkdownSymbol:)] ||
+        [self.delegate chatViewController:self.chatViewController shouldInsertSuffixForMarkdownSymbol:markdownSymbol]) {
+        
+        insertString = [insertString stringByAppendingString:markdownSymbol];
+    }
     
     self.text = [self.text stringByReplacingCharactersInRange:range withString:insertString];
     

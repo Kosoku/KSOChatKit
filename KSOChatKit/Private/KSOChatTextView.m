@@ -81,7 +81,17 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
     if (self.isShowingMarkdownMenu) {
         NSString *title = KSOChatTextViewMarkdownTitleFromSelector(action);
         
-        return title.length > 0;
+        if (title.length > 0) {
+            if ([self.viewModel.delegate respondsToSelector:@selector(chatViewController:shouldShowMenuItemForMarkdownSymbol:)]) {
+                NSString *symbol = [self.viewModel.markdownSymbolsToTitles KQS_find:^BOOL(NSDictionary<NSString *,NSString *> * _Nonnull object, NSInteger index) {
+                    return [object.allValues.firstObject isEqualToString:title];
+                }].allKeys.firstObject;
+                
+                return [self.viewModel.delegate chatViewController:self.viewModel.chatViewController shouldShowMenuItemForMarkdownSymbol:symbol];
+            }
+            return YES;
+        }
+        return NO;
     }
     
     if (action == @selector(paste:)) {

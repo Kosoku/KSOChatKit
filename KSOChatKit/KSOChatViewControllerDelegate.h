@@ -38,6 +38,9 @@ typedef void(^KSOChatViewControllerCompletionBlock)(BOOL success);
 
 - (nullable NSArray<id<KSOChatCompletion>> *)chatViewController:(KSOChatViewController *)chatViewController completionsForPrefix:(NSString *)prefix text:(NSString *)text;
 - (NSString *)chatViewController:(KSOChatViewController *)chatViewController textForCompletion:(id<KSOChatCompletion>)completion;
+
+- (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldShowMenuItemForMarkdownSymbol:(NSString *)markdownSymbol;
+- (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldInsertSuffixForMarkdownSymbol:(NSString *)markdownSymbol;
 @end
 
 NS_ASSUME_NONNULL_END

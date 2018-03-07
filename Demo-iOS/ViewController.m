@@ -364,4 +364,8 @@
     return @"";
 }
 
+- (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldInsertSuffixForMarkdownSymbol:(NSString *)markdownSymbol {
+    return ![markdownSymbol isEqualToString:@"> "];
+}
+
 @end
