@@ -321,7 +321,10 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
         return;
     }
     
-    scrollView.contentInset = UIEdgeInsetsMake(0, 0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY([self.view convertRect:self.chatContainerView.chatInputTopView.bounds fromView:self.chatContainerView.chatInputTopView]), 0);
+    UIEdgeInsets contentInset = UIEdgeInsetsMake(0, 0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY([self.view convertRect:self.chatContainerView.chatInputTopView.bounds fromView:self.chatContainerView.chatInputTopView]), 0);
+    
+    scrollView.contentInset = contentInset;
+    scrollView.scrollIndicatorInsets = contentInset;
     
     if (notification == nil) {
         [scrollView KDI_scrollToBottomAnimated:NO];
