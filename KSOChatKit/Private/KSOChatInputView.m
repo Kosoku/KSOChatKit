@@ -26,10 +26,10 @@
 @interface KSOChatInputView () <KSOChatViewModelDataSource,UITextViewDelegate,NSTextStorageDelegate>
 @property (readwrite,strong,nonatomic) UILayoutGuide *chatInputTopLayoutGuide;
 
+@property (strong,nonatomic) UIStackView *containingStackView;
 @property (strong,nonatomic) UIVisualEffectView *visualEffectView;
 @property (strong,nonatomic) UIStackView *stackView;
 @property (strong,nonatomic) UIStackView *inputStackView;
-@property (strong,nonatomic) UIStackView *leadingAccessoryStackView;
 
 @property (strong,nonatomic) KSOChatTextView *textView;
 @property (strong,nonatomic) KDIButton *doneButton;
@@ -38,53 +38,12 @@
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
 
+- (void)_updateDoneButtonHiddenAnimated:(BOOL)animated;
+- (void)_updateForEditingAnimated:(BOOL)animated;
 @end
 
 @implementation KSOChatInputView
 #pragma mark *** Subclass Overrides ***
-- (BOOL)canBecomeFirstResponder {
-    return self.textView.canBecomeFirstResponder;
-}
-- (BOOL)becomeFirstResponder {
-    return [self.textView becomeFirstResponder];
-}
-- (BOOL)canResignFirstResponder {
-    return self.textView.canResignFirstResponder;
-}
-- (BOOL)resignFirstResponder {
-    return [self.textView resignFirstResponder];
-}
-#pragma mark -
-+ (BOOL)requiresConstraintBasedLayout {
-    return YES;
-}
-- (void)updateConstraints {
-    NSMutableArray *temp = [[NSMutableArray alloc] init];
-    
-    if (self.typingIndicatorView != nil) {
-        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.typingIndicatorView}]];
-        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]" options:0 metrics:nil views:@{@"view": self.typingIndicatorView}]];
-    }
-    
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
-    
-    if (self.typingIndicatorView == nil) {
-        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
-    }
-    else {
-        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top][view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView, @"top": self.typingIndicatorView}]];
-    }
-    
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
-    
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatInputTopLayoutGuide}]];
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatInputTopLayoutGuide, @"bottom": self.visualEffectView}]];
-    
-    self.KDI_customConstraints = temp;
-    
-    [super updateConstraints];
-}
 #pragma mark NSTextStorageDelegate
 - (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta {
     if (editedMask & NSTextStorageEditedCharacters) {
@@ -145,9 +104,14 @@
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.backgroundColor = UIColor.clearColor;
     
+    _containingStackView = [[UIStackView alloc] initWithFrame:CGRectZero];
+    _containingStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    _containingStackView.axis = UILayoutConstraintAxisVertical;
+    [self addSubview:_containingStackView];
+    
     _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent]];
     _visualEffectView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self addSubview:_visualEffectView];
+    [_containingStackView addArrangedSubview:_visualEffectView];
     
     _stackView = [[UIStackView alloc] initWithFrame:CGRectZero];
     _stackView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -176,16 +140,30 @@
     _doneButton.KAG_action = _viewModel.doneAction;
     [_inputStackView addArrangedSubview:_doneButton];
     
+    _editingView = [[KSOChatEditingView alloc] initWithViewModel:_viewModel];
+    [_stackView insertArrangedSubview:_editingView atIndex:0];
+    
     _chatInputTopLayoutGuide = [[UILayoutGuide alloc] init];
     [self addLayoutGuide:_chatInputTopLayoutGuide];
     
-    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,options),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,editing),@kstKeypath(_viewModel,leadingAccessoryViews),@kstKeypath(_viewModel,typingIndicatorView)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _containingStackView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": _containingStackView}]];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _visualEffectView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": _visualEffectView}]];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": _stackView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": _stackView}]];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _chatInputTopLayoutGuide}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": _chatInputTopLayoutGuide, @"bottom": _visualEffectView}]];
+    
+    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,editing),@kstKeypath(_viewModel,leadingAccessoryViews),@kstKeypath(_viewModel,typingIndicatorView),@kstKeypath(_viewModel,automaticallyShowHideDoneButton),@kstKeypath(_viewModel,doneAction.enabled)] options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
+        BOOL shouldAnimate = change[NSKeyValueChangeOldKey] != nil;
+        
         if ([keyPath isEqualToString:@kstKeypath(self.viewModel,text)]) {
             self.textView.text = self.viewModel.text;
-        }
-        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,options)]) {
-            self.doneButton.hidden = (!(self.viewModel.options & KSOChatViewControllerOptionsShowDoneButton));
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,doneButtonTitle)]) {
             [self.doneButton setTitle:self.viewModel.doneButtonTitle forState:UIControlStateNormal];
@@ -193,49 +171,26 @@
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,textPlaceholder)]) {
             self.textView.placeholder = self.viewModel.textPlaceholder;
         }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,automaticallyShowHideDoneButton)]) {
+            [self _updateDoneButtonHiddenAnimated:shouldAnimate];
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,doneAction.enabled)]) {
+            [self _updateDoneButtonHiddenAnimated:shouldAnimate];
+        }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,editing)]) {
-            self.doneButton.hidden = self.viewModel.isEditing;
-            self.leadingAccessoryStackView.hidden = self.viewModel.isEditing;
-            
-            if (self.viewModel.isEditing) {
-                if (self.editingView == nil) {
-                    self.editingView = [[KSOChatEditingView alloc] initWithViewModel:self.viewModel];
-                    [self.stackView insertArrangedSubview:self.editingView atIndex:0];
-                }
-                self.editingView.hidden = NO;
-            }
-            else {
-                if (self.editingView != nil) {
-                    [self.editingView removeFromSuperview];
-                    self.editingView = nil;
-                }
-            }
-            
-            [self setNeedsUpdateConstraints];
+            [self _updateForEditingAnimated:shouldAnimate];
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,leadingAccessoryViews)]) {
-            if (self.viewModel.leadingAccessoryViews.count > 0) {
-                if (self.leadingAccessoryStackView == nil) {
-                    self.leadingAccessoryStackView = [[UIStackView alloc] initWithFrame:CGRectZero];
-                    self.leadingAccessoryStackView.translatesAutoresizingMaskIntoConstraints = NO;
-                    self.leadingAccessoryStackView.axis = UILayoutConstraintAxisHorizontal;
-                    self.leadingAccessoryStackView.alignment = UIStackViewAlignmentCenter;
-                    self.leadingAccessoryStackView.spacing = 8.0;
-                    [self.inputStackView insertArrangedSubview:self.leadingAccessoryStackView atIndex:0];
+            for (UIView *view in self.inputStackView.arrangedSubviews) {
+                if ([view isKindOfClass:KSOChatTextView.class]) {
+                    break;
                 }
-                
-                for (UIView *view in self.leadingAccessoryStackView.arrangedSubviews) {
-                    [view removeFromSuperview];
-                }
-                
-                for (UIView *view in self.viewModel.leadingAccessoryViews) {
-                    [self.leadingAccessoryStackView addArrangedSubview:view];
-                }
+                [view removeFromSuperview];
             }
-            else {
-                if (self.leadingAccessoryStackView != nil) {
-                    [self.leadingAccessoryStackView removeFromSuperview];
-                    self.leadingAccessoryStackView = nil;
+            
+            if (self.viewModel.leadingAccessoryViews.count > 0) {
+                for (UIView *view in [self.viewModel.leadingAccessoryViews KST_reversedArray]) {
+                    [self.inputStackView insertArrangedSubview:view atIndex:0];
                 }
             }
         }
@@ -245,14 +200,54 @@
             
             if (self.viewModel.typingIndicatorView != nil) {
                 self.typingIndicatorView = self.viewModel.typingIndicatorView;
-                [self addSubview:self.typingIndicatorView];
+                [self.containingStackView insertArrangedSubview:self.typingIndicatorView atIndex:0];
             }
-            
-            [self setNeedsUpdateConstraints];
         }
     }];
     
     return self;
+}
+
+- (void)_updateDoneButtonHiddenAnimated:(BOOL)animated; {
+    BOOL isHidden = self.doneButton.isHidden;
+    BOOL hidden = self.viewModel.isEditing || (self.viewModel.automaticallyShowHideDoneButton && !self.viewModel.doneAction.enabled);
+    
+    if (isHidden == hidden) {
+        return;
+    }
+    
+    void(^block)(void) = ^{
+        self.doneButton.hidden = hidden;
+        self.doneButton.alpha = hidden ? 0.0 : 1.0;
+        [self.inputStackView layoutIfNeeded];
+    };
+    
+    if (animated) {
+        [UIView animateWithDuration:self.viewModel.theme.animationDuration delay:0 usingSpringWithDamping:self.viewModel.theme.animationSpringDamping initialSpringVelocity:self.viewModel.theme.animationInitialSpringVelocity options:UIViewAnimationOptionBeginFromCurrentState animations:block completion:nil];
+    }
+    else {
+        block();
+    }
+}
+- (void)_updateForEditingAnimated:(BOOL)animated; {
+    [UIView animateWithDuration:self.viewModel.theme.animationDuration delay:0 usingSpringWithDamping:self.viewModel.theme.animationSpringDamping initialSpringVelocity:self.viewModel.theme.animationInitialSpringVelocity options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        for (UIView *view in self.inputStackView.arrangedSubviews) {
+            if ([view isKindOfClass:KSOChatTextView.class]) {
+                break;
+            }
+            view.hidden = self.viewModel.isEditing;
+            view.alpha = self.viewModel.isEditing ? 0.0 : 1.0;
+        }
+        
+        self.doneButton.hidden = self.viewModel.isEditing;
+        self.doneButton.alpha = self.viewModel.isEditing ? 0.0 : 1.0;
+        
+        self.editingView.hidden = !self.viewModel.isEditing;
+        self.editingView.alpha = self.viewModel.isEditing ? 1.0 : 0.0;
+        
+        [self.stackView layoutIfNeeded];
+        [self.inputStackView layoutIfNeeded];
+    } completion:nil];
 }
 
 @end

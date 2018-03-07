@@ -40,6 +40,13 @@
 @end
 
 @implementation KSOChatViewModel
+#pragma mark *** Subclass Overrides ***
++ (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
+    if ([key isEqualToString:@kstKeypath(KSOChatViewModel.new,automaticallyShowHideDoneButton)]) {
+        return [NSSet setWithObject:@kstKeypath(KSOChatViewModel.new,options)];
+    }
+    return [super keyPathsForValuesAffectingValueForKey:key];
+}
 #pragma mark *** Public Methods ***
 - (instancetype)initWithChatViewController:(KSOChatViewController *)chatViewController; {
     if (!(self = [super init]))
@@ -50,7 +57,7 @@
     _chatViewController = chatViewController;
     _viewDelegatesHashTable = [NSHashTable weakObjectsHashTable];
     
-    _options = KSOChatViewControllerOptionsShowDoneButton;
+    _options = KSOChatViewControllerOptionsAll;
     _pastableMediaTypes = KSOChatViewControllerMediaTypesAll;
     
     _theme = KSOChatTheme.defaultTheme;
@@ -95,7 +102,9 @@
     
     [self KAG_addObserverForKeyPaths:@[@kstKeypath(self,text)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
-        self.doneAction.enabled = self.text.length > 0;
+        if ([keyPath isEqualToString:@kstKeypath(self,text)]) {
+            self.doneAction.enabled = self.text.length > 0;
+        }
     }];
     
     return self;
@@ -359,6 +368,9 @@
 #pragma mark Properties
 - (NSSet<id<KSOChatViewModelViewDelegate>> *)viewDelegates {
     return self.viewDelegatesHashTable.setRepresentation;
+}
+- (BOOL)automaticallyShowHideDoneButton {
+    return self.options & KSOChatViewControllerOptionsAutomaticallyShowHideDoneButton;
 }
 - (void)setTheme:(KSOChatTheme *)theme {
     _theme = theme ?: KSOChatTheme.defaultTheme;

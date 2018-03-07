@@ -30,6 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong,nonatomic,null_resettable) UIFont *buttonFont;
 @property (copy,nonatomic,nullable) UIFontTextStyle buttonTextStyle;
 
+@property (assign,nonatomic) CGFloat animationDuration;
+@property (assign,nonatomic) CGFloat animationSpringDamping;
+@property (assign,nonatomic) CGFloat animationInitialSpringVelocity;
+
 - (instancetype)initWithIdentifier:(NSString *)identifier NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)init NS_UNAVAILABLE;

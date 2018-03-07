@@ -102,19 +102,6 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     return self;
 }
 #pragma mark -
-- (BOOL)canBecomeFirstResponder {
-    return self.chatContainerView.canBecomeFirstResponder;
-}
-- (BOOL)becomeFirstResponder {
-    return [self.chatContainerView becomeFirstResponder];
-}
-- (BOOL)canResignFirstResponder {
-    return self.chatContainerView.canResignFirstResponder;
-}
-- (BOOL)resignFirstResponder {
-    return [self.chatContainerView resignFirstResponder];
-}
-#pragma mark -
 - (BOOL)isEditing {
     return self.viewModel.isEditing;
 }
@@ -326,10 +313,7 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     scrollView.contentInset = contentInset;
     scrollView.scrollIndicatorInsets = contentInset;
     
-    if (notification == nil) {
-        [scrollView KDI_scrollToBottomAnimated:NO];
-    }
-    else if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
         [scrollView KDI_scrollToBottomAnimated:YES];
     }
 }

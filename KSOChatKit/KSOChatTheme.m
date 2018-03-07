@@ -48,6 +48,10 @@
     retval->_buttonFont = _buttonFont;
     retval->_buttonTextStyle = _buttonTextStyle;
     
+    retval->_animationDuration = _animationDuration;
+    retval->_animationSpringDamping = _animationSpringDamping;
+    retval->_animationInitialSpringVelocity = _animationInitialSpringVelocity;
+    
     return retval;
 }
 
@@ -63,6 +67,9 @@
     
     _buttonFont = [self.class _defaultButtonFont];
     _buttonTextStyle = [self.class _defaultButtonTextStyle];
+    
+    _animationDuration = 0.25;
+    _animationSpringDamping = 0.7;
     
     return self;
 }

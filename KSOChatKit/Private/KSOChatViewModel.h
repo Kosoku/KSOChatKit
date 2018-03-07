@@ -35,6 +35,8 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @property (assign,nonatomic) KSOChatViewControllerOptions options;
 @property (assign,nonatomic) KSOChatViewControllerMediaTypes pastableMediaTypes;
 
+@property (readonly,nonatomic) BOOL automaticallyShowHideDoneButton;
+
 @property (readonly,assign,nonatomic,getter=isEditing) BOOL editing;
 
 @property (strong,nonatomic) KSOChatTheme *theme;

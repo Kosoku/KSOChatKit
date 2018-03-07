@@ -35,19 +35,6 @@
 @implementation KSOChatContainerView
 
 #pragma mark -
-- (BOOL)canBecomeFirstResponder {
-    return self.chatInputView.canBecomeFirstResponder;
-}
-- (BOOL)becomeFirstResponder {
-    return [self.chatInputView becomeFirstResponder];
-}
-- (BOOL)canResignFirstResponder {
-    return self.chatInputView.canResignFirstResponder;
-}
-- (BOOL)resignFirstResponder {
-    return [self.chatInputView resignFirstResponder];
-}
-
 - (instancetype)initWithViewModel:(KSOChatViewModel *)viewModel {
     if (!(self = [super initWithFrame:CGRectZero]))
         return nil;
