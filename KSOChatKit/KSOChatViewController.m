@@ -82,7 +82,7 @@ KSOChatViewControllerMediaTypes KSOChatViewControllerMediaTypesFromUTIs(NSArray<
 NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 
 @interface KSOChatViewController ()
-@property (readwrite,strong,nonatomic) UILayoutGuide *chatBottomLayoutGuide;
+@property (readwrite,strong,nonatomic) UILayoutGuide *chatTopLayoutGuide;
 @property (strong,nonatomic) KSOChatContainerView *chatContainerView;
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
@@ -115,13 +115,13 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     
     self.KDI_customConstraints = [self _chatContainerViewLayoutConstraintsForKeyboardFrame:CGRectZero];
     
+    self.chatTopLayoutGuide = [[UILayoutGuide alloc] init];
+    [self.view addLayoutGuide:self.chatTopLayoutGuide];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatTopLayoutGuide}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatTopLayoutGuide, @"bottom": self.chatContainerView}]];
+    
     [self _addContentViewControllerIfNecessary];
-    
-    self.chatBottomLayoutGuide = [[UILayoutGuide alloc] init];
-    [self.view addLayoutGuide:self.chatBottomLayoutGuide];
-    
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatBottomLayoutGuide}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatBottomLayoutGuide, @"bottom": self.chatContainerView}]];
     
     kstWeakify(self);
     [self KAG_addObserverForNotificationNames:@[UIKeyboardWillShowNotification,UIKeyboardWillHideNotification] object:nil block:^(NSNotification * _Nonnull notification) {
@@ -278,6 +278,9 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 }
 - (void)setLeadingAccessoryViews:(NSArray<UIView *> *)leadingAccessoryViews {
     self.viewModel.leadingAccessoryViews = leadingAccessoryViews;
+}
+- (UILayoutGuide *)chatTopInputLayoutGuide {
+    return self.chatContainerView.chatTopInputLayoutGuide;
 }
 #pragma mark *** Private Methods ***
 - (void)_addContentViewControllerIfNecessary; {

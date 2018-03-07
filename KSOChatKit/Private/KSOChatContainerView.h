@@ -19,6 +19,8 @@
 
 @interface KSOChatContainerView : UIView
 
+@property (readonly,strong,nonatomic) UILayoutGuide *chatTopInputLayoutGuide;
+
 - (instancetype)initWithViewModel:(KSOChatViewModel *)viewModel;
 
 @end

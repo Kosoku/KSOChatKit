@@ -47,7 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (copy,nonatomic,nullable) NSArray<UIView *> *leadingAccessoryViews;
 
-@property (readonly,strong,nonatomic,nullable) UILayoutGuide *chatBottomLayoutGuide;
+@property (readonly,strong,nonatomic,nullable) UILayoutGuide *chatTopLayoutGuide;
+@property (readonly,strong,nonatomic,nullable) UILayoutGuide *chatTopInputLayoutGuide;
 
 - (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes;
 - (void)removeSyntaxHighlightingRegularExpressions;
