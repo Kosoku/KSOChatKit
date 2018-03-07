@@ -24,6 +24,8 @@
 #import <Agamotto/Agamotto.h>
 
 @interface KSOChatInputView () <KSOChatViewModelDataSource,UITextViewDelegate,NSTextStorageDelegate>
+@property (readwrite,strong,nonatomic) UILayoutGuide *chatInputTopLayoutGuide;
+
 @property (strong,nonatomic) UIVisualEffectView *visualEffectView;
 @property (strong,nonatomic) UIStackView *stackView;
 @property (strong,nonatomic) UIStackView *inputStackView;
@@ -32,6 +34,7 @@
 @property (strong,nonatomic) KSOChatTextView *textView;
 @property (strong,nonatomic) KDIButton *doneButton;
 @property (strong,nonatomic) KSOChatEditingView *editingView;
+@property (strong,nonatomic) UIView *typingIndicatorView;
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
 
@@ -45,11 +48,25 @@
 - (void)updateConstraints {
     NSMutableArray *temp = [[NSMutableArray alloc] init];
     
+    if (self.typingIndicatorView != nil) {
+        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.typingIndicatorView}]];
+        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]" options:0 metrics:nil views:@{@"view": self.typingIndicatorView}]];
+    }
+    
     [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
-    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
+    
+    if (self.typingIndicatorView == nil) {
+        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
+    }
+    else {
+        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top][view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView, @"top": self.typingIndicatorView}]];
+    }
     
     [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
     [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": self.stackView}]];
+    
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatInputTopLayoutGuide}]];
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatInputTopLayoutGuide, @"bottom": self.visualEffectView}]];
     
     self.KDI_customConstraints = temp;
     
@@ -146,7 +163,10 @@
     _doneButton.KAG_action = _viewModel.doneAction;
     [_inputStackView addArrangedSubview:_doneButton];
     
-    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,options),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,editing),@kstKeypath(_viewModel,leadingAccessoryViews)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+    _chatInputTopLayoutGuide = [[UILayoutGuide alloc] init];
+    [self addLayoutGuide:_chatInputTopLayoutGuide];
+    
+    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,options),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,editing),@kstKeypath(_viewModel,leadingAccessoryViews),@kstKeypath(_viewModel,typingIndicatorView)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
         if ([keyPath isEqualToString:@kstKeypath(self.viewModel,text)]) {
             self.textView.text = self.viewModel.text;
@@ -177,6 +197,8 @@
                     self.editingView = nil;
                 }
             }
+            
+            [self setNeedsUpdateConstraints];
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,leadingAccessoryViews)]) {
             if (self.viewModel.leadingAccessoryViews.count > 0) {
@@ -203,6 +225,17 @@
                     self.leadingAccessoryStackView = nil;
                 }
             }
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,typingIndicatorView)]) {
+            [self.typingIndicatorView removeFromSuperview];
+            self.typingIndicatorView = nil;
+            
+            if (self.viewModel.typingIndicatorView != nil) {
+                self.typingIndicatorView = self.viewModel.typingIndicatorView;
+                [self addSubview:self.typingIndicatorView];
+            }
+            
+            [self setNeedsUpdateConstraints];
         }
     }];
     

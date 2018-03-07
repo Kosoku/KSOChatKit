@@ -21,6 +21,32 @@
 #import <KSOFontAwesomeExtensions/KSOFontAwesomeExtensions.h>
 #import <Stanley/Stanley.h>
 
+@interface TypingIndicatorView : UIView
+@end
+
+@implementation TypingIndicatorView
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (!(self = [super initWithFrame:frame]))
+        return nil;
+    
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    self.backgroundColor = UIColor.whiteColor;
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+    
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    label.textColor = UIColor.darkGrayColor;
+    label.KDI_dynamicTypeTextStyle = UIFontTextStyleFootnote;
+    label.text = @"Someone is typing things";
+    [self addSubview:label];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": label}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": label}]];
+    
+    return self;
+}
+@end
+
 @interface User : NSObject <KSOChatCompletion>
 @property (copy,nonatomic) NSString *name;
 @property (copy,nonatomic) NSString *screenName;
@@ -136,6 +162,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    kstWeakify(self);
+    
     NSMutableArray *temp = [[NSMutableArray alloc] init];
     
     for (NSUInteger i=0; i<15; i++) {
@@ -155,31 +183,23 @@
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.tableView}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.tableView}]];
-}
-- (void)didMoveToParentViewController:(UIViewController *)parent {
-    [super didMoveToParentViewController:parent];
     
-    if (parent &&
-        self.bottomButton == nil) {
-        kstWeakify(self);
-        
-        KDIButton *bottomButton = [KDIButton buttonWithType:UIButtonTypeSystem];
-        
-        bottomButton.translatesAutoresizingMaskIntoConstraints = NO;
-        bottomButton.contentEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
-        [bottomButton setImage:[UIImage KSO_fontAwesomeImageWithIcon:KSOFontAwesomeIconArrowDown size:CGSizeMake(25, 25)].KDI_templateImage forState:UIControlStateNormal];
-        bottomButton.inverted = YES;
-        [bottomButton KDI_addBlock:^(__kindof UIControl * _Nonnull control, UIControlEvents controlEvents) {
-            kstStrongify(self);
-            [self.tableView KDI_scrollToBottomAnimated:YES];
-        } forControlEvents:UIControlEventTouchUpInside];
-        [self.KSO_chatViewController.view addSubview:bottomButton];
-        
-        [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]" options:0 metrics:nil views:@{@"view": bottomButton}]];
-        [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": bottomButton, @"bottom": self.KSO_chatViewController.chatTopInputLayoutGuide}]];
-        
-        self.bottomButton = bottomButton;
-    }
+    KDIButton *bottomButton = [KDIButton buttonWithType:UIButtonTypeSystem];
+    
+    bottomButton.translatesAutoresizingMaskIntoConstraints = NO;
+    bottomButton.contentEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
+    [bottomButton setImage:[UIImage KSO_fontAwesomeImageWithIcon:KSOFontAwesomeIconArrowDown size:CGSizeMake(25, 25)].KDI_templateImage forState:UIControlStateNormal];
+    bottomButton.inverted = YES;
+    [bottomButton KDI_addBlock:^(__kindof UIControl * _Nonnull control, UIControlEvents controlEvents) {
+        kstStrongify(self);
+        [self.tableView KDI_scrollToBottomAnimated:YES];
+    } forControlEvents:UIControlEventTouchUpInside];
+    [self.KSO_chatViewController.view addSubview:bottomButton];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]" options:0 metrics:nil views:@{@"view": bottomButton}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": bottomButton, @"bottom": self.KSO_chatViewController.chatInputTopLayoutGuide}]];
+    
+    self.bottomButton = bottomButton;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -248,6 +268,15 @@
     
     self.chatViewController = [[KSOChatViewController alloc] initWithNibName:nil bundle:nil];
     self.chatViewController.title = @"Chats";
+    self.chatViewController.navigationItem.rightBarButtonItems = @[[UIBarButtonItem KDI_barButtonSystemItem:UIBarButtonSystemItemCompose block:^(__kindof UIBarButtonItem * _Nonnull barButtonItem) {
+        kstStrongify(self);
+        if (self.chatViewController.typingIndicatorView == nil) {
+            self.chatViewController.typingIndicatorView = [[TypingIndicatorView alloc] initWithFrame:CGRectZero];
+        }
+        else {
+            self.chatViewController.typingIndicatorView = nil;
+        }
+    }]];
     self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
     self.chatViewController.delegate = self;
     self.chatViewController.contentViewController = [[ContentViewController alloc] initWithNibName:nil bundle:nil];

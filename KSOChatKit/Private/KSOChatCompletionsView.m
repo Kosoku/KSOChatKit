@@ -84,9 +84,11 @@
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.backgroundColor = UIColor.whiteColor;
+    self.borderOptions = KDIBorderOptionsTopAndBottom;
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.translatesAutoresizingMaskIntoConstraints = NO;
+    _tableView.backgroundColor = UIColor.clearColor;
     _tableView.estimatedRowHeight = 44.0;
     _tableView.dataSource = self;
     _tableView.delegate = self;

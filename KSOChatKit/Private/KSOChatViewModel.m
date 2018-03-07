@@ -148,6 +148,7 @@
              range.location > 0 &&
              text.length > 0 &&
              [NSCharacterSet.whitespaceCharacterSet characterIsMember:[text characterAtIndex:0]] &&
+             self.text.length > 2 &&
              [NSCharacterSet.whitespaceCharacterSet characterIsMember:[self.text characterAtIndex:range.location - 1]]) {
         
         if ([self.text substringToIndex:self.selectedRange.location].length < 2) {

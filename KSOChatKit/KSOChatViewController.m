@@ -82,7 +82,6 @@ KSOChatViewControllerMediaTypes KSOChatViewControllerMediaTypesFromUTIs(NSArray<
 NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 
 @interface KSOChatViewController ()
-@property (readwrite,strong,nonatomic) UILayoutGuide *chatTopLayoutGuide;
 @property (strong,nonatomic) KSOChatContainerView *chatContainerView;
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
@@ -114,12 +113,6 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     [self.view addSubview:self.chatContainerView];
     
     self.KDI_customConstraints = [self _chatContainerViewLayoutConstraintsForKeyboardFrame:CGRectZero];
-    
-    self.chatTopLayoutGuide = [[UILayoutGuide alloc] init];
-    [self.view addLayoutGuide:self.chatTopLayoutGuide];
-    
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.chatTopLayoutGuide}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": self.chatTopLayoutGuide, @"bottom": self.chatContainerView}]];
     
     [self _addContentViewControllerIfNecessary];
     
@@ -279,8 +272,15 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 - (void)setLeadingAccessoryViews:(NSArray<UIView *> *)leadingAccessoryViews {
     self.viewModel.leadingAccessoryViews = leadingAccessoryViews;
 }
-- (UILayoutGuide *)chatTopInputLayoutGuide {
-    return self.chatContainerView.chatTopInputLayoutGuide;
+@dynamic typingIndicatorView;
+- (UIView *)typingIndicatorView {
+    return self.viewModel.typingIndicatorView;
+}
+- (void)setTypingIndicatorView:(__kindof UIView *)typingIndicatorView {
+    self.viewModel.typingIndicatorView = typingIndicatorView;
+}
+- (UILayoutGuide *)chatInputTopLayoutGuide {
+    return self.chatContainerView.chatInputTopLayoutGuide;
 }
 #pragma mark *** Private Methods ***
 - (void)_addContentViewControllerIfNecessary; {
@@ -310,7 +310,10 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     
     scrollView.contentInset = UIEdgeInsetsMake(0, 0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY(self.chatContainerView.frame), 0);
     
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+    if (notification == nil) {
+        [scrollView KDI_scrollToBottomAnimated:NO];
+    }
+    else if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
         [scrollView KDI_scrollToBottomAnimated:YES];
     }
 }

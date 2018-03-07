@@ -18,6 +18,9 @@
 #import "KSOChatInputView.h"
 #import "KSOChatCompletionsView.h"
 
+#import <Stanley/Stanley.h>
+#import <Agamotto/Agamotto.h>
+
 @interface KSOChatContainerView () <KSOChatViewModelViewDelegate>
 @property (readwrite,strong,nonatomic) UILayoutGuide *chatTopInputLayoutGuide;
 
@@ -51,13 +54,11 @@
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _stackView}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": _stackView}]];
     
-    _chatTopInputLayoutGuide = [[UILayoutGuide alloc] init];
-    [self addLayoutGuide:_chatTopInputLayoutGuide];
-    
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _chatTopInputLayoutGuide}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": _chatTopInputLayoutGuide, @"bottom": _chatInputView}]];
-    
     return self;
+}
+
+- (UILayoutGuide *)chatInputTopLayoutGuide {
+    return self.chatInputView.chatInputTopLayoutGuide;
 }
 
 - (void)chatViewModelShowCompletions:(KSOChatViewModel *)chatViewModel {
