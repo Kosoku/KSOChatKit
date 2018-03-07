@@ -26,7 +26,7 @@
 
 @property (strong,nonatomic) UIStackView *stackView;
 
-@property (strong,nonatomic) KSOChatInputView *chatInputView;
+@property (readwrite,strong,nonatomic) KSOChatInputView *chatInputView;
 @property (strong,nonatomic) KSOChatCompletionsView *chatCompletionsView;
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
@@ -59,6 +59,9 @@
 
 - (UILayoutGuide *)chatInputTopLayoutGuide {
     return self.chatInputView.chatInputTopLayoutGuide;
+}
+- (UIView *)chatInputTopView {
+    return self.chatInputView;
 }
 
 - (void)chatViewModelShowCompletions:(KSOChatViewModel *)chatViewModel {
