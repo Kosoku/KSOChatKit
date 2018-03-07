@@ -21,7 +21,8 @@
 typedef NS_OPTIONS(NSUInteger, KSOChatViewControllerOptions) {
     KSOChatViewControllerOptionsNone = 0,
     KSOChatViewControllerOptionsAutomaticallyShowHideDoneButton = 1 << 0,
-    KSOChatViewControllerOptionsAll = KSOChatViewControllerOptionsAutomaticallyShowHideDoneButton
+    KSOChatViewControllerOptionsAutomaticallyScrollToBottomOnKeyboardWillShow = 1 << 1,
+    KSOChatViewControllerOptionsAll = KSOChatViewControllerOptionsAutomaticallyShowHideDoneButton|KSOChatViewControllerOptionsAutomaticallyScrollToBottomOnKeyboardWillShow
 };
 
 typedef NS_OPTIONS(NSUInteger, KSOChatViewControllerMediaTypes) {

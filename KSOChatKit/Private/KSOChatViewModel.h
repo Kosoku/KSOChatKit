@@ -36,6 +36,7 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 @property (assign,nonatomic) KSOChatViewControllerMediaTypes pastableMediaTypes;
 
 @property (readonly,nonatomic) BOOL automaticallyShowHideDoneButton;
+@property (readonly,nonatomic) BOOL automaticallyScrollToBottomOnKeyboardWillShow;
 
 @property (readonly,assign,nonatomic,getter=isEditing) BOOL editing;
 

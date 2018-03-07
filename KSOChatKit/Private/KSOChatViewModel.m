@@ -372,6 +372,9 @@
 - (BOOL)automaticallyShowHideDoneButton {
     return self.options & KSOChatViewControllerOptionsAutomaticallyShowHideDoneButton;
 }
+- (BOOL)automaticallyScrollToBottomOnKeyboardWillShow {
+    return self.options & KSOChatViewControllerOptionsAutomaticallyScrollToBottomOnKeyboardWillShow;
+}
 - (void)setTheme:(KSOChatTheme *)theme {
     _theme = theme ?: KSOChatTheme.defaultTheme;
 }

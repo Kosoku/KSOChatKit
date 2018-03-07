@@ -313,7 +313,9 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     scrollView.contentInset = contentInset;
     scrollView.scrollIndicatorInsets = contentInset;
     
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification] &&
+        self.viewModel.automaticallyScrollToBottomOnKeyboardWillShow) {
+        
         [scrollView KDI_scrollToBottomAnimated:YES];
     }
 }
