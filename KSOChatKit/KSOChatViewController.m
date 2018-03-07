@@ -101,7 +101,20 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     
     return self;
 }
-
+#pragma mark -
+- (BOOL)canBecomeFirstResponder {
+    return self.chatContainerView.canBecomeFirstResponder;
+}
+- (BOOL)becomeFirstResponder {
+    return [self.chatContainerView becomeFirstResponder];
+}
+- (BOOL)canResignFirstResponder {
+    return self.chatContainerView.canResignFirstResponder;
+}
+- (BOOL)resignFirstResponder {
+    return [self.chatContainerView resignFirstResponder];
+}
+#pragma mark -
 - (BOOL)isEditing {
     return self.viewModel.isEditing;
 }

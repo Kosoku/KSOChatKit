@@ -16,6 +16,7 @@
 #import "KSOChatCompletionsView.h"
 #import "KSOChatViewModel.h"
 #import "KSOChatDefaultCompletionTableViewCell.h"
+#import "KSOChatViewController.h"
 
 #import <Ditko/Ditko.h>
 #import <Stanley/Stanley.h>
@@ -27,6 +28,8 @@
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
 @property (copy,nonatomic) NSArray<id<KSOChatCompletion>> *completions;
 @property (strong,nonatomic) NSMutableSet<Class<KSOChatCompletionCell>> *registeredCompletionCellClasses;
+
+@property (strong,nonatomic) NSLayoutConstraint *tableViewHeightLayoutConstraint;
 
 @end
 
@@ -84,7 +87,8 @@
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.backgroundColor = UIColor.whiteColor;
-    self.borderOptions = KDIBorderOptionsTopAndBottom;
+    self.borderColor = UIColor.lightGrayColor;
+    self.borderOptions = KDIBorderOptionsTop;
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -96,16 +100,27 @@
     [self addSubview:_tableView];
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _tableView}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view(==height@priority)]|" options:0 metrics:@{@"height": @(ceil(_tableView.estimatedRowHeight * 2.5)), @"priority": @(UILayoutPriorityRequired - 1.0)} views:@{@"view": _tableView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-margin-[view]|" options:0 metrics:@{@"margin": @1.0} views:@{@"view": _tableView}]];
+    
+    _tableViewHeightLayoutConstraint = [NSLayoutConstraint constraintWithItem:_tableView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:ceil(_tableView.estimatedRowHeight * 2.5)];
+    _tableViewHeightLayoutConstraint.priority = UILayoutPriorityRequired - 1.0;
+    [NSLayoutConstraint activateConstraints:@[_tableViewHeightLayoutConstraint]];
     
     [_viewModel requestCompletionsWithCompletion:^(NSArray<id<KSOChatCompletion>> *completions) {
         kstStrongify(self);
         self.completions = completions;
     }];
     
-    [self KAG_addObserverForKeyPaths:@[@kstKeypath(self,completions)] options:0 block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+    [self KAG_addObserverForKeyPaths:@[@kstKeypath(self,completions),@kstKeypath(self,tableView.contentSize)] options:0 block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
-        [self.tableView reloadData];
+        if ([keyPath isEqualToString:@kstKeypath(self,completions)]) {
+            [self.tableView reloadData];
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self,tableView.contentSize)]) {
+            CGFloat maximumHeight = ceil(_tableView.estimatedRowHeight * 2.5);
+            
+            self.tableViewHeightLayoutConstraint.constant = MIN(self.tableView.contentSize.height, maximumHeight);
+        }
     }];
     
     return self;

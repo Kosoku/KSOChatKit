@@ -42,6 +42,19 @@
 
 @implementation KSOChatInputView
 #pragma mark *** Subclass Overrides ***
+- (BOOL)canBecomeFirstResponder {
+    return self.textView.canBecomeFirstResponder;
+}
+- (BOOL)becomeFirstResponder {
+    return [self.textView becomeFirstResponder];
+}
+- (BOOL)canResignFirstResponder {
+    return self.textView.canResignFirstResponder;
+}
+- (BOOL)resignFirstResponder {
+    return [self.textView resignFirstResponder];
+}
+#pragma mark -
 + (BOOL)requiresConstraintBasedLayout {
     return YES;
 }

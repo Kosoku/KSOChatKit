@@ -20,6 +20,7 @@
 #import <Ditko/Ditko.h>
 #import <KSOFontAwesomeExtensions/KSOFontAwesomeExtensions.h>
 #import <Stanley/Stanley.h>
+#import <Quicksilver/Quicksilver.h>
 
 @interface TypingIndicatorView : UIView
 @end
@@ -249,6 +250,9 @@
 @interface ViewController () <KSOChatViewControllerDelegate>
 @property (strong,nonatomic) KSOChatViewController *chatViewController;
 @property (strong,nonatomic) UINavigationController *contentViewController;
+
+@property (copy,nonatomic) NSArray<HashTag *> *hashTags;
+@property (copy,nonatomic) NSArray<User *> *users;
 @end
 
 @implementation ViewController
@@ -338,14 +342,39 @@
     NSMutableArray *retval = [[NSMutableArray alloc] init];
     
     if ([prefix isEqualToString:@"@"]) {
-        for (NSUInteger i=0; i<10; i++) {
-            [retval addObject:[[User alloc] init]];
+        if (self.users == nil) {
+            NSMutableArray *users = [[NSMutableArray alloc] init];
+            for (NSUInteger i=0; i<25; i++) {
+                [users addObject:[[User alloc] init]];
+            }
+            self.users = users;
+        }
+        
+        NSString *search = text.lowercaseString;
+        
+        if (search.length == 0) {
+            [retval addObjectsFromArray:self.users];
+        }
+        else {
+            [retval addObjectsFromArray:[self.users KQS_filter:^BOOL(User * _Nonnull object, NSInteger index) {
+                return [object.name rangeOfString:search options:NSCaseInsensitiveSearch].length > 0;
+            }]];
         }
     }
     else if ([prefix isEqualToString:@"#"]) {
-        for (NSUInteger i=0; i<10; i++) {
-            [retval addObject:[[HashTag alloc] init]];
+        if (self.hashTags == nil) {
+            NSMutableArray *hashTags = [[NSMutableArray alloc] init];
+            for (NSUInteger i=0; i<25; i++) {
+                [hashTags addObject:[[HashTag alloc] init]];
+            }
+            self.hashTags = hashTags;
         }
+        
+        NSString *search = [prefix stringByAppendingString:text].lowercaseString;
+        
+        [retval addObjectsFromArray:[self.hashTags KQS_filter:^BOOL(HashTag * _Nonnull object, NSInteger index) {
+            return [object.name rangeOfString:search options:NSCaseInsensitiveSearch].length > 0;
+        }]];
     }
     
     return retval;
