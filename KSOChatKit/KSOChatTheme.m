@@ -26,6 +26,9 @@
 
 + (UIFont *)_defaultButtonFont;
 + (UIFontTextStyle)_defaultButtonTextStyle;
+
++ (UIColor *)_defaultTextBackgroundColor;
++ (UIVisualEffect *)_defaultTextBackgroundBlurEffect;
 @end
 
 @implementation KSOChatTheme
@@ -48,6 +51,10 @@
     retval->_buttonFont = _buttonFont;
     retval->_buttonTextStyle = _buttonTextStyle;
     
+    retval->_textBackgroundColor = _textBackgroundColor;
+    retval->_textCornerRadius = _textCornerRadius;
+    retval->_textBackgroundBlurEffect = _textBackgroundBlurEffect;
+    
     retval->_animationDuration = _animationDuration;
     retval->_animationSpringDamping = _animationSpringDamping;
     retval->_animationInitialSpringVelocity = _animationInitialSpringVelocity;
@@ -67,6 +74,10 @@
     
     _buttonFont = [self.class _defaultButtonFont];
     _buttonTextStyle = [self.class _defaultButtonTextStyle];
+    
+    _textBackgroundColor = [self.class _defaultTextBackgroundColor];
+    _textCornerRadius = 5.0;
+    _textBackgroundBlurEffect = [self.class _defaultTextBackgroundBlurEffect];
     
     _animationDuration = 0.25;
     _animationSpringDamping = 0.7;
@@ -99,6 +110,13 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
     _buttonTextStyle = buttonTextStyle ?: [self.class _defaultButtonTextStyle];
 }
 
+- (void)setTextBackgroundColor:(UIColor *)textBackgroundColor {
+    _textBackgroundColor = textBackgroundColor ?: [self.class _defaultTextBackgroundColor];
+}
+- (void)setTextBackgroundBlurEffect:(UIBlurEffect *)textBackgroundBlurEffect {
+    _textBackgroundBlurEffect = textBackgroundBlurEffect ?: [self.class _defaultTextBackgroundBlurEffect];
+}
+
 + (UIColor *)_defaultTextColor; {
     return UIColor.blackColor;
 }
@@ -113,6 +131,12 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
 }
 + (UIFontTextStyle)_defaultButtonTextStyle; {
     return UIFontTextStyleCallout;
+}
++ (UIColor *)_defaultTextBackgroundColor; {
+    return UIColor.whiteColor;
+}
++ (UIVisualEffect *)_defaultTextBackgroundBlurEffect; {
+    return [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
 }
 
 @end

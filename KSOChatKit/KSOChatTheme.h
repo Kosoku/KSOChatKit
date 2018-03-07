@@ -30,6 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong,nonatomic,null_resettable) UIFont *buttonFont;
 @property (copy,nonatomic,nullable) UIFontTextStyle buttonTextStyle;
 
+@property (strong,nonatomic,null_resettable) UIColor *textBackgroundColor;
+@property (assign,nonatomic) CGFloat textCornerRadius;
+@property (strong,nonatomic,null_resettable) UIBlurEffect *textBackgroundBlurEffect;
+
 @property (assign,nonatomic) CGFloat animationDuration;
 @property (assign,nonatomic) CGFloat animationSpringDamping;
 @property (assign,nonatomic) CGFloat animationInitialSpringVelocity;

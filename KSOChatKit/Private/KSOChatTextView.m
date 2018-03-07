@@ -136,6 +136,7 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
     _viewModel = viewModel;
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
+    self.backgroundColor = _viewModel.theme.textBackgroundColor;
     self.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
     self.font = _viewModel.theme.textFont;
     self.allowsMultilinePlaceholder = NO;
@@ -143,7 +144,7 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
     if (_viewModel.theme.textStyle != nil) {
         self.KDI_dynamicTypeTextStyle = _viewModel.theme.textStyle;
     }
-    self.KDI_cornerRadius = 5.0;
+    self.KDI_cornerRadius = _viewModel.theme.textCornerRadius;
     
     [self KAG_addObserverForNotificationNames:@[UIMenuControllerDidHideMenuNotification] object:nil block:^(NSNotification * _Nonnull notification) {
         kstStrongify(self);

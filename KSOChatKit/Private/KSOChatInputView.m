@@ -109,7 +109,7 @@
     _containingStackView.axis = UILayoutConstraintAxisVertical;
     [self addSubview:_containingStackView];
     
-    _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent]];
+    _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:_viewModel.theme.textBackgroundBlurEffect];
     _visualEffectView.translatesAutoresizingMaskIntoConstraints = NO;
     [_containingStackView addArrangedSubview:_visualEffectView];
     
