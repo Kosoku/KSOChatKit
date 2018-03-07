@@ -138,7 +138,8 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
     self.font = _viewModel.theme.textFont;
-    self.maximumNumberOfLines = 4;
+    self.allowsMultilinePlaceholder = NO;
+    self.maximumNumberOfLines = 3;
     if (_viewModel.theme.textStyle != nil) {
         self.KDI_dynamicTypeTextStyle = _viewModel.theme.textStyle;
     }
