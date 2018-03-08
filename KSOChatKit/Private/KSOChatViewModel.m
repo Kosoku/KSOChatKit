@@ -16,6 +16,7 @@
 #import "KSOChatViewModel.h"
 #import "KSOChatViewController.h"
 #import "KSOChatTheme.h"
+#import "NSBundle+KSOChatKitExtensionsPrivate.h"
 
 #import <Agamotto/Agamotto.h>
 #import <Stanley/Stanley.h>
@@ -409,19 +410,19 @@
 }
 #pragma mark *** Private Methods ***
 + (NSString *)_defaultTextPlaceholder; {
-    return @"Enter Message…";
+    return NSLocalizedStringWithDefaultValue(@"text.placeholder", nil, [NSBundle KSO_chatKitFrameworkBundle], @"Enter Message…", @"Enter Message…");
 }
 + (NSString *)_defaultEditingTitle; {
-    return @"Editing";
+    return NSLocalizedStringWithDefaultValue(@"editing.title", nil, [NSBundle KSO_chatKitFrameworkBundle], @"Editing", @"Editing");
 }
 + (NSString *)_defaultDoneButtonTitle; {
-    return @"Send";
+    return NSLocalizedStringWithDefaultValue(@"button.title.done", nil, [NSBundle KSO_chatKitFrameworkBundle], @"Send", @"Send");
 }
 + (NSString *)_defaultEditingCancelButtonTitle; {
-    return @"Cancel";
+    return NSLocalizedStringWithDefaultValue(@"editing.button.title.cancel", nil, [NSBundle KSO_chatKitFrameworkBundle], @"Cancel", @"Cancel");
 }
 + (NSString *)_defaultEditingDoneButtonTitle; {
-    return @"Save";
+    return NSLocalizedStringWithDefaultValue(@"editing.button.title.done", nil, [NSBundle KSO_chatKitFrameworkBundle], @"Save", @"Save");
 }
 
 @end

@@ -1,0 +1,1 @@
+find $SRCROOT/KSOChatKit/ -name "*.m" | xargs genstrings -o $SRCROOT/KSOChatKit/en.lproj
