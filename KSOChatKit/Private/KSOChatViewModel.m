@@ -264,7 +264,7 @@
         return;
     }
     
-    if (![self.delegate respondsToSelector:@selector(chatViewController:shouldShowCompletionsForPrefix:text:)] ||
+    if ([self.delegate respondsToSelector:@selector(chatViewController:shouldShowCompletionsForPrefix:text:)] ||
         ![self.delegate chatViewController:self.chatViewController shouldShowCompletionsForPrefix:prefix text:text]) {
         
         [self hideCompletions];
