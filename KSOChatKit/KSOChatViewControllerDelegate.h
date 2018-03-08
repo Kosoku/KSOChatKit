@@ -19,29 +19,105 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ Typedef for completion that the delegate invokes when certain actions have completed.
+ 
+ @param success Whether the action was successful
+ */
 typedef void(^KSOChatViewControllerCompletionBlock)(BOOL success);
 
 @class KSOChatViewController;
 
 @protocol KSOChatViewControllerDelegate <NSObject>
 @optional
+/**
+ Returns the scroll view that should be adjusted by the receiver. The receiver will adjust the content insets and scroll view insets of the receiver if the return value is non-nil.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @return The scroll view that should be adjusted
+ */
 - (nullable UIScrollView *)scrollViewForChatViewController:(KSOChatViewController *)chatViewController;
 
+/**
+ Return YES if the receiver should treat the return key as if the user had tapped the Done button.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @return YES if return should tap the Done button, otherwise NO
+ */
 - (BOOL)chatViewControllerReturnShouldTapDoneButton:(KSOChatViewController *)chatViewController;
+/**
+ Called when the user taps the Done button. The delegate should read the text from the chat view controller, process it, and invoke the completion block when finished.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @param completion The completion block to invoke when the operation is finished
+ */
 - (void)chatViewControllerDidTapDoneButton:(KSOChatViewController *)chatViewController completion:(KSOChatViewControllerCompletionBlock)completion;
 
+/**
+ Called when the user enters new text into the chat text view.
+ 
+ @param chatViewController The chat view controller that sent the message
+ */
 - (void)chatViewControllerDidChangeText:(KSOChatViewController *)chatViewController;
 
+/**
+ Called when the user pastes media content into the chat text view. The delegate should act upon the media data and mediaType.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @param mediaType The media type that was pasted
+ @param data The data that was pasted
+ */
 - (void)chatViewController:(KSOChatViewController *)chatViewController didPasteMediaType:(KSOChatViewControllerMediaTypes)mediaType data:(NSData *)data;
 
+/**
+ Return whether the chat view controller should show the completions table view for the provided prefix.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @param prefix The prefix for which to show the completions table view
+ @param text The text, not including the prefix, for which to show the completions table view
+ @return YES if the completions table view should be shows, otherwise NO
+ */
 - (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldShowCompletionsForPrefix:(NSString *)prefix text:(NSString *)text;
-
+/**
+ Called immediately before the completions table view is shown. The delegate can customize the appearance of the table view.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @param tableView The completions table view
+ */
 - (void)chatViewController:(KSOChatViewController *)chatViewController willShowCompletionsTableView:(UITableView *)tableView;
-
+/**
+ Returns the array of completions to display in the completions table view.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @param prefix The prefix for which to return completions
+ @param text The text, not including the prefix, for which to return completions
+ @return The array of completions to display
+ */
 - (nullable NSArray<id<KSOChatCompletion>> *)chatViewController:(KSOChatViewController *)chatViewController completionsForPrefix:(NSString *)prefix text:(NSString *)text;
+/**
+ Returns the text to insert for the selected completion object.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @param completion The completion object that was selected
+ @return The text to insert
+ */
 - (NSString *)chatViewController:(KSOChatViewController *)chatViewController textForCompletion:(id<KSOChatCompletion>)completion;
 
+/**
+ Returns whether to show the UIMenuItem for the provided *markdownSymbol*.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @param markdownSymbol The markdown symbol for which to display a menu item
+ @return YES if the menu item should be displayed, otherwise NO
+ */
 - (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldShowMenuItemForMarkdownSymbol:(NSString *)markdownSymbol;
+/**
+ Returns YES if the chat view controller should automatically insert a matching suffix for the provided *markdownSymbol*.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @param markdownSymbol The markdown symbol for which to insert a matching suffix
+ @return YES if the matching suffix should be inserted, otherwise NO
+ */
 - (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldInsertSuffixForMarkdownSymbol:(NSString *)markdownSymbol;
 @end
 

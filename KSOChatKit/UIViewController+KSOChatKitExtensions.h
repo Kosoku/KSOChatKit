@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIViewController (KSOChatKitExtensions)
 
+/**
+ Get the chat view controller that owns the receiver or nil.
+ */
 @property (readonly,nonatomic,nullable) KSOChatViewController *KSO_chatViewController;
 
 @end

@@ -16,7 +16,13 @@
 #import <Foundation/Foundation.h>
 #import <KSOChatKit/KSOChatCompletion.h>
 
+/**
+ Protocol describing a table view cell that can display a completion object.
+ */
 @protocol KSOChatCompletionCell <NSObject>
 @required
+/**
+ Set and get the completion object represented by the receiver.
+ */
 @property (strong,nonatomic) id<KSOChatCompletion> completion;
 @end

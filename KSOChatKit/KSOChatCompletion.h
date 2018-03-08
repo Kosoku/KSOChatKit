@@ -15,10 +15,22 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ Protocol describing a chat completion object.
+ */
 @protocol KSOChatCompletion <NSObject>
 @required
+/**
+ The chat completion title.
+ */
 @property (readonly,nonatomic) NSString *chatCompletionTitle;
 @optional
+/**
+ The chat completion image.
+ */
 @property (readonly,nonatomic) UIImage *chatCompletionImage;
+/**
+ The chat completion subtitle.
+ */
 @property (readonly,nonatomic) NSString *chatCompletionSubtitle;
 @end
