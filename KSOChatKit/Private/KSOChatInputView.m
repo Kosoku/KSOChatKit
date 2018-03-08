@@ -26,7 +26,6 @@
 @interface KSOChatInputView () <KSOChatViewModelDataSource,UITextViewDelegate,NSTextStorageDelegate>
 @property (readwrite,strong,nonatomic) UILayoutGuide *chatInputTopLayoutGuide;
 
-@property (strong,nonatomic) UIStackView *containingStackView;
 @property (strong,nonatomic) UIVisualEffectView *visualEffectView;
 @property (strong,nonatomic) UIStackView *stackView;
 @property (strong,nonatomic) UIStackView *inputStackView;
@@ -44,6 +43,28 @@
 
 @implementation KSOChatInputView
 #pragma mark *** Subclass Overrides ***
++ (BOOL)requiresConstraintBasedLayout {
+    return YES;
+}
+- (void)updateConstraints {
+    NSMutableArray *temp = [[NSMutableArray alloc] init];
+    
+    [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
+    
+    if (self.typingIndicatorView == nil) {
+        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView}]];
+    }
+    else {
+        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.typingIndicatorView}]];
+        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view][bottom]" options:0 metrics:nil views:@{@"view": self.typingIndicatorView, @"bottom": self.visualEffectView}]];
+        
+        [temp addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[top][view]|" options:0 metrics:nil views:@{@"view": self.visualEffectView, @"top": self.typingIndicatorView}]];
+    }
+    
+    self.KDI_customConstraints = temp;
+    
+    [super updateConstraints];
+}
 #pragma mark NSTextStorageDelegate
 - (void)textStorage:(NSTextStorage *)textStorage willProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta {
     if (editedMask & NSTextStorageEditedCharacters) {
@@ -104,14 +125,9 @@
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.backgroundColor = UIColor.clearColor;
     
-    _containingStackView = [[UIStackView alloc] initWithFrame:CGRectZero];
-    _containingStackView.translatesAutoresizingMaskIntoConstraints = NO;
-    _containingStackView.axis = UILayoutConstraintAxisVertical;
-    [self addSubview:_containingStackView];
-    
     _visualEffectView = [[UIVisualEffectView alloc] initWithEffect:_viewModel.theme.textBackgroundBlurEffect];
     _visualEffectView.translatesAutoresizingMaskIntoConstraints = NO;
-    [_containingStackView addArrangedSubview:_visualEffectView];
+    [self addSubview:_visualEffectView];
     
     _stackView = [[UIStackView alloc] initWithFrame:CGRectZero];
     _stackView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -145,12 +161,6 @@
     
     _chatInputTopLayoutGuide = [[UILayoutGuide alloc] init];
     [self addLayoutGuide:_chatInputTopLayoutGuide];
-    
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _containingStackView}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": _containingStackView}]];
-    
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _visualEffectView}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": _visualEffectView}]];
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": _stackView}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": _stackView}]];
@@ -200,8 +210,10 @@
             
             if (self.viewModel.typingIndicatorView != nil) {
                 self.typingIndicatorView = self.viewModel.typingIndicatorView;
-                [self.containingStackView insertArrangedSubview:self.typingIndicatorView atIndex:0];
+                [self addSubview:self.typingIndicatorView];
             }
+            
+            [self setNeedsUpdateConstraints];
         }
     }];
     
