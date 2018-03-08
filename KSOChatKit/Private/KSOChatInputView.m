@@ -39,6 +39,7 @@
 
 - (void)_updateDoneButtonHiddenAnimated:(BOOL)animated;
 - (void)_updateForEditingAnimated:(BOOL)animated;
+- (void)_updateTypingIndicatorViewAnimated:(BOOL)animated;
 @end
 
 @implementation KSOChatInputView
@@ -242,7 +243,7 @@
     }
 }
 - (void)_updateForEditingAnimated:(BOOL)animated; {
-    [UIView animateWithDuration:self.viewModel.theme.animationDuration delay:0 usingSpringWithDamping:self.viewModel.theme.animationSpringDamping initialSpringVelocity:self.viewModel.theme.animationInitialSpringVelocity options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+    void(^block)(void) = ^{
         for (UIView *view in self.inputStackView.arrangedSubviews) {
             if ([view isKindOfClass:KSOChatTextView.class]) {
                 break;
@@ -259,7 +260,17 @@
         
         [self.stackView layoutIfNeeded];
         [self.inputStackView layoutIfNeeded];
-    } completion:nil];
+    };
+    
+    if (animated) {
+        [UIView animateWithDuration:self.viewModel.theme.animationDuration delay:0 usingSpringWithDamping:self.viewModel.theme.animationSpringDamping initialSpringVelocity:self.viewModel.theme.animationInitialSpringVelocity options:UIViewAnimationOptionBeginFromCurrentState animations:block completion:nil];
+    }
+    else {
+        block();
+    }
+}
+- (void)_updateTypingIndicatorViewAnimated:(BOOL)animated; {
+    
 }
 
 @end
