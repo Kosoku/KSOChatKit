@@ -29,8 +29,6 @@
 
 + (UIColor *)_defaultTextBackgroundColor;
 + (UIBlurEffect *)_defaultTextBackgroundBlurEffect;
-
-+ (UIColor *)_defaultCompletionsBackgroundColor;
 @end
 
 @implementation KSOChatTheme
@@ -57,8 +55,6 @@
     retval->_textCornerRadius = _textCornerRadius;
     retval->_textBackgroundBlurEffect = _textBackgroundBlurEffect;
     
-    retval->_completionsBackgroundColor = _completionsBackgroundColor;
-    
     retval->_animationDuration = _animationDuration;
     retval->_animationSpringDamping = _animationSpringDamping;
     retval->_animationInitialSpringVelocity = _animationInitialSpringVelocity;
@@ -82,8 +78,6 @@
     _textBackgroundColor = [self.class _defaultTextBackgroundColor];
     _textCornerRadius = 5.0;
     _textBackgroundBlurEffect = [self.class _defaultTextBackgroundBlurEffect];
-    
-    _completionsBackgroundColor = [self.class _defaultCompletionsBackgroundColor];
     
     _animationDuration = 0.25;
     _animationSpringDamping = 0.7;
@@ -123,10 +117,6 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
     _textBackgroundBlurEffect = textBackgroundBlurEffect ?: [self.class _defaultTextBackgroundBlurEffect];
 }
 
-- (void)setCompletionsBackgroundColor:(UIColor *)completionsBackgroundColor {
-    _completionsBackgroundColor = completionsBackgroundColor ?: [self.class _defaultCompletionsBackgroundColor];
-}
-
 + (UIColor *)_defaultTextColor; {
     return UIColor.blackColor;
 }
@@ -147,9 +137,6 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
 }
 + (UIBlurEffect *)_defaultTextBackgroundBlurEffect; {
     return [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
-}
-+ (UIColor *)_defaultCompletionsBackgroundColor; {
-    return UIColor.lightGrayColor;
 }
 
 @end

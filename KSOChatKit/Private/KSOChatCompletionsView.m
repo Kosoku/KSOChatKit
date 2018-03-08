@@ -36,6 +36,16 @@
 
 @implementation KSOChatCompletionsView
 
+- (void)didMoveToWindow {
+    [super didMoveToWindow];
+    
+    if (self.window != nil) {
+        if ([self.viewModel.delegate respondsToSelector:@selector(chatViewController:willShowCompletionsTableView:)]) {
+            [self.viewModel.delegate chatViewController:self.viewModel.chatViewController willShowCompletionsTableView:self.tableView];
+        }
+    }
+}
+
 #pragma mark UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.completions.count;
@@ -93,7 +103,6 @@
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.translatesAutoresizingMaskIntoConstraints = NO;
-    _tableView.backgroundColor = _viewModel.theme.completionsBackgroundColor;
     _tableView.estimatedRowHeight = 44.0;
     _tableView.dataSource = self;
     _tableView.delegate = self;
