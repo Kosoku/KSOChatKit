@@ -205,7 +205,7 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     self.viewModel.theme = theme;
 }
 - (BOOL)isKeyboardShowing {
-    return [[self.chatContainerView KDI_recursiveSubviews] KQS_find:^BOOL(__kindof UIView * _Nonnull object, NSInteger index) {
+    return [[self.chatContainerView KDI_recursiveSubviews] KQS_any:^BOOL(__kindof UIView * _Nonnull object, NSInteger index) {
         return object.isFirstResponder;
     }];
 }
