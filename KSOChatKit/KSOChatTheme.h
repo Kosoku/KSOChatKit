@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign,nonatomic) CGFloat textCornerRadius;
 @property (strong,nonatomic,null_resettable) UIBlurEffect *textBackgroundBlurEffect;
 
+@property (strong,nonatomic,null_resettable) UIColor *completionsBackgroundColor;
+
 @property (assign,nonatomic) CGFloat animationDuration;
 @property (assign,nonatomic) CGFloat animationSpringDamping;
 @property (assign,nonatomic) CGFloat animationInitialSpringVelocity;

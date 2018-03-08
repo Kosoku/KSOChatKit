@@ -17,6 +17,7 @@
 #import "KSOChatViewModel.h"
 #import "KSOChatDefaultCompletionTableViewCell.h"
 #import "KSOChatViewController.h"
+#import "KSOChatTheme.h"
 
 #import <Ditko/Ditko.h>
 #import <Stanley/Stanley.h>
@@ -92,7 +93,7 @@
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.translatesAutoresizingMaskIntoConstraints = NO;
-    _tableView.backgroundColor = UIColor.clearColor;
+    _tableView.backgroundColor = _viewModel.theme.completionsBackgroundColor;
     _tableView.estimatedRowHeight = 44.0;
     _tableView.dataSource = self;
     _tableView.delegate = self;
