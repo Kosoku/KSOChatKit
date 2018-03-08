@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong,nonatomic,null_resettable) KSOChatTheme *theme;
 
+@property (readonly,nonatomic,getter=isKeyboardShowing) BOOL keyboardShowing;
+
 @property (strong,nonatomic,nullable) __kindof UIViewController *contentViewController;
 @property (copy,nonatomic,nullable) NSString *text;
 @property (copy,nonatomic,null_resettable) NSString *textPlaceholder;
@@ -59,6 +61,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)editText:(NSString *)text;
 - (void)cancelTextEditing;
+
+- (void)showKeyboard;
+- (void)hideKeyboard;
 
 @end
 

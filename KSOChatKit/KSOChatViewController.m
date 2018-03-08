@@ -168,6 +168,13 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 - (void)cancelTextEditing; {
     [self.viewModel cancelTextEditing];
 }
+#pragma mark -
+- (void)showKeyboard; {
+    [self.chatContainerView showKeyboard];
+}
+- (void)hideKeyboard; {
+    [self.chatContainerView hideKeyboard];
+}
 #pragma mark Properties
 @dynamic delegate;
 - (id<KSOChatViewControllerDelegate>)delegate {
@@ -196,6 +203,11 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 }
 - (void)setTheme:(KSOChatTheme *)theme {
     self.viewModel.theme = theme;
+}
+- (BOOL)isKeyboardShowing {
+    return [[self.chatContainerView KDI_recursiveSubviews] KQS_find:^BOOL(__kindof UIView * _Nonnull object, NSInteger index) {
+        return object.isFirstResponder;
+    }];
 }
 - (void)setContentViewController:(__kindof UIViewController *)contentViewController {
     UIViewController *oldViewController = _contentViewController;

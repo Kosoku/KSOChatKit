@@ -24,4 +24,7 @@
 
 - (instancetype)initWithViewModel:(KSOChatViewModel *)viewModel;
 
+- (void)showKeyboard;
+- (void)hideKeyboard;
+
 @end

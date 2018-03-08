@@ -58,6 +58,13 @@
     return self;
 }
 
+- (void)showKeyboard; {
+    [self.chatInputView showKeyboard];
+}
+- (void)hideKeyboard; {
+    [self.chatInputView hideKeyboard];
+}
+
 - (UILayoutGuide *)chatInputTopLayoutGuide {
     return self.chatInputView.chatInputTopLayoutGuide;
 }

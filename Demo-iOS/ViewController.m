@@ -280,6 +280,14 @@
         else {
             self.chatViewController.typingIndicatorView = nil;
         }
+    }],[UIBarButtonItem KDI_barButtonSystemItem:UIBarButtonSystemItemOrganize block:^(__kindof UIBarButtonItem * _Nonnull barButtonItem) {
+        kstStrongify(self);
+        if (self.chatViewController.isKeyboardShowing) {
+            [self.chatViewController hideKeyboard];
+        }
+        else {
+            [self.chatViewController showKeyboard];
+        }
     }]];
     self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
     self.chatViewController.delegate = self;

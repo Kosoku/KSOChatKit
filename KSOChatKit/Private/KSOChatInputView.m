@@ -201,6 +201,13 @@
     return self;
 }
 
+- (void)showKeyboard; {
+    [self.textView becomeFirstResponder];
+}
+- (void)hideKeyboard; {
+    [self.textView resignFirstResponder];
+}
+
 - (void)_updateDoneButtonHiddenAnimated:(BOOL)animated; {
     BOOL isHidden = self.doneButton.isHidden;
     BOOL hidden = self.viewModel.isEditing || (self.viewModel.automaticallyShowHideDoneButton && !self.viewModel.doneAction.enabled);
