@@ -17,19 +17,19 @@
 
 @implementation KSOChatDefaultCompletionTableViewCell
 
-@synthesize completion=_completion;
-- (void)setCompletion:(id<KSOChatCompletion>)completion {
-    _completion = completion;
+@synthesize chatCompletion=_chatCompletion;
+- (void)setChatCompletion:(id<KSOChatCompletion>)chatCompletion {
+    _chatCompletion = chatCompletion;
     
-    self.title = _completion.chatCompletionTitle;
-    if ([_completion respondsToSelector:@selector(chatCompletionSubtitle)]) {
-        self.subtitle = _completion.chatCompletionSubtitle;
+    self.title = _chatCompletion.chatCompletionTitle;
+    if ([_chatCompletion respondsToSelector:@selector(chatCompletionSubtitle)]) {
+        self.subtitle = _chatCompletion.chatCompletionSubtitle;
     }
     else {
         self.subtitle = nil;
     }
-    if ([_completion respondsToSelector:@selector(chatCompletionImage)]) {
-        self.icon = _completion.chatCompletionImage;
+    if ([_chatCompletion respondsToSelector:@selector(chatCompletionImage)]) {
+        self.icon = _chatCompletion.chatCompletionImage;
     }
     else {
         self.icon = nil;

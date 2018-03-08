@@ -133,11 +133,11 @@
 @end
 
 @implementation UserTableViewCell
-@synthesize completion=_completion;
+@synthesize chatCompletion=_chatCompletion;
 - (void)setCompletion:(id<KSOChatCompletion>)completion {
-    _completion = completion;
+    _chatCompletion = completion;
     
-    User *user = (User *)_completion;
+    User *user = (User *)_chatCompletion;
     
     self.title = user.name;
     self.subtitle = user.screenName;

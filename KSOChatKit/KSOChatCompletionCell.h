@@ -24,5 +24,5 @@
 /**
  Set and get the completion object represented by the receiver.
  */
-@property (strong,nonatomic) id<KSOChatCompletion> completion;
+@property (strong,nonatomic) id<KSOChatCompletion> chatCompletion;
 @end

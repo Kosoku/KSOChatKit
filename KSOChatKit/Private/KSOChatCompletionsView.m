@@ -69,7 +69,7 @@
     UITableViewCell<KSOChatCompletionCell> *retval = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     id<KSOChatCompletion> completion = self.completions[indexPath.row];
     
-    retval.completion = completion;
+    retval.chatCompletion = completion;
     
     return retval;
 }
