@@ -115,6 +115,13 @@
     _visualEffectView.translatesAutoresizingMaskIntoConstraints = NO;
     [_containingStackView addArrangedSubview:_visualEffectView];
     
+    UIView *topBorderView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    topBorderView.translatesAutoresizingMaskIntoConstraints = NO;
+    topBorderView.backgroundColor = KDIColorW(0.85);
+    
+    [_visualEffectView.contentView addSubview:topBorderView];
+    
     _stackView = [[UIStackView alloc] initWithFrame:CGRectZero];
     _stackView.translatesAutoresizingMaskIntoConstraints = NO;
     _stackView.axis = UILayoutConstraintAxisVertical;
@@ -153,6 +160,9 @@
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": _stackView}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": _stackView}]];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": topBorderView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view(==height)]" options:0 metrics:@{@"height": @1.0} views:@{@"view": topBorderView}]];
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _chatInputTopLayoutGuide}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": _chatInputTopLayoutGuide, @"bottom": _visualEffectView}]];

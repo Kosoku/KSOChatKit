@@ -98,7 +98,7 @@
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
     self.backgroundColor = UIColor.whiteColor;
-    self.borderColor = UIColor.lightGrayColor;
+    self.borderColor = KDIColorW(0.85);
     self.borderOptions = KDIBorderOptionsTop;
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
