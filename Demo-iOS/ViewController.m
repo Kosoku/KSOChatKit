@@ -206,6 +206,9 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     self.bottomButton.hidden = scrollView.KDI_isAtBottom;
 }
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    [self.KSO_chatViewController hideKeyboard];
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.messages.count;
