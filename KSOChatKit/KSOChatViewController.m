@@ -305,7 +305,7 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     [self.view insertSubview:self.contentViewController.view belowSubview:self.chatContainerView];
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view][bottom]" options:0 metrics:nil views:@{@"view": self.contentViewController.view, @"bottom": self.chatContainerView}]];
     
     [self.contentViewController didMoveToParentViewController:self];
 }
@@ -319,11 +319,6 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     if (scrollView == nil) {
         return;
     }
-    
-    UIEdgeInsets contentInset = UIEdgeInsetsMake(0, 0, CGRectGetHeight(self.view.bounds) - CGRectGetMinY([self.view convertRect:self.chatContainerView.chatInputTopView.bounds fromView:self.chatContainerView.chatInputTopView]), 0);
-    
-    scrollView.contentInset = contentInset;
-    scrollView.scrollIndicatorInsets = contentInset;
     
     if ([notification.name isEqualToString:UIKeyboardWillShowNotification] &&
         self.viewModel.automaticallyScrollToBottomOnKeyboardWillShow) {
