@@ -63,6 +63,7 @@
     
     _theme = KSOChatTheme.defaultTheme;
     
+    _text = @"";
     _textPlaceholder = [self.class _defaultTextPlaceholder];
     _editingTitle = [self.class _defaultEditingTitle];
     _doneButtonTitle = [self.class _defaultDoneButtonTitle];
@@ -378,6 +379,9 @@
 }
 - (void)setTheme:(KSOChatTheme *)theme {
     _theme = theme ?: KSOChatTheme.defaultTheme;
+}
+- (void)setText:(NSString *)text {
+    _text = text ?: @"";
 }
 - (void)setTextPlaceholder:(NSString *)textPlaceholder {
     _textPlaceholder = textPlaceholder ?: [self.class _defaultTextPlaceholder];

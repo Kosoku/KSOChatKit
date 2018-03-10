@@ -228,7 +228,8 @@
     
     self.editingMessage = self.messages[indexPath.row];
     
-    [self.KSO_chatViewController editText:self.editingMessage.text];
+    UIPasteboard.generalPasteboard.string = self.editingMessage.text;
+//    [self.KSO_chatViewController editText:self.editingMessage.text];
 }
 
 - (void)addMessageWithText:(NSString *)text {
