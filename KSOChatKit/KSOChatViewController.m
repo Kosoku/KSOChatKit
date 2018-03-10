@@ -142,11 +142,6 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
         }];
     }];
 }
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    
-    [self _adjustContentInsetsIfNecessaryForKeyboardNotification:nil];
-}
 #pragma mark *** Public Methods ***
 - (void)addSyntaxHighlightingRegularExpression:(NSRegularExpression *)regularExpression textAttributes:(NSDictionary<NSAttributedStringKey, id> *)textAttributes; {
     [self.viewModel addSyntaxHighlightingRegularExpression:regularExpression textAttributes:textAttributes];
@@ -305,7 +300,7 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     [self.view insertSubview:self.contentViewController.view belowSubview:self.chatContainerView];
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.contentViewController.view}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view][bottom]" options:0 metrics:nil views:@{@"view": self.contentViewController.view, @"bottom": self.chatContainerView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view][bottom]" options:0 metrics:nil views:@{@"view": self.contentViewController.view, @"bottom": self.chatContainerView.chatInputTopView}]];
     
     [self.contentViewController didMoveToParentViewController:self];
 }

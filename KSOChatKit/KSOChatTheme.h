@@ -84,6 +84,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong,nonatomic,null_resettable) UIBlurEffect *textBackgroundBlurEffect;
 
 /**
+ The color used for the top border of the text input view and the completions table view.
+ 
+ The default is KDIColorW(0.85).
+ */
+@property (strong,nonatomic,null_resettable) UIColor *containerBorderColor;
+
+/**
  The default animation duration used throughout the framework.
  
  The default is 0.25.

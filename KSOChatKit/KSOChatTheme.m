@@ -15,6 +15,8 @@
 
 #import "KSOChatTheme.h"
 
+#import <Ditko/Ditko.h>
+
 #import <objc/runtime.h>
 
 @interface KSOChatTheme ()
@@ -29,6 +31,8 @@
 
 + (UIColor *)_defaultTextBackgroundColor;
 + (UIBlurEffect *)_defaultTextBackgroundBlurEffect;
+
++ (UIColor *)_defaultContainerBorderColor;
 @end
 
 @implementation KSOChatTheme
@@ -59,6 +63,8 @@
     retval->_animationSpringDamping = _animationSpringDamping;
     retval->_animationInitialSpringVelocity = _animationInitialSpringVelocity;
     
+    retval->_containerBorderColor = _containerBorderColor;
+    
     return retval;
 }
 
@@ -78,6 +84,8 @@
     _textBackgroundColor = [self.class _defaultTextBackgroundColor];
     _textCornerRadius = 5.0;
     _textBackgroundBlurEffect = [self.class _defaultTextBackgroundBlurEffect];
+    
+    _containerBorderColor = [self.class _defaultContainerBorderColor];
     
     _animationDuration = 0.25;
     _animationSpringDamping = 0.7;
@@ -117,6 +125,10 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
     _textBackgroundBlurEffect = textBackgroundBlurEffect ?: [self.class _defaultTextBackgroundBlurEffect];
 }
 
+- (void)setContainerBorderColor:(UIColor *)containerBorderColor {
+    _containerBorderColor = containerBorderColor ?: [self.class _defaultContainerBorderColor];
+}
+
 + (UIColor *)_defaultTextColor; {
     return UIColor.blackColor;
 }
@@ -137,6 +149,9 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
 }
 + (UIBlurEffect *)_defaultTextBackgroundBlurEffect; {
     return [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
+}
++ (UIColor *)_defaultContainerBorderColor {
+    return KDIColorW(0.85);
 }
 
 @end

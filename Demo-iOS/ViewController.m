@@ -134,7 +134,7 @@
 
 @implementation UserTableViewCell
 @synthesize chatCompletion=_chatCompletion;
-- (void)setCompletion:(id<KSOChatCompletion>)completion {
+- (void)setChatCompletion:(id<KSOChatCompletion>)completion {
     _chatCompletion = completion;
     
     User *user = (User *)_chatCompletion;
