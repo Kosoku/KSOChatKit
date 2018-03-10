@@ -31,6 +31,13 @@ typedef void(^KSOChatViewControllerCompletionBlock)(BOOL success);
 @protocol KSOChatViewControllerDelegate <NSObject>
 @optional
 /**
+ Called when the keyboard state changes, passing the relevant keyboard notification to the delegate.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @param notification The keyboard notification
+ */
+- (void)chatViewController:(KSOChatViewController *)chatViewController keyboardDidChange:(NSNotification *)notification;
+/**
  Returns the scroll view that should be adjusted by the receiver. The receiver will adjust the content insets and scroll view insets of the receiver if the return value is non-nil.
  
  @param chatViewController The chat view controller that sent the message

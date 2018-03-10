@@ -117,29 +117,37 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     [self _addContentViewControllerIfNecessary];
     
     kstWeakify(self);
-    [self KAG_addObserverForNotificationNames:@[UIKeyboardWillShowNotification,UIKeyboardWillHideNotification] object:nil block:^(NSNotification * _Nonnull notification) {
+    [self KAG_addObserverForNotificationNames:@[UIKeyboardWillShowNotification,UIKeyboardWillHideNotification,UIKeyboardDidShowNotification,UIKeyboardDidHideNotification] object:nil block:^(NSNotification * _Nonnull notification) {
         kstStrongify(self);
-        if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-            CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-            
-            keyboardFrame = [self.view convertRect:[self.view.window convertRect:keyboardFrame fromWindow:nil] fromView:nil];
-            
-            self.KDI_customConstraints = [self _chatContainerViewLayoutConstraintsForKeyboardFrame:keyboardFrame];
-        }
-        else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
-            self.KDI_customConstraints = [self _chatContainerViewLayoutConstraintsForKeyboardFrame:CGRectZero];
-            
-            [self.viewModel hideCompletions];
+        if ([self.delegate respondsToSelector:@selector(chatViewController:keyboardDidChange:)]) {
+            [self.delegate chatViewController:self keyboardDidChange:notification];
         }
         
-        [self.view setNeedsLayout];
-        [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
-            [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+        if ([notification.name isEqualToString:UIKeyboardWillHideNotification] ||
+            [notification.name isEqualToString:UIKeyboardWillShowNotification]) {
             
-            [self.view layoutIfNeeded];
+            if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+                CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+                
+                keyboardFrame = [self.view convertRect:[self.view.window convertRect:keyboardFrame fromWindow:nil] fromView:nil];
+                
+                self.KDI_customConstraints = [self _chatContainerViewLayoutConstraintsForKeyboardFrame:keyboardFrame];
+            }
+            else if ([notification.name isEqualToString:UIKeyboardWillHideNotification]) {
+                self.KDI_customConstraints = [self _chatContainerViewLayoutConstraintsForKeyboardFrame:CGRectZero];
+                
+                [self.viewModel hideCompletions];
+            }
             
-            [self _adjustContentInsetsIfNecessaryForKeyboardNotification:notification];
-        }];
+            [self.view setNeedsLayout];
+            [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+                [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
+                
+                [self.view layoutIfNeeded];
+                
+                [self _adjustContentInsetsIfNecessaryForKeyboardNotification:notification];
+            }];
+        }
     }];
 }
 #pragma mark *** Public Methods ***
