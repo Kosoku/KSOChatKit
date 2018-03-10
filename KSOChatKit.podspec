@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'KSOChatKit'
-  s.version          = '0.7.0'
+  s.version          = '0.7.1'
   s.summary          = 'KSOChatKit is an iOS framework that provides various controls for building a Messages like UI.'
   s.description      = <<-DESC
 KSOChatKit is an iOS framework that provides various controls for building a Messages like UI. It provides an automatically expanding text view, automatic scroll view management and various completion behavior.
