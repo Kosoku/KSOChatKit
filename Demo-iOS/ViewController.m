@@ -288,6 +288,12 @@
         else {
             [self.chatViewController showKeyboard];
         }
+    }],[UIBarButtonItem KDI_barButtonSystemItem:UIBarButtonSystemItemAdd block:^(__kindof UIBarButtonItem * _Nonnull barButtonItem) {
+        [[UIViewController KDI_viewControllerForPresenting] presentViewController:[[ViewController alloc] initWithNibName:nil bundle:nil] animated:YES completion:nil];
+    }]];
+    self.chatViewController.navigationItem.leftBarButtonItems = @[[UIBarButtonItem KDI_barButtonSystemItem:UIBarButtonSystemItemCancel block:^(__kindof UIBarButtonItem * _Nonnull barButtonItem) {
+        kstStrongify(self);
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }]];
     self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
     self.chatViewController.delegate = self;
