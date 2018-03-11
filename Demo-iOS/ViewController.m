@@ -332,6 +332,10 @@
     return [(ContentViewController *)chatViewController.contentViewController tableView];
 }
 
+- (BOOL)chatViewControllerShouldEnableDoneButton:(KSOChatViewController *)chatViewController {
+    // require more than just whitespace or returns
+    return [chatViewController.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length > 0;
+}
 - (BOOL)chatViewControllerReturnShouldTapDoneButton:(KSOChatViewController *)chatViewController {
     return YES;
 }

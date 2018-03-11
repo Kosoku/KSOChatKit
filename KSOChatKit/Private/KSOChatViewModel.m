@@ -106,7 +106,12 @@
     [self KAG_addObserverForKeyPaths:@[@kstKeypath(self,text)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
         if ([keyPath isEqualToString:@kstKeypath(self,text)]) {
-            self.doneAction.enabled = self.text.length > 0;
+            if ([self.delegate respondsToSelector:@selector(chatViewControllerShouldEnableDoneButton:)]) {
+                self.doneAction.enabled = [self.delegate chatViewControllerShouldEnableDoneButton:self.chatViewController];
+            }
+            else {
+                self.doneAction.enabled = self.text.length > 0;
+            }
         }
     }];
     

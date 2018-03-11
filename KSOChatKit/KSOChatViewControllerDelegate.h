@@ -46,6 +46,13 @@ typedef void(^KSOChatViewControllerCompletionBlock)(BOOL success);
 - (nullable UIScrollView *)scrollViewForChatViewController:(KSOChatViewController *)chatViewController;
 
 /**
+ Returns YES if the done button (which includes the Save button in editing mode) should be enabled, otherwise NO. You can inspect the current text through the text property on the sender.
+ 
+ @param chatViewController The chat view controller that sent the message
+ @return YES if the done button should be enabled, otherwise NO
+ */
+- (BOOL)chatViewControllerShouldEnableDoneButton:(KSOChatViewController *)chatViewController;
+/**
  Return YES if the receiver should treat the return key as if the user had tapped the Done button.
  
  @param chatViewController The chat view controller that sent the message
