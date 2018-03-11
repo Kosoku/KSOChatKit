@@ -65,6 +65,9 @@
     [self.chatInputView hideKeyboard];
 }
 
+- (UILayoutGuide *)chatTypingIndicatorTopLayoutGuide {
+    return self.chatInputView.chatTypingIndicatorTopLayoutGuide;
+}
 - (UILayoutGuide *)chatInputTopLayoutGuide {
     return self.chatInputView.chatInputTopLayoutGuide;
 }

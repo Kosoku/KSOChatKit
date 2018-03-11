@@ -294,6 +294,9 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 - (void)setTypingIndicatorView:(__kindof UIView *)typingIndicatorView {
     self.viewModel.typingIndicatorView = typingIndicatorView;
 }
+- (UILayoutGuide *)chatTypingIndicatorTopLayoutGuide {
+    return self.chatContainerView.chatTypingIndicatorTopLayoutGuide;
+}
 - (UILayoutGuide *)chatInputTopLayoutGuide {
     return self.chatContainerView.chatInputTopLayoutGuide;
 }

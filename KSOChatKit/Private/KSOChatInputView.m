@@ -18,12 +18,14 @@
 #import "KSOChatTheme.h"
 #import "KSOChatEditingView.h"
 #import "KSOChatTextView.h"
+#import "KSOChatTypingIndicatorView.h"
 
 #import <Ditko/Ditko.h>
 #import <Stanley/Stanley.h>
 #import <Agamotto/Agamotto.h>
 
 @interface KSOChatInputView () <KSOChatViewModelDataSource,UITextViewDelegate,NSTextStorageDelegate>
+@property (readwrite,strong,nonatomic) UILayoutGuide *chatTypingIndicatorTopLayoutGuide;
 @property (readwrite,strong,nonatomic) UILayoutGuide *chatInputTopLayoutGuide;
 
 @property (strong,nonatomic) UIStackView *containingStackView;
@@ -34,7 +36,7 @@
 @property (strong,nonatomic) KSOChatTextView *textView;
 @property (strong,nonatomic) KDIButton *doneButton;
 @property (strong,nonatomic) KSOChatEditingView *editingView;
-@property (strong,nonatomic) UIView *typingIndicatorView;
+@property (strong,nonatomic) UIView<KSOChatTypingIndicatorView> *typingIndicatorView;
 
 @property (strong,nonatomic) KSOChatViewModel *viewModel;
 
@@ -155,6 +157,9 @@
     _chatInputTopLayoutGuide = [[UILayoutGuide alloc] init];
     [self addLayoutGuide:_chatInputTopLayoutGuide];
     
+    _chatTypingIndicatorTopLayoutGuide = [[UILayoutGuide alloc] init];
+    [self addLayoutGuide:_chatTypingIndicatorTopLayoutGuide];
+    
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _containingStackView}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": _containingStackView}]];
     
@@ -166,6 +171,9 @@
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _chatInputTopLayoutGuide}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": _chatInputTopLayoutGuide, @"bottom": _visualEffectView}]];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _chatTypingIndicatorTopLayoutGuide}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": _chatTypingIndicatorTopLayoutGuide, @"bottom": _containingStackView}]];
     
     [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,editing),@kstKeypath(_viewModel,leadingAccessoryViews),@kstKeypath(_viewModel,typingIndicatorView),@kstKeypath(_viewModel,automaticallyShowHideDoneButton),@kstKeypath(_viewModel,doneAction.enabled)] options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
@@ -272,6 +280,9 @@
     
     if (self.viewModel.typingIndicatorView != nil) {
         self.typingIndicatorView = self.viewModel.typingIndicatorView;
+        if ([self.typingIndicatorView respondsToSelector:@selector(theme)]) {
+            self.typingIndicatorView.theme = self.viewModel.theme;
+        }
         [self.containingStackView insertArrangedSubview:self.typingIndicatorView atIndex:0];
     }
     

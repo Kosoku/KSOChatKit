@@ -91,6 +91,37 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong,nonatomic,null_resettable) UIColor *containerBorderColor;
 
 /**
+ The background color for the typing indicator view.
+ 
+ The default is KDIColorW(0.95).
+ */
+@property (strong,nonatomic,null_resettable) UIColor *typingIndicatorBackgroundColor;
+/**
+ The text color for the typing indicator view.
+ 
+ The default is UIColor.grayColor.
+ */
+@property (strong,nonatomic,null_resettable) UIColor *typingIndicatorColor;
+/**
+ The text color for names displayed by the typing indicator view.
+ 
+ The default is UIColor.darkGrayColor.
+ */
+@property (strong,nonatomic,null_resettable) UIColor *typingIndicatorNameColor;
+/**
+ The font used for the typing indicator view.
+ 
+ The default is [UIFont systemFontOfSize:13.0].
+ */
+@property (strong,nonatomic,null_resettable) UIFont *typingIndicatorFont;
+/**
+ The font used for names displayed by the typing indicator view.
+ 
+ The default is [UIFont boldSystemFontOfSize:13.0].
+ */
+@property (strong,nonatomic,null_resettable) UIFont *typingIndicatorNameFont;
+
+/**
  The default animation duration used throughout the framework.
  
  The default is 0.25.

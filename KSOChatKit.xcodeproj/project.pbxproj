@@ -34,6 +34,9 @@
 		070F9916204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 070F9915204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0721D8EF204EFD41000F0A6A /* KSOChatTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0721D8ED204EFD41000F0A6A /* KSOChatTextView.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0721D8F0204EFD41000F0A6A /* KSOChatTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0721D8EE204EFD41000F0A6A /* KSOChatTextView.m */; };
+		07442DD82055B4E30015370C /* KSOChatDefaultTypingIndicatorView.h in Headers */ = {isa = PBXBuildFile; fileRef = 07442DD62055B4E30015370C /* KSOChatDefaultTypingIndicatorView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		07442DD92055B4E30015370C /* KSOChatDefaultTypingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07442DD72055B4E30015370C /* KSOChatDefaultTypingIndicatorView.m */; };
+		07442DDB2055B5050015370C /* KSOChatTypingIndicatorView.h in Headers */ = {isa = PBXBuildFile; fileRef = 07442DDA2055B5050015370C /* KSOChatTypingIndicatorView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0746166B204B4A4600F2192A /* KSOChatKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 07461669204B4A4600F2192A /* KSOChatKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0746167A204B4EB900F2192A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07461679204B4EB900F2192A /* AppDelegate.m */; };
 		0746167D204B4EB900F2192A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0746167C204B4EB900F2192A /* ViewController.m */; };
@@ -114,6 +117,9 @@
 		070F9915204BBAE5001CFEFE /* KSOChatViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatViewControllerDelegate.h; sourceTree = "<group>"; };
 		0721D8ED204EFD41000F0A6A /* KSOChatTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatTextView.h; sourceTree = "<group>"; };
 		0721D8EE204EFD41000F0A6A /* KSOChatTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatTextView.m; sourceTree = "<group>"; };
+		07442DD62055B4E30015370C /* KSOChatDefaultTypingIndicatorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatDefaultTypingIndicatorView.h; sourceTree = "<group>"; };
+		07442DD72055B4E30015370C /* KSOChatDefaultTypingIndicatorView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KSOChatDefaultTypingIndicatorView.m; sourceTree = "<group>"; };
+		07442DDA2055B5050015370C /* KSOChatTypingIndicatorView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatTypingIndicatorView.h; sourceTree = "<group>"; };
 		07461666204B4A4600F2192A /* KSOChatKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KSOChatKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		07461669204B4A4600F2192A /* KSOChatKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KSOChatKit.h; sourceTree = "<group>"; };
 		0746166A204B4A4600F2192A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -260,6 +266,9 @@
 				070F9900204B6230001CFEFE /* KSOChatViewController.m */,
 				07490A62204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h */,
 				07490A63204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m */,
+				07442DDA2055B5050015370C /* KSOChatTypingIndicatorView.h */,
+				07442DD62055B4E30015370C /* KSOChatDefaultTypingIndicatorView.h */,
+				07442DD72055B4E30015370C /* KSOChatDefaultTypingIndicatorView.m */,
 				070F9917204BC3D2001CFEFE /* Private */,
 			);
 			name = Source;
@@ -345,6 +354,8 @@
 				070F9901204B6230001CFEFE /* KSOChatViewController.h in Headers */,
 				070F98FD204B50CF001CFEFE /* KSOChatInputView.h in Headers */,
 				07490A64204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.h in Headers */,
+				07442DDB2055B5050015370C /* KSOChatTypingIndicatorView.h in Headers */,
+				07442DD82055B4E30015370C /* KSOChatDefaultTypingIndicatorView.h in Headers */,
 				07CDA86D204CA3E200089406 /* KSOChatViewModel.h in Headers */,
 				07CDA879204CE74300089406 /* KSOChatContainerView.h in Headers */,
 			);
@@ -495,6 +506,7 @@
 				07CDA86E204CA3E200089406 /* KSOChatViewModel.m in Sources */,
 				07EFB2BA204DFDBB00FDEA13 /* KSOChatTheme.m in Sources */,
 				070F9902204B6230001CFEFE /* KSOChatViewController.m in Sources */,
+				07442DD92055B4E30015370C /* KSOChatDefaultTypingIndicatorView.m in Sources */,
 				07D0B9E7205116D60078BEFB /* NSBundle+KSOChatKitExtensionsPrivate.m in Sources */,
 				07490A65204CF97D004CB5C8 /* UIViewController+KSOChatKitExtensions.m in Sources */,
 				07CDA87A204CE74300089406 /* KSOChatContainerView.m in Sources */,

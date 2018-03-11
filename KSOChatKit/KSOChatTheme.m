@@ -33,6 +33,12 @@
 + (UIBlurEffect *)_defaultTextBackgroundBlurEffect;
 
 + (UIColor *)_defaultContainerBorderColor;
+
++ (UIColor *)_defaultTypingIndicatorBackgroundColor;
++ (UIColor *)_defaultTypingIndicatorColor;
++ (UIColor *)_defaultTypingIndicatorNameColor;
++ (UIFont *)_defaultTypingIndicatorFont;
++ (UIFont *)_defaultTypingIndicatorNameFont;
 @end
 
 @implementation KSOChatTheme
@@ -65,6 +71,12 @@
     
     retval->_containerBorderColor = _containerBorderColor;
     
+    retval->_typingIndicatorBackgroundColor = _typingIndicatorBackgroundColor;
+    retval->_typingIndicatorColor = _typingIndicatorColor;
+    retval->_typingIndicatorNameColor = _typingIndicatorNameColor;
+    retval->_typingIndicatorFont = _typingIndicatorFont;
+    retval->_typingIndicatorNameFont = _typingIndicatorNameFont;
+    
     return retval;
 }
 
@@ -86,6 +98,12 @@
     _textBackgroundBlurEffect = [self.class _defaultTextBackgroundBlurEffect];
     
     _containerBorderColor = [self.class _defaultContainerBorderColor];
+    
+    _typingIndicatorBackgroundColor = [self.class _defaultTypingIndicatorBackgroundColor];
+    _typingIndicatorColor = [self.class _defaultTypingIndicatorColor];
+    _typingIndicatorNameColor = [self.class _defaultTypingIndicatorNameColor];
+    _typingIndicatorFont = [self.class _defaultTypingIndicatorFont];
+    _typingIndicatorNameFont = [self.class _defaultTypingIndicatorNameFont];
     
     _animationDuration = 0.25;
     _animationSpringDamping = 0.7;
@@ -129,6 +147,22 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
     _containerBorderColor = containerBorderColor ?: [self.class _defaultContainerBorderColor];
 }
 
+- (void)setTypingIndicatorBackgroundColor:(UIColor *)typingIndicatorBackgroundColor {
+    _typingIndicatorBackgroundColor = typingIndicatorBackgroundColor ?: [self.class _defaultTypingIndicatorBackgroundColor];
+}
+- (void)setTypingIndicatorColor:(UIColor *)typingIndicatorColor {
+    _typingIndicatorColor = typingIndicatorColor ?: [self.class _defaultTypingIndicatorColor];
+}
+- (void)setTypingIndicatorNameColor:(UIColor *)typingIndicatorNameColor {
+    _typingIndicatorNameColor = typingIndicatorNameColor ?: [self.class _defaultTypingIndicatorNameColor];
+}
+- (void)setTypingIndicatorFont:(UIFont *)typingIndicatorFont {
+    _typingIndicatorFont = typingIndicatorFont ?: [self.class _defaultTypingIndicatorFont];
+}
+- (void)setTypingIndicatorNameFont:(UIFont *)typingIndicatorNameFont {
+    _typingIndicatorNameFont = typingIndicatorNameFont ?: [self.class _defaultTypingIndicatorNameFont];
+}
+
 + (UIColor *)_defaultTextColor; {
     return UIColor.blackColor;
 }
@@ -152,6 +186,21 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
 }
 + (UIColor *)_defaultContainerBorderColor {
     return KDIColorW(0.85);
+}
++ (UIColor *)_defaultTypingIndicatorBackgroundColor {
+    return KDIColorW(0.95);
+}
++ (UIColor *)_defaultTypingIndicatorColor; {
+    return UIColor.grayColor;
+}
++ (UIColor *)_defaultTypingIndicatorNameColor; {
+    return UIColor.darkGrayColor;
+}
++ (UIFont *)_defaultTypingIndicatorFont; {
+    return [UIFont systemFontOfSize:13.0];
+}
++ (UIFont *)_defaultTypingIndicatorNameFont; {
+    return [UIFont boldSystemFontOfSize:13.0];
 }
 
 @end

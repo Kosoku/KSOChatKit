@@ -18,6 +18,7 @@
 #import "KSOChatViewControllerDefines.h"
 #import "KSOChatViewControllerDelegate.h"
 #import "KSOChatCompletionCell.h"
+#import "KSOChatTypingIndicatorView.h"
 
 typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatCompletion>> *completions);
 
@@ -60,7 +61,7 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 
 @property (copy,nonatomic) NSArray<UIView *> *leadingAccessoryViews;
 
-@property (strong,nonatomic) UIView *typingIndicatorView;
+@property (strong,nonatomic) UIView<KSOChatTypingIndicatorView> *typingIndicatorView;
 
 @property (readonly,strong,nonatomic) KAGAction *cancelAction;
 @property (readonly,strong,nonatomic) KAGAction *doneAction;

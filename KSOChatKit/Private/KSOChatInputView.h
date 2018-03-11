@@ -19,6 +19,7 @@
 
 @interface KSOChatInputView : UIView
 
+@property (readonly,strong,nonatomic) UILayoutGuide *chatTypingIndicatorTopLayoutGuide;
 @property (readonly,strong,nonatomic) UILayoutGuide *chatInputTopLayoutGuide;
 
 - (instancetype)initWithViewModel:(KSOChatViewModel *)viewModel;

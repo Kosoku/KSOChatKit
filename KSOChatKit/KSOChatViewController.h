@@ -17,6 +17,7 @@
 #import <KSOChatKit/KSOChatViewControllerDefines.h>
 #import <KSOChatKit/KSOChatViewControllerDelegate.h>
 #import <KSOChatKit/KSOChatCompletionCell.h>
+#import <KSOChatKit/KSOChatTypingIndicatorView.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -126,10 +127,14 @@ NS_ASSUME_NONNULL_BEGIN
  
  The default is nil.
  */
-@property (strong,nonatomic,nullable) __kindof UIView *typingIndicatorView;
+@property (strong,nonatomic,nullable) __kindof UIView<KSOChatTypingIndicatorView> *typingIndicatorView;
 
 /**
- Get the layout guide that can be used to anchor views against the top edge of the input container view. This will return nil if referenced before the receiver's view had been loaded.
+ Get the layout guide that can be used to anchor views against the top edge of the typing indicator view when visible, otherwise anchors against the chatInputTopLayoutGuide. This will return nil if referenced before the receiver's view has been loaded.
+ */
+@property (readonly,nonatomic,nullable) UILayoutGuide *chatTypingIndicatorTopLayoutGuide;
+/**
+ Get the layout guide that can be used to anchor views against the top edge of the input container view. This will return nil if referenced before the receiver's view has been loaded.
  */
 @property (readonly,nonatomic,nullable) UILayoutGuide *chatInputTopLayoutGuide;
 

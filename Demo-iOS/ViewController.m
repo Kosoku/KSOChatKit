@@ -22,7 +22,7 @@
 #import <Stanley/Stanley.h>
 #import <Quicksilver/Quicksilver.h>
 
-@interface TypingIndicatorView : UIView
+@interface TypingIndicatorView : KSOChatDefaultTypingIndicatorView
 @end
 
 @implementation TypingIndicatorView
@@ -30,19 +30,7 @@
     if (!(self = [super initWithFrame:frame]))
         return nil;
     
-    self.translatesAutoresizingMaskIntoConstraints = NO;
-    self.backgroundColor = UIColor.whiteColor;
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-    
-    label.translatesAutoresizingMaskIntoConstraints = NO;
-    label.textColor = UIColor.darkGrayColor;
-    label.KDI_dynamicTypeTextStyle = UIFontTextStyleFootnote;
-    label.text = @"Someone is typing things";
-    [self addSubview:label];
-    
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[view]-|" options:0 metrics:nil views:@{@"view": label}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-[view]-|" options:0 metrics:nil views:@{@"view": label}]];
+    [self addName:@"John Smith"];
     
     return self;
 }
@@ -204,7 +192,9 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    self.bottomButton.hidden = scrollView.KDI_isAtBottom;
+    [UIView animateWithDuration:UINavigationControllerHideShowBarDuration delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        self.bottomButton.alpha = scrollView.KDI_isAtBottom ? 0.0 : 1.0;
+    } completion:nil];
 }
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self.KSO_chatViewController hideKeyboard];
@@ -228,8 +218,7 @@
     
     self.editingMessage = self.messages[indexPath.row];
     
-    UIPasteboard.generalPasteboard.string = self.editingMessage.text;
-//    [self.KSO_chatViewController editText:self.editingMessage.text];
+    [self.KSO_chatViewController editText:self.editingMessage.text];
 }
 
 - (void)addMessageWithText:(NSString *)text {
@@ -282,7 +271,9 @@
             self.chatViewController.typingIndicatorView = [[TypingIndicatorView alloc] initWithFrame:CGRectZero];
         }
         else {
-            self.chatViewController.typingIndicatorView = nil;
+            TypingIndicatorView *typingIndicatorView = self.chatViewController.typingIndicatorView;
+            
+            [typingIndicatorView removeName:typingIndicatorView.names.firstObject];
         }
     }],[UIBarButtonItem KDI_barButtonSystemItem:UIBarButtonSystemItemOrganize block:^(__kindof UIBarButtonItem * _Nonnull barButtonItem) {
         kstStrongify(self);
@@ -293,11 +284,25 @@
             [self.chatViewController showKeyboard];
         }
     }],[UIBarButtonItem KDI_barButtonSystemItem:UIBarButtonSystemItemAdd block:^(__kindof UIBarButtonItem * _Nonnull barButtonItem) {
-        [[UIViewController KDI_viewControllerForPresenting] presentViewController:[[ViewController alloc] initWithNibName:nil bundle:nil] animated:YES completion:nil];
-    }]];
-    self.chatViewController.navigationItem.leftBarButtonItems = @[[UIBarButtonItem KDI_barButtonSystemItem:UIBarButtonSystemItemCancel block:^(__kindof UIBarButtonItem * _Nonnull barButtonItem) {
-        kstStrongify(self);
-        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        [UIAlertController KDI_presentAlertControllerWithTitle:@"Add User" message:@"Enter the name of the user" cancelButtonTitle:@"Cancel" otherButtonTitles:@[@"Add"] configure:^(__kindof UIAlertController * _Nonnull alertController) {
+            UIAlertAction *action = [alertController.actions KQS_find:^BOOL(UIAlertAction * _Nonnull object, NSInteger index) {
+                return object.style == UIAlertActionStyleDefault;
+            }];
+            
+            [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+                textField.placeholder = @"Enter name";
+                [textField KDI_addBlock:^(__kindof UIControl * _Nonnull control, UIControlEvents controlEvents) {
+                    action.enabled = textField.text.length > 0;
+                } forControlEvents:UIControlEventAllEditingEvents];
+            }];
+        } completion:^(__kindof UIAlertController * _Nonnull alertController, NSInteger buttonIndex) {
+            if (buttonIndex == KDIUIAlertControllerCancelButtonIndex) {
+                return;
+            }
+            
+            [(TypingIndicatorView *)self.chatViewController.typingIndicatorView addName:alertController.textFields.firstObject.text];
+        }];
     }]];
     self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
     self.chatViewController.delegate = self;

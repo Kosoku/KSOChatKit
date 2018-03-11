@@ -21,6 +21,7 @@
 #import <Agamotto/Agamotto.h>
 #import <Stanley/Stanley.h>
 #import <Quicksilver/Quicksilver.h>
+#import <Ditko/Ditko.h>
 
 @interface KSOChatViewModel ()
 @property (readwrite,weak,nonatomic) KSOChatViewController *chatViewController;
