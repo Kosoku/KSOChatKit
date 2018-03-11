@@ -26,11 +26,21 @@
 
 @property (readwrite,copy,nonatomic) NSOrderedSet<NSString *> *names;
 
+@property (strong,nonatomic) NSMutableDictionary<NSString *, KSTTimer *> *namesToTimers;
+
 - (void)_updateLabelAttributedText;
+- (void)_addTimerForName:(NSString *)name;
+- (void)_removeTimerForName:(NSString *)name;
+- (void)_removeAllTimers;
 @end
 
 @implementation KSOChatDefaultTypingIndicatorView
 
+- (void)dealloc {
+    for (KSTTimer *timer in _namesToTimers.allValues) {
+        [timer invalidate];
+    }
+}
 - (instancetype)initWithFrame:(CGRect)frame {
     if (!(self = [super initWithFrame:frame]))
         return nil;
@@ -38,6 +48,10 @@
     kstWeakify(self);
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    _nameDisplayDuration = 5.0;
+    
+    _namesToTimers = [[NSMutableDictionary alloc] init];
     
     _button = [UIButton buttonWithType:UIButtonTypeCustom];
     _button.translatesAutoresizingMaskIntoConstraints = NO;
@@ -73,8 +87,13 @@
 }
 
 - (void)setHidden:(BOOL)hidden animated:(BOOL)animated; {
+    if (hidden) {
+        [self _removeAllTimers];
+    }
+    
     void(^block)(void) = ^{
         self.hidden = hidden;
+        self.alpha = hidden ? 0.0 : 1.0;
         
         UIView *superview = self.superview;
         
@@ -102,6 +121,8 @@
         return;
     }
     
+    [self _addTimerForName:name];
+    
     NSMutableOrderedSet *temp = [NSMutableOrderedSet orderedSetWithOrderedSet:self.names];
     
     [temp addObject:name];
@@ -112,6 +133,8 @@
     if (name == nil) {
         return;
     }
+    
+    [self _removeTimerForName:name];
     
     NSMutableOrderedSet *temp = [NSMutableOrderedSet orderedSetWithOrderedSet:self.names];
     
@@ -154,6 +177,33 @@
     }
     
     self.label.attributedText = string;
+}
+- (void)_addTimerForName:(NSString *)name; {
+    if (self.nameDisplayDuration == 0.0) {
+        return;
+    }
+    
+    [self _removeTimerForName:name];
+    
+    kstWeakify(self);
+    self.namesToTimers[name] = [KSTTimer scheduledTimerWithTimeInterval:self.nameDisplayDuration block:^(KSTTimer * _Nonnull timer) {
+        kstStrongify(self);
+        [self removeName:name];
+    } userInfo:name repeats:NO queue:nil];
+}
+- (void)_removeTimerForName:(NSString *)name; {
+    if (self.nameDisplayDuration == 0.0) {
+        return;
+    }
+    
+    [self.namesToTimers[name] invalidate];
+    [self.namesToTimers removeObjectForKey:name];
+}
+- (void)_removeAllTimers; {
+    for (KSTTimer *timer in self.namesToTimers.allValues) {
+        [timer invalidate];
+    }
+    [self.namesToTimers removeAllObjects];
 }
 
 - (void)setNames:(NSOrderedSet<NSString *> *)names {

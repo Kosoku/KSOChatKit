@@ -29,6 +29,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly,copy,nonatomic,nullable) NSOrderedSet<NSString *> *names;
 
 /**
+ The duration that each name is displayed before being hidden. If the duration is set to 0.0, the receiver will never hide names or itself automatically.
+ 
+ The default is 5.0.
+ */
+@property (assign,nonatomic) NSTimeInterval nameDisplayDuration;
+
+/**
  Hide the receiver with optional animation. The user can also hide the view by tapping on it.
  
  @param hidden Whether the receiver should be hidden
@@ -37,13 +44,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setHidden:(BOOL)hidden animated:(BOOL)animated;
 
 /**
- Add the *name* to the list of names displayed by the receiver.
+ Add the *name* to the list of names displayed by the receiver. When the first name is added the receiver will show itself.
  
  @param name The name to add
  */
 - (void)addName:(NSString *)name;
 /**
- Remove the *name* to the list of names displayed by the receiver.
+ Remove the *name* to the list of names displayed by the receiver. When the last name is removed the receiver will hide itself.
  
  @param name The name to remove
  */

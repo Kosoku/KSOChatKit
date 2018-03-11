@@ -301,7 +301,13 @@
                 return;
             }
             
-            [(TypingIndicatorView *)self.chatViewController.typingIndicatorView addName:alertController.textFields.firstObject.text];
+            __block NSTimeInterval delay = 0.0;
+            for (NSString *text in [alertController.textFields.firstObject.text componentsSeparatedByString:@","]) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [(TypingIndicatorView *)self.chatViewController.typingIndicatorView addName:[text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+                });
+                delay += 1.0;
+            }
         }];
     }]];
     self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
