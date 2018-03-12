@@ -15,6 +15,7 @@
 
 #import "KSOChatDefaultTypingIndicatorView.h"
 #import "KSOChatTheme.h"
+#import "NSBundle+KSOChatKitExtensionsPrivate.h"
 
 #import <Ditko/Ditko.h>
 #import <Stanley/Stanley.h>
@@ -55,8 +56,8 @@
     
     _button = [UIButton buttonWithType:UIButtonTypeCustom];
     _button.translatesAutoresizingMaskIntoConstraints = NO;
-    _button.accessibilityLabel = NSLocalizedStringWithDefaultValue(@"typing-indicator.dismiss.accessibility-label", nil, NSBundle.mainBundle, @"Dismiss typing indicator", @"Dismiss typing indicator");
-    _button.accessibilityHint = NSLocalizedStringWithDefaultValue(@"typing-indicator.dismiss.accessibility-hint", nil, NSBundle.mainBundle, @"Tap to dismiss the typing indicator", @"Tap to dismiss the typing indicator");
+    _button.accessibilityLabel = NSLocalizedStringWithDefaultValue(@"typing-indicator.dismiss.accessibility-label", nil, NSBundle.KSO_chatKitFrameworkBundle, @"Dismiss typing indicator", @"Dismiss typing indicator");
+    _button.accessibilityHint = NSLocalizedStringWithDefaultValue(@"typing-indicator.dismiss.accessibility-hint", nil, NSBundle.KSO_chatKitFrameworkBundle, @"Tap to dismiss the typing indicator", @"Tap to dismiss the typing indicator");
     [_button KDI_addBlock:^(__kindof UIControl * _Nonnull control, UIControlEvents controlEvents) {
         kstStrongify(self);
         [self setHidden:YES animated:YES];
@@ -151,15 +152,15 @@
     NSString *text = @"";
     
     if (self.names.count == 1) {
-        text = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"typing-indicator.text.one", nil, NSBundle.mainBundle, @"%@ is typing", @"<name> is typing"),self.names.firstObject];
+        text = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"typing-indicator.text.one", nil, NSBundle.KSO_chatKitFrameworkBundle, @"%@ is typing", @"<name> is typing"),self.names.firstObject];
     }
     else if (self.names.count == 2) {
-        text = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"typing-indicator.text.two", nil, NSBundle.mainBundle, @"%@ and %@ are typing", @"<name1> and <name2> are typing"),self.names.firstObject,self.names.lastObject];
+        text = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"typing-indicator.text.two", nil, NSBundle.KSO_chatKitFrameworkBundle, @"%@ and %@ are typing", @"<name1> and <name2> are typing"),self.names.firstObject,self.names.lastObject];
     }
     else if (self.names.count > 2) {
-        NSString *conjunction = NSLocalizedStringWithDefaultValue(@"typing-indicator.list.conjuction", nil, NSBundle.mainBundle, @"and", @"and");
-        NSString *separator = NSLocalizedStringWithDefaultValue(@"typing-indicator.list.separator", nil, NSBundle.mainBundle, @" ", @"space");
-        NSString *delimiter = NSLocalizedStringWithDefaultValue(@"typing-indicator.list.delimiter", nil, NSBundle.mainBundle, @",", @"comma");
+        NSString *conjunction = NSLocalizedStringWithDefaultValue(@"typing-indicator.list.conjuction", nil, NSBundle.KSO_chatKitFrameworkBundle, @"and", @"and");
+        NSString *separator = NSLocalizedStringWithDefaultValue(@"typing-indicator.list.separator", nil, NSBundle.KSO_chatKitFrameworkBundle, @" ", @"space");
+        NSString *delimiter = NSLocalizedStringWithDefaultValue(@"typing-indicator.list.delimiter", nil, NSBundle.KSO_chatKitFrameworkBundle, @",", @"comma");
         
         NSString *namesFormat = [self.names.array KQS_reduceWithStart:[[NSMutableString alloc] init] block:^id _Nonnull(NSMutableString * _Nullable sum, NSString * _Nonnull object, NSInteger index) {
             if (index == self.names.count - 1) {
@@ -171,7 +172,7 @@
             return sum;
         }];
         
-        text = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"typing-indicator.text.other", nil, NSBundle.mainBundle, @"%@ are typing", @"<name1>, <name2>, and <name-n> are typing"),namesFormat];
+        text = [NSString stringWithFormat:NSLocalizedStringWithDefaultValue(@"typing-indicator.text.other", nil, NSBundle.KSO_chatKitFrameworkBundle, @"%@ are typing", @"<name1>, <name2>, and <name-n> are typing"),namesFormat];
     }
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName: self.theme.typingIndicatorFont, NSForegroundColorAttributeName: self.theme.typingIndicatorColor}];
@@ -193,7 +194,7 @@
     self.namesToTimers[name] = [KSTTimer scheduledTimerWithTimeInterval:self.nameDisplayDuration block:^(KSTTimer * _Nonnull timer) {
         kstStrongify(self);
         [self removeName:name];
-    } userInfo:name repeats:NO queue:nil];
+    } userInfo:nil repeats:NO queue:nil];
 }
 - (void)_removeTimerForName:(NSString *)name; {
     if (self.nameDisplayDuration == 0.0) {
