@@ -23,6 +23,37 @@
 #import <Quicksilver/Quicksilver.h>
 #import <Ditko/Ditko.h>
 
+@interface KSOMarkdownSymbolAndRange : NSObject
+@property (copy,nonatomic) NSString *symbol;
+@property (assign,nonatomic) NSRange range;
+- (instancetype)initWithSymbol:(NSString *)symbol range:(NSRange)range;
+
++ (NSArray *)sortedArrayByRange:(NSArray *)array;
+@end
+
+@implementation KSOMarkdownSymbolAndRange
+- (instancetype)initWithSymbol:(NSString *)symbol range:(NSRange)range; {
+    if (!(self = [super init]))
+        return nil;
+    
+    _symbol = [symbol copy];
+    _range = range;
+    
+    return self;
+}
++ (NSArray *)sortedArrayByRange:(NSArray *)array; {
+    return [array sortedArrayUsingComparator:^NSComparisonResult(KSOMarkdownSymbolAndRange * _Nonnull obj1, KSOMarkdownSymbolAndRange * _Nonnull obj2) {
+        if (obj1.range.location > obj2.range.location) {
+            return NSOrderedAscending;
+        }
+        else if (obj1.range.location < obj2.range.location) {
+            return NSOrderedDescending;
+        }
+        return NSOrderedSame;
+    }];
+}
+@end
+
 @interface KSOChatViewModel ()
 @property (readwrite,weak,nonatomic) KSOChatViewController *chatViewController;
 @property (readwrite,assign,nonatomic,getter=isEditing) BOOL editing;
@@ -185,9 +216,20 @@
         [invalidCharacterSet formUnionWithCharacterSet:NSCharacterSet.punctuationCharacterSet];
         [invalidCharacterSet removeCharactersInString:[self.markdownSymbols componentsJoinedByString:@""]];
         
+        NSArray *markdownSymbols = [[KSOMarkdownSymbolAndRange sortedArrayByRange:[[self.markdownSymbols KQS_map:^id _Nullable(NSString * _Nonnull object, NSInteger index) {
+            NSRange searchRange = NSMakeRange(0, wordRange.location);
+            NSRange prefixRange = [self.text rangeOfString:object options:NSBackwardsSearch range:searchRange];
+            
+            return [[KSOMarkdownSymbolAndRange alloc] initWithSymbol:object range:prefixRange];
+        }] KQS_filter:^BOOL(KSOMarkdownSymbolAndRange * _Nonnull object, NSInteger index) {
+            return object.range.length > 0;
+        }]] KQS_map:^id _Nullable(KSOMarkdownSymbolAndRange * _Nonnull object, NSInteger index) {
+            return object.symbol;
+        }];
+        
         BOOL shouldChange = YES;
         
-        for (NSString *symbol in self.markdownSymbols) {
+        for (NSString *symbol in markdownSymbols) {
             NSRange searchRange = NSMakeRange(0, wordRange.location);
             NSRange prefixRange = [self.text rangeOfString:symbol options:NSBackwardsSearch range:searchRange];
             
@@ -230,7 +272,7 @@
             shouldChange = NO;
             
             // Reset the original cursor location +1 for the new character
-            NSRange adjustedCursorPosition = NSMakeRange(range.location + 1, 0);
+            NSRange adjustedCursorPosition = NSMakeRange(range.location + 2, 0);
             self.selectedRange = adjustedCursorPosition;
             
             break;
