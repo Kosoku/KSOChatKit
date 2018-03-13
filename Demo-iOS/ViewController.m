@@ -173,22 +173,22 @@
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": self.tableView}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": self.tableView}]];
     
-    KDIButton *bottomButton = [KDIButton buttonWithType:UIButtonTypeSystem];
-    
-    bottomButton.translatesAutoresizingMaskIntoConstraints = NO;
-    bottomButton.contentEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
-    [bottomButton setImage:[UIImage KSO_fontAwesomeImageWithIcon:KSOFontAwesomeIconArrowDown size:CGSizeMake(25, 25)].KDI_templateImage forState:UIControlStateNormal];
-    bottomButton.inverted = YES;
-    [bottomButton KDI_addBlock:^(__kindof UIControl * _Nonnull control, UIControlEvents controlEvents) {
-        kstStrongify(self);
-        [self.tableView KDI_scrollToBottomAnimated:YES];
-    } forControlEvents:UIControlEventTouchUpInside];
-    [self.KSO_chatViewController.view addSubview:bottomButton];
-    
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]" options:0 metrics:nil views:@{@"view": bottomButton}]];
-    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": bottomButton, @"bottom": self.KSO_chatViewController.chatInputTopLayoutGuide}]];
-    
-    self.bottomButton = bottomButton;
+//    KDIButton *bottomButton = [KDIButton buttonWithType:UIButtonTypeSystem];
+//
+//    bottomButton.translatesAutoresizingMaskIntoConstraints = NO;
+//    bottomButton.contentEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
+//    [bottomButton setImage:[UIImage KSO_fontAwesomeImageWithIcon:KSOFontAwesomeIconArrowDown size:CGSizeMake(25, 25)].KDI_templateImage forState:UIControlStateNormal];
+//    bottomButton.inverted = YES;
+//    [bottomButton KDI_addBlock:^(__kindof UIControl * _Nonnull control, UIControlEvents controlEvents) {
+//        kstStrongify(self);
+//        [self.tableView KDI_scrollToBottomAnimated:YES];
+//    } forControlEvents:UIControlEventTouchUpInside];
+//    [self.KSO_chatViewController.view addSubview:bottomButton];
+//
+//    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]" options:0 metrics:nil views:@{@"view": bottomButton}]];
+//    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": bottomButton, @"bottom": self.KSO_chatViewController.chatInputTopLayoutGuide}]];
+//
+//    self.bottomButton = bottomButton;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
