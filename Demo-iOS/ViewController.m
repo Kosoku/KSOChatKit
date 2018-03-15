@@ -258,7 +258,7 @@
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeSystem];
     
     addButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [addButton setImage:[UIImage KSO_fontAwesomeImageWithIcon:KSOFontAwesomeIconPlus size:CGSizeMake(25, 25)].KDI_templateImage forState:UIControlStateNormal];
+    [addButton setImage:[UIImage KSO_fontAwesomeSolidImageWithString:@"\uf067" size:CGSizeMake(25, 25)].KDI_templateImage forState:UIControlStateNormal];
     [addButton KDI_addBlock:^(__kindof UIControl * _Nonnull control, UIControlEvents controlEvents) {
         [UIAlertController KDI_presentAlertControllerWithTitle:nil message:@"The add button was tapped!" cancelButtonTitle:nil otherButtonTitles:nil completion:nil];
     } forControlEvents:UIControlEventTouchUpInside];
