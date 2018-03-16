@@ -118,6 +118,10 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     
     kstWeakify(self);
     [self KAG_addObserverForNotificationNames:@[UIKeyboardWillShowNotification,UIKeyboardWillHideNotification,UIKeyboardDidShowNotification,UIKeyboardDidHideNotification] object:nil block:^(NSNotification * _Nonnull notification) {
+        if (!self.isKeyboardShowing) {
+            return;
+        }
+        
         kstStrongify(self);
         if ([self.delegate respondsToSelector:@selector(chatViewController:keyboardDidChange:)]) {
             [self.delegate chatViewController:self keyboardDidChange:notification];
