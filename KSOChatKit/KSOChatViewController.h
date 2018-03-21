@@ -56,6 +56,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong,nonatomic,null_resettable) KSOChatTheme *theme;
 
 /**
+ Set and get whether the user can interact with the chat input view. This affects the userInteractionEnabled property on the appropriate subviews.
+ 
+ The default is YES.
+ */
+@property (assign,nonatomic) BOOL allowsChatInputInteraction;
+
+/**
  Get whether the keyboard is showing.
  */
 @property (readonly,nonatomic,getter=isKeyboardShowing) BOOL keyboardShowing;
