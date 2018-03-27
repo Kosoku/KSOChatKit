@@ -57,7 +57,7 @@
     _button = [UIButton buttonWithType:UIButtonTypeCustom];
     _button.translatesAutoresizingMaskIntoConstraints = NO;
     _button.accessibilityLabel = NSLocalizedStringWithDefaultValue(@"typing-indicator.dismiss.accessibility-label", nil, NSBundle.KSO_chatKitFrameworkBundle, @"Dismiss typing indicator", @"Dismiss typing indicator");
-    _button.accessibilityHint = NSLocalizedStringWithDefaultValue(@"typing-indicator.dismiss.accessibility-hint", nil, NSBundle.KSO_chatKitFrameworkBundle, @"Tap to dismiss the typing indicator", @"Tap to dismiss the typing indicator");
+    _button.accessibilityHint = NSLocalizedStringWithDefaultValue(@"typing-indicator.dismiss.accessibility-hint", nil, NSBundle.KSO_chatKitFrameworkBundle, @"Double tap to dismiss the typing indicator", @"Tap to dismiss the typing indicator");
     [_button KDI_addBlock:^(__kindof UIControl * _Nonnull control, UIControlEvents controlEvents) {
         kstStrongify(self);
         [self setHidden:YES animated:YES];
