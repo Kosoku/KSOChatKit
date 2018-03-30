@@ -93,9 +93,6 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 
 @implementation KSOChatViewController
 #pragma mark *** Subclass Overrides ***
-- (void)dealloc {
-    KSTLogObject(self.class);
-}
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (!(self = [super initWithNibName:nil bundle:nil]))
         return nil;
