@@ -93,6 +93,9 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 
 @implementation KSOChatViewController
 #pragma mark *** Subclass Overrides ***
+- (void)dealloc {
+    KSTLogObject(self.class);
+}
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (!(self = [super initWithNibName:nil bundle:nil]))
         return nil;
@@ -120,11 +123,11 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     
     kstWeakify(self);
     [self KAG_addObserverForNotificationNames:@[UIKeyboardWillShowNotification,UIKeyboardWillHideNotification,UIKeyboardDidShowNotification,UIKeyboardDidHideNotification] object:nil block:^(NSNotification * _Nonnull notification) {
+        kstStrongify(self);
         if (!self.isKeyboardShowing) {
             return;
         }
         
-        kstStrongify(self);
         if ([self.delegate respondsToSelector:@selector(chatViewController:keyboardDidChange:)]) {
             [self.delegate chatViewController:self keyboardDidChange:notification];
         }
@@ -147,6 +150,7 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
             
             [self.view setNeedsLayout];
             [UIView animateWithDuration:[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue] animations:^{
+                kstStrongify(self);
                 [UIView setAnimationCurve:[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue]];
                 
                 [self.view layoutIfNeeded];

@@ -17,6 +17,7 @@
 
 @interface ViewController : UIViewController
 
+- (instancetype)initForNavigationController;
 
 @end
 

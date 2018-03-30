@@ -275,6 +275,8 @@
     }
 }
 - (void)_updateTypingIndicatorViewAnimated:(BOOL)animated; {
+    kstWeakify(self);
+    
     [self.typingIndicatorView removeFromSuperview];
     self.typingIndicatorView = nil;
     
@@ -288,6 +290,7 @@
     
     if (animated) {
         [UIView animateWithDuration:self.viewModel.theme.animationDuration delay:0 usingSpringWithDamping:self.viewModel.theme.animationSpringDamping initialSpringVelocity:self.viewModel.theme.animationInitialSpringVelocity options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+            kstStrongify(self);
             [self.containingStackView layoutIfNeeded];
         } completion:nil];
     }

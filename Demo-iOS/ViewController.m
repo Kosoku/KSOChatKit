@@ -148,10 +148,11 @@
 - (BOOL)automaticallyAdjustsScrollViewInsets {
     return NO;
 }
+- (void)dealloc {
+    KSTLogObject(self.class);
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    kstWeakify(self);
     
     NSMutableArray *temp = [[NSMutableArray alloc] init];
     
@@ -216,9 +217,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    self.editingMessage = self.messages[indexPath.row];
-    
-    [self.KSO_chatViewController editText:self.editingMessage.text];
+//    self.editingMessage = self.messages[indexPath.row];
+//
+//    [self.KSO_chatViewController editText:self.editingMessage.text];
+    [self.navigationController pushViewController:[[ViewController alloc] initForNavigationController] animated:YES];
 }
 
 - (void)addMessageWithText:(NSString *)text {
@@ -242,14 +244,19 @@
 
 @interface ViewController () <KSOChatViewControllerDelegate>
 @property (strong,nonatomic) KSOChatViewController *chatViewController;
-@property (strong,nonatomic) UINavigationController *contentViewController;
+@property (strong,nonatomic) UIViewController *contentViewController;
 
 @property (copy,nonatomic) NSArray<HashTag *> *hashTags;
 @property (copy,nonatomic) NSArray<User *> *users;
+
+@property (assign,nonatomic) BOOL isInNavigationController;
 @end
 
 @implementation ViewController
 
+- (void)dealloc {
+    KSTLogObject(self.class);
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -284,7 +291,9 @@
             [self.chatViewController showKeyboard];
         }
     }],[UIBarButtonItem KDI_barButtonSystemItem:UIBarButtonSystemItemAdd block:^(__kindof UIBarButtonItem * _Nonnull barButtonItem) {
+        kstStrongify(self);
         [UIAlertController KDI_presentAlertControllerWithTitle:@"Add User" message:@"Enter the name of the user" cancelButtonTitle:@"Cancel" otherButtonTitles:@[@"Add"] configure:^(__kindof UIAlertController * _Nonnull alertController) {
+            
             UIAlertAction *action = [alertController.actions KQS_find:^BOOL(UIAlertAction * _Nonnull object, NSInteger index) {
                 return object.style == UIAlertActionStyleDefault;
             }];
@@ -297,6 +306,7 @@
                 } forControlEvents:UIControlEventAllEditingEvents];
             }];
         } completion:^(__kindof UIAlertController * _Nonnull alertController, NSInteger buttonIndex) {
+            kstStrongify(self);
             if (buttonIndex == KDIUIAlertControllerCancelButtonIndex) {
                 return;
             }
@@ -304,6 +314,7 @@
             __block NSTimeInterval delay = 0.0;
             for (NSString *text in [alertController.textFields.firstObject.text componentsSeparatedByString:@","]) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    kstStrongify(self);
                     [(TypingIndicatorView *)self.chatViewController.typingIndicatorView addName:[text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
                 });
                 delay += 1.0;
@@ -324,7 +335,7 @@
     [self.chatViewController addSyntaxHighlightingRegularExpression:[NSRegularExpression regularExpressionWithPattern:@"@\\w+" options:0 error:NULL] textAttributes:@{NSForegroundColorAttributeName: UIColor.redColor}];
     [self.chatViewController setCompletionCellClass:UserTableViewCell.class forPrefix:@"@"];
     
-    self.contentViewController = [[UINavigationController alloc] initWithRootViewController:self.chatViewController];
+    self.contentViewController = self.isInNavigationController ? self.chatViewController : [[UINavigationController alloc] initWithRootViewController:self.chatViewController];
     self.contentViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
     [self addChildViewController:self.contentViewController];
     [self.view addSubview:self.contentViewController.view];
@@ -428,6 +439,15 @@
 
 - (BOOL)chatViewController:(KSOChatViewController *)chatViewController shouldInsertSuffixForMarkdownSymbol:(NSString *)markdownSymbol {
     return ![markdownSymbol isEqualToString:@"> "];
+}
+
+- (instancetype)initForNavigationController; {
+    if (!(self = [super initWithNibName:nil bundle:nil]))
+        return nil;
+    
+    _isInNavigationController = YES;
+    
+    return self;
 }
 
 @end
