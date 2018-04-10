@@ -122,6 +122,7 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     [self KAG_addObserverForNotificationNames:@[UIKeyboardWillShowNotification,UIKeyboardWillHideNotification,UIKeyboardDidShowNotification,UIKeyboardDidHideNotification] object:nil block:^(NSNotification * _Nonnull notification) {
         kstStrongify(self);
         if (!self.isKeyboardShowing) {
+            self.KDI_customConstraints = [self _chatContainerViewLayoutConstraintsForKeyboardFrame:CGRectZero];
             return;
         }
         
