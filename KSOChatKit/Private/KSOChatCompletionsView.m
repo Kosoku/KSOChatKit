@@ -127,7 +127,7 @@
             [self.tableView reloadData];
         }
         else if ([keyPath isEqualToString:@kstKeypath(self,tableView.contentSize)]) {
-            CGFloat maximumHeight = ceil(_tableView.estimatedRowHeight * 2.5);
+            CGFloat maximumHeight = ceil(self.tableView.estimatedRowHeight * 2.5);
             
             self.tableViewHeightLayoutConstraint.constant = MIN(self.tableView.contentSize.height, maximumHeight);
         }
