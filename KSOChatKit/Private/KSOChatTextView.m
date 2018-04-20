@@ -146,6 +146,14 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
     }
     self.KDI_cornerRadius = _viewModel.theme.textCornerRadius;
     
+    [self.viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(self.viewModel,allowsChatInputInteraction)] options:NSKeyValueObservingOptionInitial block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+        kstStrongify(self);
+        if ([keyPath isEqualToString:@kstKeypath(self.viewModel,allowsChatInputInteraction)]) {
+            self.editable = self.viewModel.allowsChatInputInteraction;
+            self.selectable = self.viewModel.allowsChatInputInteraction;
+        }
+    }];
+    
     [self KAG_addObserverForNotificationNames:@[UIMenuControllerDidHideMenuNotification] object:nil block:^(NSNotification * _Nonnull notification) {
         kstStrongify(self);
         self.showingMarkdownMenu = NO;

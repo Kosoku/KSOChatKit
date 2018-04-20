@@ -43,6 +43,8 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 
 @property (strong,nonatomic) KSOChatTheme *theme;
 
+@property (assign,nonatomic) BOOL allowsChatInputInteraction;
+
 @property (copy,nonatomic) NSString *text;
 @property (copy,nonatomic) NSString *textPlaceholder;
 @property (assign,nonatomic) NSRange selectedRange;

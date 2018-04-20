@@ -97,7 +97,6 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
     if (!(self = [super initWithNibName:nil bundle:nil]))
         return nil;
     
-    _allowsChatInputInteraction = YES;
     _viewModel = [[KSOChatViewModel alloc] initWithChatViewController:self];
     
     return self;
@@ -215,10 +214,14 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 - (void)setTheme:(KSOChatTheme *)theme {
     self.viewModel.theme = theme;
 }
+@dynamic allowsChatInputInteraction;
+- (BOOL)allowsChatInputInteraction {
+    return self.viewModel.allowsChatInputInteraction;
+}
 - (void)setAllowsChatInputInteraction:(BOOL)allowsChatInputInteraction {
-    _allowsChatInputInteraction = allowsChatInputInteraction;
+    self.viewModel.allowsChatInputInteraction = allowsChatInputInteraction;
     
-    self.chatContainerView.userInteractionEnabled = _allowsChatInputInteraction;
+    self.chatContainerView.userInteractionEnabled = allowsChatInputInteraction;
 }
 - (BOOL)isKeyboardShowing {
     return [[self.chatContainerView KDI_recursiveSubviews] KQS_any:^BOOL(__kindof UIView * _Nonnull object, NSInteger index) {

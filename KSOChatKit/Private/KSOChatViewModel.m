@@ -95,6 +95,8 @@
     
     _theme = KSOChatTheme.defaultTheme;
     
+    _allowsChatInputInteraction = YES;
+    
     _text = @"";
     _textPlaceholder = [self.class _defaultTextPlaceholder];
     _editingTitle = [self.class _defaultEditingTitle];
