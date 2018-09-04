@@ -83,18 +83,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (copy,nonatomic,null_resettable) NSString *textPlaceholder;
 
 /**
- Set and get text view's attributed placeholder text.
+ Set and get text view's attributed placeholder text. Use this if you want to completely override styling information inherited from KSOChatTheme.
  
  The default is nil.
  */
-@property (copy,nonatomic,nullable) NSAttributedString *attributedPlaceholder;
-
-/**
- Set and get the placeholder text color, which is used when setting the placeholder via `setPlaceholder:`.
- 
- The default is UIColor.lightGrayColor.
- */
-@property (strong,nonatomic,null_resettable) UIColor *placeholderTextColor UI_APPEARANCE_SELECTOR;
+@property (copy,nonatomic,nullable) NSAttributedString *attributedTextPlaceholder;
 
 /**
  Set and get the editing title displayed by the receiver when in editing mode.

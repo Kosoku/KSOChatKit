@@ -51,6 +51,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (copy,nonatomic,nullable) UIFontTextStyle textStyle;
 
+@property (strong,nonatomic,null_resettable) UIColor *textPlaceholderColor;
+
 /**
  The font for buttons.
  

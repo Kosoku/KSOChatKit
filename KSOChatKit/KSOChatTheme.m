@@ -26,6 +26,8 @@
 + (UIFont *)_defaultTextFont;
 + (UIFontTextStyle)_defaultTextStyle;
 
++ (UIColor *)_defaultTextPlaceholderColor;
+
 + (UIFont *)_defaultButtonFont;
 + (UIFontTextStyle)_defaultButtonTextStyle;
 
@@ -58,6 +60,8 @@
     retval->_textFont = _textFont;
     retval->_textStyle = _textStyle;
     
+    retval->_textPlaceholderColor = _textPlaceholderColor;
+    
     retval->_buttonFont = _buttonFont;
     retval->_buttonTextStyle = _buttonTextStyle;
     
@@ -89,6 +93,8 @@
     _textColor = [self.class _defaultTextColor];
     _textFont = [self.class _defaultTextFont];
     _textStyle = [self.class _defaultTextStyle];
+    
+    _textPlaceholderColor = [self.class _defaultTextPlaceholderColor];
     
     _buttonFont = [self.class _defaultButtonFont];
     _buttonTextStyle = [self.class _defaultButtonTextStyle];
@@ -125,8 +131,9 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
 - (void)setTextFont:(UIFont *)textFont {
     _textFont = textFont ?: [self.class _defaultTextFont];
 }
-- (void)setTextStyle:(UIFontTextStyle)textStyle {
-    _textStyle = textStyle ?: [self.class _defaultTextStyle];
+
+- (void)setTextPlaceholderColor:(UIColor *)textPlaceholderColor {
+    _textPlaceholderColor = textPlaceholderColor ?: [self.class _defaultTextPlaceholderColor];
 }
 
 - (void)setButtonFont:(UIFont *)buttonFont {
@@ -171,6 +178,9 @@ static void const *kDefaultThemeKey = &kDefaultThemeKey;
 }
 + (UIFontTextStyle)_defaultTextStyle; {
     return UIFontTextStyleBody;
+}
++ (UIColor *)_defaultTextPlaceholderColor; {
+    return UIColor.lightGrayColor;
 }
 + (UIFont *)_defaultButtonFont; {
     return [UIFont systemFontOfSize:15.0];

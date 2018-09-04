@@ -141,6 +141,7 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
     self.font = _viewModel.theme.textFont;
     self.allowsMultilinePlaceholder = NO;
     self.maximumNumberOfLines = 3;
+    self.placeholderTextColor = _viewModel.theme.textPlaceholderColor;
     if (_viewModel.theme.textStyle != nil) {
         self.KDI_dynamicTypeTextStyle = _viewModel.theme.textStyle;
     }
