@@ -25,11 +25,11 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    KSOChatTheme *theme = [KSOChatTheme.defaultTheme copy];
-    
-    theme.textPlaceholderColor = UIColor.orangeColor;
-    
-    KSOChatTheme.defaultTheme = theme;
+//    KSOChatTheme *theme = [KSOChatTheme.defaultTheme copy];
+//    
+//    theme.textPlaceholderColor = KDIColorRandomRGB();
+//    
+//    KSOChatTheme.defaultTheme = theme;
     
     return YES;
 }

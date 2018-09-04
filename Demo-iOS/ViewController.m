@@ -321,7 +321,7 @@
             }
         }];
     }]];
-    self.chatViewController.attributedTextPlaceholder = [[NSAttributedString alloc] initWithString:@"Type something…" attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:17.0], NSForegroundColorAttributeName: UIColor.redColor}];
+    
     self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
     self.chatViewController.delegate = self;
     self.chatViewController.contentViewController = [[ContentViewController alloc] initWithNibName:nil bundle:nil];
