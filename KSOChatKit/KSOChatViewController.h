@@ -81,7 +81,6 @@ NS_ASSUME_NONNULL_BEGIN
  The default is @"Enter Message…".
  */
 @property (copy,nonatomic,null_resettable) NSString *textPlaceholder;
-
 /**
  Set and get text view's attributed placeholder text. Use this if you want to completely override styling information inherited from KSOChatTheme.
  
