@@ -51,6 +51,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (copy,nonatomic,nullable) UIFontTextStyle textStyle;
 
+/**
+ The text color for the text placeholder that is visible when there is no text in the text view.
+ 
+ The default is UIColor.lightGrayColor.
+ */
 @property (strong,nonatomic,null_resettable) UIColor *textPlaceholderColor;
 
 /**
