@@ -254,6 +254,20 @@ NSString *const KSOChatViewControllerUTIPassbook = @"com.apple.pkpass";
 - (void)setTextPlaceholder:(NSString *)textPlaceholder {
     self.viewModel.textPlaceholder = textPlaceholder;
 }
+@dynamic attributedPlaceholder;
+- (NSAttributedString*)attributedPlaceholder {
+    return self.viewModel.attributedPlaceholder;
+}
+- (void)setAttributedPlaceholder:(NSAttributedString *)attributedPlaceholder {
+    self.viewModel.attributedPlaceholder = attributedPlaceholder;
+}
+@dynamic placeholderTextColor;
+- (UIColor*)placeholderTextColor {
+    return self.viewModel.placeholderTextColor;
+}
+- (void)setPlaceholderTextColor:(UIColor *)placeholderTextColor {
+    self.viewModel.placeholderTextColor = placeholderTextColor;
+}
 @dynamic editingTitle;
 - (NSString *)editingTitle {
     return self.viewModel.editingTitle;
