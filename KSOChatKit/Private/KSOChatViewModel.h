@@ -47,6 +47,9 @@ typedef void(^KSOChatViewModelRequestCompletionsBlock)(NSArray<id<KSOChatComplet
 
 @property (copy,nonatomic) NSString *text;
 @property (copy,nonatomic) NSString *textPlaceholder;
+@property (copy,nonatomic) NSAttributedString *attributedPlaceholder;
+@property (copy,nonatomic) UIColor *placeholderTextColor;
+
 @property (assign,nonatomic) NSRange selectedRange;
 
 @property (copy,nonatomic) NSString *editingTitle;

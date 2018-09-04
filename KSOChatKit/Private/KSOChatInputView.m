@@ -175,7 +175,7 @@
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _chatTypingIndicatorTopLayoutGuide}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": _chatTypingIndicatorTopLayoutGuide, @"bottom": _containingStackView}]];
     
-    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,editing),@kstKeypath(_viewModel,leadingAccessoryViews),@kstKeypath(_viewModel,typingIndicatorView),@kstKeypath(_viewModel,automaticallyShowHideDoneButton),@kstKeypath(_viewModel,doneAction.enabled)] options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
+    [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,attributedPlaceholder),@kstKeypath(_viewModel,placeholderTextColor),@kstKeypath(_viewModel,editing),@kstKeypath(_viewModel,leadingAccessoryViews),@kstKeypath(_viewModel,typingIndicatorView),@kstKeypath(_viewModel,automaticallyShowHideDoneButton),@kstKeypath(_viewModel,doneAction.enabled)] options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
         BOOL shouldAnimate = change[NSKeyValueChangeOldKey] != nil;
         
@@ -187,6 +187,12 @@
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,textPlaceholder)]) {
             self.textView.placeholder = self.viewModel.textPlaceholder;
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,attributedPlaceholder)]) {
+            self.textView.attributedPlaceholder = self.viewModel.attributedPlaceholder;
+        }
+        else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,placeholderTextColor)]) {
+            self.textView.placeholderTextColor = self.viewModel.placeholderTextColor;
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,automaticallyShowHideDoneButton)]) {
             [self _updateDoneButtonHiddenAnimated:shouldAnimate];
