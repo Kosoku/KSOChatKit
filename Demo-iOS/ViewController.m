@@ -217,10 +217,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-//    self.editingMessage = self.messages[indexPath.row];
-//
-//    [self.KSO_chatViewController editText:self.editingMessage.text];
-    [self.navigationController pushViewController:[[ViewController alloc] initForNavigationController] animated:YES];
+    self.editingMessage = self.messages[indexPath.row];
+
+    [self.KSO_chatViewController editText:self.editingMessage.text];
+//    [self.navigationController pushViewController:[[ViewController alloc] initForNavigationController] animated:YES];
 }
 
 - (void)addMessageWithText:(NSString *)text {
@@ -321,6 +321,7 @@
             }
         }];
     }]];
+    self.chatViewController.attributedTextPlaceholder = [[NSAttributedString alloc] initWithString:@"Type something…" attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:17.0], NSForegroundColorAttributeName: UIColor.redColor}];
     self.chatViewController.prefixesForCompletion = [NSSet setWithArray:@[@"@",@"#",@"/"]];
     self.chatViewController.delegate = self;
     self.chatViewController.contentViewController = [[ContentViewController alloc] initWithNibName:nil bundle:nil];

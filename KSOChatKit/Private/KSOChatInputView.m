@@ -189,8 +189,10 @@
             self.textView.placeholder = self.viewModel.textPlaceholder;
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,attributedTextPlaceholder)]) {
-            // only set attributed placeholder if normal placeholder is nil
-            if (KSTIsEmptyObject(self.viewModel.textPlaceholder)) {
+            if (KSTIsEmptyObject(self.viewModel.attributedTextPlaceholder)) {
+                self.textView.placeholder = self.viewModel.textPlaceholder;
+            }
+            else {
                 self.textView.attributedPlaceholder = self.viewModel.attributedTextPlaceholder;
             }
         }
