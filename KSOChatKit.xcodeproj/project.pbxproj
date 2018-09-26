@@ -476,7 +476,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = scripts/./genstrings.sh;
+			shellScript = "scripts/./genstrings.sh\n";
 		};
 		07D0B9E92051191D0078BEFB /* increment build number */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -707,7 +707,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kosoku.ksochatkit;
 				PRODUCT_NAME = KSOChatKit;
 				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
