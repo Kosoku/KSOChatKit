@@ -32,7 +32,9 @@
 @property (strong,nonatomic) UIVisualEffectView *visualEffectView;
 @property (strong,nonatomic) UIStackView *stackView;
 @property (strong,nonatomic) UIStackView *inputStackView;
+@property (strong,nonatomic) UIStackView *leadingAccessoryStackView;
 
+@property (strong,nonatomic) UIScrollView *scrollView;
 @property (strong,nonatomic) KSOChatTextView *textView;
 @property (strong,nonatomic) KDIButton *doneButton;
 @property (strong,nonatomic) KSOChatEditingView *editingView;
@@ -85,6 +87,10 @@
     if (self.viewModel.selectedRange.length > 0) {
         [self.viewModel hideCompletions];
     }
+    
+    CGRect rect = [textView caretRectForPosition:textView.selectedTextRange.start];
+    
+    [self.scrollView scrollRectToVisible:rect animated:NO];
 }
 #pragma mark KSOChatViewModelDataSource
 - (NSRange)selectedRangeForChatViewModel:(KSOChatViewModel *)chatViewModel {
@@ -137,10 +143,15 @@
     _inputStackView.spacing = 8.0;
     [_stackView addArrangedSubview:_inputStackView];
     
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
+    _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    _scrollView.backgroundColor = UIColor.clearColor;
+    [_inputStackView addArrangedSubview:_scrollView];
+    
     _textView = [[KSOChatTextView alloc] initWithViewModel:self.viewModel];
     _textView.delegate = self;
     _textView.textStorage.delegate = self;
-    [_inputStackView addArrangedSubview:_textView];
+    [_scrollView addSubview:_textView];
     
     _doneButton = [KDIButton buttonWithType:UIButtonTypeSystem];
     _doneButton.translatesAutoresizingMaskIntoConstraints = NO;
@@ -149,6 +160,7 @@
         _doneButton.titleLabel.KDI_dynamicTypeTextStyle = _viewModel.theme.buttonTextStyle;
     }
     _doneButton.KAG_action = _viewModel.doneAction;
+    [_doneButton setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     [_inputStackView addArrangedSubview:_doneButton];
     
     _editingView = [[KSOChatEditingView alloc] initWithViewModel:_viewModel];
@@ -174,6 +186,16 @@
     
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _chatTypingIndicatorTopLayoutGuide}]];
     [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view][bottom]" options:0 metrics:nil views:@{@"view": _chatTypingIndicatorTopLayoutGuide, @"bottom": _containingStackView}]];
+    
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:@{@"view": _textView}]];
+    [NSLayoutConstraint activateConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|" options:0 metrics:nil views:@{@"view": _textView}]];
+    [NSLayoutConstraint activateConstraints:@[[_textView.widthAnchor constraintEqualToAnchor:_scrollView.widthAnchor], [_scrollView.heightAnchor constraintLessThanOrEqualToConstant:(ceil(_textView.font.lineHeight) * 3) + _textView.textContainerInset.top + _textView.textContainerInset.bottom]]];
+    
+    NSLayoutConstraint *scrollViewHeight = [_scrollView.heightAnchor constraintEqualToAnchor:_textView.heightAnchor];
+    
+    scrollViewHeight.priority = UILayoutPriorityDefaultLow;
+    
+    [NSLayoutConstraint activateConstraints:@[scrollViewHeight]];
     
     [_viewModel KAG_addObserverForKeyPaths:@[@kstKeypath(_viewModel,text),@kstKeypath(_viewModel,doneButtonTitle),@kstKeypath(_viewModel,textPlaceholder),@kstKeypath(_viewModel,attributedTextPlaceholder),@kstKeypath(_viewModel,editing),@kstKeypath(_viewModel,leadingAccessoryViews),@kstKeypath(_viewModel,typingIndicatorView),@kstKeypath(_viewModel,automaticallyShowHideDoneButton),@kstKeypath(_viewModel,doneAction.enabled)] options:NSKeyValueObservingOptionInitial|NSKeyValueObservingOptionOld block:^(NSString * _Nonnull keyPath, id  _Nullable value, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change) {
         kstStrongify(self);
@@ -206,17 +228,28 @@
             [self _updateForEditingAnimated:shouldAnimate];
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,leadingAccessoryViews)]) {
-            for (UIView *view in self.inputStackView.arrangedSubviews) {
-                if ([view isKindOfClass:KSOChatTextView.class]) {
-                    break;
-                }
+            for (UIView *view in self.leadingAccessoryStackView.subviews) {
                 [view removeFromSuperview];
             }
-            
+
             if (self.viewModel.leadingAccessoryViews.count > 0) {
-                for (UIView *view in [self.viewModel.leadingAccessoryViews KST_reversedArray]) {
-                    [self.inputStackView insertArrangedSubview:view atIndex:0];
+                if (self.leadingAccessoryStackView == nil) {
+                    self.leadingAccessoryStackView = [[UIStackView alloc] initWithFrame:CGRectZero];
+                    self.leadingAccessoryStackView.translatesAutoresizingMaskIntoConstraints = NO;
+                    self.leadingAccessoryStackView.axis = UILayoutConstraintAxisHorizontal;
+                    self.leadingAccessoryStackView.alignment = UIStackViewAlignmentLeading;
+                    self.leadingAccessoryStackView.spacing = 8.0;
+                    [self.inputStackView insertArrangedSubview:self.leadingAccessoryStackView atIndex:0];
                 }
+
+                for (UIView *view in self.viewModel.leadingAccessoryViews) {
+                    [view setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+                    [self.leadingAccessoryStackView addArrangedSubview:view];
+                }
+            }
+            else {
+                [self.leadingAccessoryStackView removeFromSuperview];
+                self.leadingAccessoryStackView = nil;
             }
         }
         else if ([keyPath isEqualToString:@kstKeypath(self.viewModel,typingIndicatorView)]) {
@@ -258,7 +291,7 @@
 - (void)_updateForEditingAnimated:(BOOL)animated; {
     void(^block)(void) = ^{
         for (UIView *view in self.inputStackView.arrangedSubviews) {
-            if ([view isKindOfClass:KSOChatTextView.class]) {
+            if ([view isKindOfClass:UIScrollView.class]) {
                 break;
             }
             view.hidden = self.viewModel.isEditing;

@@ -16,6 +16,7 @@
 #import "KSOChatTextView.h"
 #import "KSOChatViewModel.h"
 #import "KSOChatTheme.h"
+#import "NSBundle+KSOChatKitExtensionsPrivate.h"
 
 #import <Ditko/Ditko.h>
 #import <Stanley/Stanley.h>
@@ -136,11 +137,10 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
     _viewModel = viewModel;
     
     self.translatesAutoresizingMaskIntoConstraints = NO;
+    self.scrollEnabled = NO;
     self.backgroundColor = _viewModel.theme.textBackgroundColor;
     self.textContainerInset = UIEdgeInsetsMake(8, 8, 8, 8);
     self.font = _viewModel.theme.textFont;
-    self.allowsMultilinePlaceholder = NO;
-    self.maximumNumberOfLines = 3;
     self.placeholderTextColor = _viewModel.theme.textPlaceholderColor;
     if (_viewModel.theme.textStyle != nil) {
         self.KDI_dynamicTypeTextStyle = _viewModel.theme.textStyle;
@@ -189,7 +189,7 @@ static NSString* KSOChatTextViewMarkdownTitleFromSelector(SEL selector) {
         return;
     }
     
-    UIMenuItem *markdownItem = [[UIMenuItem alloc] initWithTitle:@"Markdown" action:@selector(_markdownMenuItemAction:)];
+    UIMenuItem *markdownItem = [[UIMenuItem alloc] initWithTitle:NSLocalizedStringWithDefaultValue(@"menu-item.markdown.title", nil, NSBundle.KSO_chatKitFrameworkBundle, @"Markdown", @"menu item markdown title") action:@selector(_markdownMenuItemAction:)];
     
     UIMenuController.sharedMenuController.menuItems = @[markdownItem];
 }
