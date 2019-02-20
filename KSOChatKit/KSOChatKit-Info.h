@@ -20,6 +20,6 @@
 #ifndef __KSO_CHAT_KIT__
 #define __KSO_CHAT_KIT__
 
-#define KSO_BUNDLE_SHORT_VERSION_STRING 0.15.3
+#define KSO_BUNDLE_SHORT_VERSION_STRING 0.15.4
 
 #endif
