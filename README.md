@@ -1,5 +1,7 @@
 ## KSOChatKit
 
+**This project is archived, we recommend you use [MessageKit](https://github.com/MessageKit/MessageKit) instead.**
+
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](http://img.shields.io/cocoapods/v/KSOChatKit.svg)](http://cocoapods.org/?q=KSOChatKit)
 [![Platform](http://img.shields.io/cocoapods/p/KSOChatKit.svg)]()
